@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     @Override
     public void ShowNoneUserAlert() {
         new AlertDialog.Builder(this)
-                .setTitle("提醒")
-                .setMessage("无用户，请先设置用户。")
-                .setPositiveButton("确定", null)
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_MainAct_ShowNoneUserAlertMessage)
+                .setPositiveButton(getString(R.string.str_MainAct_ShowNoneUserAlertPosButton), null)
                 .show();
     }
 

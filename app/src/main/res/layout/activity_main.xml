@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.396"
-        android:text="开始游戏" />
+        android:text="@string/str_MainAct_StartGameButton" />
 
     <Button
         android:id="@+id/id_MainAct_SettingButton"
@@ -28,7 +28,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.641"
-        android:text="游戏设置" />
-
+        android:text="@string/str_MainAct_SettingButton" />
 
 </android.support.constraint.ConstraintLayout>

@@ -66,7 +66,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         m_GameBGMSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                m_GameBGMTextView.setText(String.format("%d%%", i));
+                m_GameBGMTextView.setText(String.format(getString(R.string.str_SettingAct_SeekBarChangeTextView), i));
             }
 
             @Override
@@ -79,7 +79,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         m_GameOtoSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                m_GameOtoTextView.setText(String.format("%d%%", i));
+                m_GameOtoTextView.setText(String.format(getString(R.string.str_SettingAct_SeekBarChangeTextView), i));
             }
 
             @Override
@@ -172,9 +172,9 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
     @Override
     public void onShowNoneUserAlert() {
         new AlertDialog.Builder(this)
-                .setTitle("提醒")
-                .setMessage("没有输入用户名。")
-                .setPositiveButton("确定", null)
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_SettingAct_ShowNoneUserAlertMessage)
+                .setPositiveButton(getString(R.string.str_SettingAct_ShowNoneUserAlertPosButton), null)
                 .show();
     }
 }

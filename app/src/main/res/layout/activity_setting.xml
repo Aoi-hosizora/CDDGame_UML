@@ -13,7 +13,7 @@
         android:id="@+id/id_SettingAct_BackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="返回"
+        android:text="@string/str_SettingAct_BackButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,7 +25,7 @@
         android:id="@+id/id_SettingAct_OKButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确定"
+        android:text="@string/str_SettingAct_OKButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,7 +38,7 @@
         android:id="@+id/id_SettingAct_ResetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="重置"
+        android:text="@string/str_SettingAct_ResetButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.64"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -69,24 +69,10 @@
         app:layout_constraintVertical_bias="0.609" />
 
     <TextView
-        android:id="@+id/id_SettingAct_GameOtoTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0%"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.795"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.609" />
-
-    <TextView
         android:id="@+id/id_SettingAct_GameBGMTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0%"
+        android:text="@string/str_SettingAct_SeekBarTextView"
         android:textColor="#ffffff"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -96,13 +82,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.455" />
 
+    <TextView
+        android:id="@+id/id_SettingAct_GameOtoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_SettingAct_SeekBarTextView"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.795"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.609" />
+
     <EditText
         android:id="@+id/id_SettingAct_UserNameEditText"
         android:layout_width="249dp"
         android:layout_height="44dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="请输入用户名"
+        android:hint="@string/str_SettingAct_UserNameEditTextHint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintLeft_toLeftOf="parent"

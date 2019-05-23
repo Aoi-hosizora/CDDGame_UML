@@ -83,15 +83,15 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     private void ExitGameButton_Click() {
 
         new AlertDialog.Builder(this)
-                .setTitle("提醒")
-                .setMessage("确定退出游戏？")
-                .setPositiveButton("退出", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_GamingAct_ShowConfirmExitGameAlertMessage)
+                .setPositiveButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         onBackToMainActivity();
                     }
                 })
-                .setNegativeButton("取消", null)
+                .setNegativeButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel), null)
                 .show();
     }
 

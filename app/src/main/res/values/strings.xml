@@ -1,3 +1,28 @@
 <resources>
     <string name="app_name">CDDGame</string>
+    <string name="alert_title">提醒</string>
+
+    <!-- Main Act -->
+    <string name="str_MainAct_StartGameButton">开始游戏</string>
+    <string name="str_MainAct_SettingButton">游戏设置</string>
+    <string name="str_MainAct_ShowNoneUserAlertMessage">无用户，请先设置用户。</string>
+    <string name="str_MainAct_ShowNoneUserAlertPosButton">确定</string>
+
+    <!-- Setting Act -->
+    <string name="str_SettingAct_BackButton">返回</string>
+    <string name="str_SettingAct_OKButton">确定</string>
+    <string name="str_SettingAct_ResetButton">重置</string>
+    <string name="str_SettingAct_UserNameEditTextHint">请输入用户名...</string>
+    <string name="str_SettingAct_SeekBarTextView">0%</string>
+    <string name="str_SettingAct_SeekBarChangeTextView">%d%%</string>
+    <string name="str_SettingAct_ShowNoneUserAlertMessage">没有输入用户名。</string>
+    <string name="str_SettingAct_ShowNoneUserAlertPosButton">确定</string>
+
+    <!-- Gaming Act -->
+    <string name="str_GamingAct_PauseGameButton">暂停</string>
+    <string name="str_GamingAct_ExitGameButton">退出</string>
+    <string name="str_GamingAct_ShowConfirmExitGameAlertMessage">确定退出游戏？</string>
+    <string name="str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit">退出</string>
+    <string name="str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel">取消</string>
+
 </resources>
