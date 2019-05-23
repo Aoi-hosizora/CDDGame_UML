@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,6 +38,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         m_SettingButton.setOnClickListener(this);
     }
 
+    private void ShowLogE(String FunctionName, String data) {
+        String TAG = "CDDGame";
+        String CN = "MainActivity";
+        String msg = CN + "###" + FunctionName + "(): " + data;
+        Log.e(TAG, msg);
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -63,11 +71,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         return this;
     }
 
-    @Override
-    protected void onResume() {
-        // 默认横屏
-        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        super.onResume();
-    }
+//    @Override
+//    protected void onResume() {
+//        // 默认横屏
+//        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        super.onResume();
+//    }
 }

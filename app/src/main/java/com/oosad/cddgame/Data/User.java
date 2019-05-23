@@ -1,6 +1,8 @@
 package com.oosad.cddgame.Data;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     public User(String name) {
         this.name = name;
