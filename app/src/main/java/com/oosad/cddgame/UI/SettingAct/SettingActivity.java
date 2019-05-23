@@ -93,22 +93,28 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_SettingAct_BackButton:
+            case R.id.id_SettingAct_BackButton: // 返回主界面
                 BackButton_Click();
             break;
-            case R.id.id_SettingAct_OKButton:
+            case R.id.id_SettingAct_OKButton: // 确定设置
                 OKButton_Click();
             break;
-            case R.id.id_SettingAct_ResetButton:
+            case R.id.id_SettingAct_ResetButton: // 重置设置
                 ResetButton_Click();
             break;
         }
     }
 
+    /**
+     * 单击返回主界面按钮
+     */
     private void BackButton_Click() {
         m_settingPresenter.Handle_BackButton_Click();
     }
 
+    /**
+     * 单击确定设置按钮
+     */
     private void OKButton_Click() {
         String currUserName = m_UserNameEditText.getText().toString();
         if (currUserName.isEmpty()) {
@@ -122,15 +128,24 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         m_settingPresenter.Handle_OKButton_Click(currUserName, GameBGMVoloum, GameOtoVoloum);
     }
 
+    /**
+     * 确定重置设置按钮
+     */
     private void ResetButton_Click() {
         m_settingPresenter.Handle_ResetButton_Click();
     }
 
+    /**
+     * 退出当前界面，返回主界面
+     */
     @Override
     public void onBackToMainActivity() {
         finish();
     }
 
+    /**
+     * 重置用户界面
+     */
     @Override
     public void onResetUI() {
         m_GameBGMSeekBar.setProgress(50);
@@ -138,6 +153,12 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         m_UserNameEditText.setText("");
     }
 
+    /**
+     * 根据 Setting 设置用户界面
+     * @param UserName
+     * @param BGMVoloum
+     * @param OtoVoloum
+     */
     @Override
     public void onSetupUI(String UserName, int BGMVoloum, int OtoVoloum) {
         m_GameBGMSeekBar.setProgress(BGMVoloum);
@@ -145,11 +166,14 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         m_UserNameEditText.setText(UserName);
     }
 
+    /**
+     * 没有输入用户名
+     */
     @Override
     public void onShowNoneUserAlert() {
         new AlertDialog.Builder(this)
                 .setTitle("提醒")
-                .setMessage("没有输入用户名")
+                .setMessage("没有输入用户名。")
                 .setPositiveButton("确定", null)
                 .show();
     }

@@ -26,6 +26,10 @@ public class SettingPresenterCompl implements ISettingPresenter {
         Log.e(TAG, msg);
     }
 
+    /**
+     * 处理从 MainAct 传递进的 Bundle 数据，并设置用户界面
+     * @param intent
+     */
     @Override
     public void Handle_SetupBundle(Intent intent) {
         Bundle bundle = intent.getBundleExtra(INT_BUNDLE_INFO);
@@ -35,29 +39,38 @@ public class SettingPresenterCompl implements ISettingPresenter {
         m_settingView.onSetupUI(currUser.getName(), setting.getGameBGMVoloum(), setting.getGameOtoVoloum());
     }
 
+    /**
+     * 返回主界面
+     */
     @Override
     public void Handle_BackButton_Click() {
         m_settingView.onBackToMainActivity();
     }
 
+    /**
+     * 提交设置，从用户键入的数据设置Setting
+     * @param userName
+     * @param BGMVoloum
+     * @param OtoVoloum
+     */
     @Override
     public void Handle_OKButton_Click(String userName, int BGMVoloum, int OtoVoloum) {
-        CommitSetting(userName, BGMVoloum, OtoVoloum);
-        m_settingView.onBackToMainActivity();
-    }
-
-    @Override
-    public void Handle_ResetButton_Click() {
-        // Setting.getInstance().resetSetting();
-        m_settingView.onResetUI();
-    }
-
-    private void CommitSetting(String userName, int BGMVoloum, int OtoVoloum) {
         User currUser = new User(userName);
 
         Setting setting = Setting.getInstance();
         setting.setCurrUser(currUser);
         setting.setGameBGMVoloum(BGMVoloum);
         setting.setGameOtoVoloum(OtoVoloum);
+
+        m_settingView.onBackToMainActivity();
+    }
+
+    /**
+     * 重置用户显示的设置，但不重置已经提交的Handle_BackButton_Click设置
+     */
+    @Override
+    public void Handle_ResetButton_Click() {
+        // Setting.getInstance().resetSetting();
+        m_settingView.onResetUI();
     }
 }

@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         }
     }
 
+    /**
+     * 没有设置用户就开始游戏
+     */
     @Override
     public void ShowNoneUserAlert() {
         new AlertDialog.Builder(this)
@@ -66,16 +69,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
                 .show();
     }
 
+    /**
+     * 返回 this 指针用于 MainActivity.this
+     * @return
+     */
     @Override
     public MainActivity getThisPtr() {
         return this;
     }
-
-//    @Override
-//    protected void onResume() {
-//        // 默认横屏
-//        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//        super.onResume();
-//    }
 }
