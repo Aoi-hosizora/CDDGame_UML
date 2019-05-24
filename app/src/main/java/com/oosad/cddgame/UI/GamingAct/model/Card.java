@@ -7,6 +7,11 @@ public class Card {
         this.cardSuit = cardSuit;
     }
 
+    /**
+     * 1 - 13
+     * 1: A
+     * 11: J, 12: Q, 13: K
+     */
     private int cardNum;
     private CardSuit cardSuit;
 

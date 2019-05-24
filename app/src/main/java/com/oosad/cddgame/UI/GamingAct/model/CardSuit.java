@@ -5,19 +5,19 @@ package com.oosad.cddgame.UI.GamingAct.model;
  */
 public enum CardSuit {
     /**
-     * 黑桃
+     * 黑桃 ♠
      */
     Spade,
     /**
-     * 红桃
+     * 红桃 ♥
      */
     Heart,
     /**
-     * 方块
+     * 方块 ♦
      */
     Diamond,
     /**
-     * 梅花
+     * 梅花 ♣
      */
     Club
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="Card_Height">120dp</dimen>
+    <dimen name="Card_Width">80dp</dimen>
+    <dimen name="Card_Horizontal_Spacing">25dp</dimen>
+    <dimen name="Card_Vertical_Spacing">0dp</dimen>
+    <dimen name="Card_Vertical_Padding">20dp</dimen>
+
+    <dimen name="CardSet_CascadeLayout_Height">@dimen/CardSet_FrameLayout_Height</dimen>
+    <dimen name="CardSet_CascadeLayout_Width">@dimen/CardSet_FrameLayout_Width</dimen>
+
+    <dimen name="CardSet_FrameLayout_Height">140dp</dimen>
+    <dimen name="CardSet_FrameLayout_Width">450dp</dimen>
+
+</resources>

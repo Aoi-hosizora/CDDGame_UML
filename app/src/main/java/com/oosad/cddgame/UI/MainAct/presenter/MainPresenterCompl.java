@@ -37,7 +37,7 @@ public class MainPresenterCompl implements IMainPresenter {
             m_mainView.ShowNoneUserAlert();
             return;
         }
-        ShowLogE("Handle_StartGameButton_Click", Setting.getInstance().getCurrUser().getName());
+        ShowLogE("Handle_StartGameButton_Click", "CurrUserName: " + Setting.getInstance().getCurrUser().getName());
 
         Intent GamingIntent = new Intent(m_mainView.getThisPtr(), GamingActivity.class);
         Bundle GamingBundle = new Bundle();

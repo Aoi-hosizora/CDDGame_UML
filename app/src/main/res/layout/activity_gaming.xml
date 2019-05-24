@@ -31,6 +31,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.044" />
 
+    <Button
+        android:id="@+id/id_GamingAct_PushOrDistributeCardButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_GamingAct_DistributeCardButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.945"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.955" />
+
     <TextView
         android:id="@+id/id_GamingAct_UserNameDownTextView"
         android:layout_width="wrap_content"
@@ -90,8 +102,8 @@
 
     <FrameLayout
         xmlns:cascade="http://schemas.android.com/apk/res-auto"
-        android:layout_width="400dp"
-        android:layout_height="150dp"
+        android:layout_width="@dimen/CardSet_FrameLayout_Width"
+        android:layout_height="@dimen/CardSet_FrameLayout_Height"
         android:layout_gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -102,35 +114,49 @@
         app:layout_constraintVertical_bias="1.0">
 
         <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            cascade:horizontal_spacing="30dp"
-            cascade:vertical_spacing="00dp">
+            android:id="@+id/id_GamingAct_CardSetCascadeLayout"
+            xmlns:card="http://schemas.android.com/apk/res-auto"
+            android:layout_width="@dimen/CardSet_CascadeLayout_Width"
+            android:layout_height="@dimen/CardSet_CascadeLayout_Height"
+            cascade:horizontal_spacing="@dimen/Card_Horizontal_Spacing"
+            cascade:vertical_spacing="@dimen/Card_Vertical_Spacing">
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:background="@drawable/card_1" />
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_1" />-->
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:background="@drawable/card_2" />
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_2" />-->
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:background="@drawable/card_3" />
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_3" />-->
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:background="@drawable/card_4" />
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_4" />-->
 
-            <View
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:background="@drawable/card_5" />
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_5" />-->
+
+            <!--<com.oosad.cddgame.UI.GamingAct.view.CardLayout-->
+                <!--android:layout_width="@dimen/Card_Width"-->
+                <!--android:layout_height="@dimen/Card_Height"-->
+                <!--card:vertical_padding="@dimen/Card_Vertical_Padding"-->
+                <!--android:background="@drawable/card_6" />-->
+
         </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
 
 

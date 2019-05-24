@@ -14,7 +14,7 @@ public class Setting implements Serializable {
         if (instance == null) {
             instance = new Setting();
             instance.GameBGMVoloum = instance.GameOtoVoloum = 50;
-            instance.currUser = new User("");
+            instance.currUser = new User("123");
         }
         return instance;
     }

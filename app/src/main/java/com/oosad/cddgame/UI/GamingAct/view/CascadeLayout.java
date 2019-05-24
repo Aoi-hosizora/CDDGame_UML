@@ -3,6 +3,7 @@ package com.oosad.cddgame.UI.GamingAct.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,6 +13,9 @@ import com.oosad.cddgame.R;
 public class CascadeLayout extends ViewGroup {
     private int horizontalSpacing;
     private int verticalSpacing;
+
+    private int widthMeasureSpec;
+    private int heightMeasureSpec;
 
     public CascadeLayout(Context context) {
         this(context, null);
@@ -31,8 +35,8 @@ public class CascadeLayout extends ViewGroup {
         // cascade:horizontal_spacing="30dp"
         // cascade:vertical_spacing="00dp"
 
-        horizontalSpacing = a.getDimensionPixelSize(R.styleable.CascadeLayout_horizontal_spacing, 30);
-        verticalSpacing = a.getDimensionPixelSize(R.styleable.CascadeLayout_vertical_spacing, 0);
+        horizontalSpacing = a.getDimensionPixelSize(R.styleable.CascadeLayout_horizontal_spacing, (int) getResources().getDimension(R.dimen.Card_Horizontal_Spacing));
+        verticalSpacing = a.getDimensionPixelSize(R.styleable.CascadeLayout_vertical_spacing, R.dimen.Card_Vertical_Spacing);
         a.recycle();
     }
 
@@ -83,38 +87,56 @@ public class CascadeLayout extends ViewGroup {
         return new LayoutParams(p.width, p.height);
     }
 
+    private void ShowLogE(String FunctionName, String data) {
+        String TAG = "CDDGame";
+        String CN = "CascadeLayout";
+        String msg = CN + "###" + FunctionName + "(): " + data;
+        Log.e(TAG, msg);
+    }
+
+
     /**
      * step4 重写onMeasure
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        this.widthMeasureSpec = widthMeasureSpec;
+        this.heightMeasureSpec = heightMeasureSpec;
+        refreshLayout();
+    }
+
+    public void refreshLayout() {
         int width = 0;
         int height = getPaddingTop();
 
         // 获取每个子视图
         final int count = getChildCount();
 
-        for (int i = 0; i < count; i++) {
-            View child = getChildAt(i);
+        if (count != 0) {
 
-            // 每个子视图测量自身
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            for (int i = 0; i < count; i++) {
+                View child = getChildAt(i);
 
-            // 获取每个子视图的LayoutParams
-            LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                // 每个子视图测量自身
+                measureChild(child, widthMeasureSpec, heightMeasureSpec);
 
-            width = getPaddingLeft() + horizontalSpacing * i;
-            lp.x = width;
-            lp.y = height;// 将宽和高保存到自定义的LayoutParams中去
+                // 获取每个子视图的LayoutParams
+                LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-            width += child.getMeasuredWidth();
-            height += verticalSpacing;
+                width = getPaddingLeft() + horizontalSpacing * i;
+                lp.x = width;
+                lp.y = height;// 将宽和高保存到自定义的LayoutParams中去
+
+                width += child.getMeasuredWidth();
+                height += verticalSpacing;
+
+            }
+
+            // 使用计算所得的宽和高设置整个布局的测量尺寸
+            width += getPaddingRight();
+            height += getChildAt(getChildCount() - 1).getMeasuredHeight() + getPaddingBottom();
 
         }
-
-        // 使用计算所得的宽和高设置整个布局的测量尺寸
-        width += getPaddingRight();
-        height += getChildAt(getChildCount() - 1).getMeasuredHeight() + getPaddingBottom();
 
         // resolveSize: 根据提供的大小和 MeasureSpec 返回大小值
         // 这个里面根据传入模式的不同来做相应的处理
@@ -132,5 +154,27 @@ public class CascadeLayout extends ViewGroup {
             LayoutParams lp = (LayoutParams) child.getLayoutParams();
             child.layout(lp.x, lp.y, lp.x + child.getMeasuredWidth(), lp.y + child.getMeasuredHeight());
         }
+    }
+
+    @Override
+    public void onViewAdded(View child) {
+        CardLayout[] v = getAllCards();
+        for (int idx = 0; idx < getChildCount() - 1; idx++) {
+            v[idx].setFin(false);
+        }
+        ((CardLayout) child).setFin(true);
+        super.onViewAdded(child);
+    }
+
+    /**
+     * 获取所有的子扑克牌布局
+     * @return
+     */
+    public CardLayout[] getAllCards() {
+        CardLayout[] v = new CardLayout[getChildCount()];
+        for (int i = 0; i < getChildCount(); i++) {
+            v[i] = (CardLayout) getChildAt(i);
+        }
+        return v;
     }
 }
