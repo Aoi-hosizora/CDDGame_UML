@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".UI.GamingAct.GamingActivity">
+    tools:context=".UI.GamingAct.GamingActivity"
+    android:background="@drawable/bg_game">
 
     <Button
         android:id="@+id/id_GamingAct_PauseGameButton"
@@ -36,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="USER"
         android:textSize="20dp"
+        android:textColor="@color/White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.102"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -49,6 +51,7 @@
         android:layout_height="wrap_content"
         android:text="LeftUSER"
         android:textSize="20dp"
+        android:textColor="@color/White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -63,6 +66,7 @@
         android:layout_height="wrap_content"
         android:text="RightUSER"
         android:textSize="20dp"
+        android:textColor="@color/White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,6 +80,7 @@
         android:layout_height="wrap_content"
         android:text="UpUSER"
         android:textSize="20dp"
+        android:textColor="@color/White"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.463"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -105,22 +110,27 @@
             <View
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                android:background="#ff0000" />
+                android:background="@drawable/card_1" />
 
             <View
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                android:background="#00ff00" />
+                android:background="@drawable/card_2" />
 
             <View
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                android:background="#0000ff" />
+                android:background="@drawable/card_3" />
 
             <View
                 android:layout_width="100dp"
                 android:layout_height="150dp"
-                android:background="#00ffff" />
+                android:background="@drawable/card_4" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="150dp"
+                android:background="@drawable/card_5" />
         </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
 
 
