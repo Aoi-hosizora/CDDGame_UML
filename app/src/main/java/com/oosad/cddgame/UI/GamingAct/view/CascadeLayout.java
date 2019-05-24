@@ -166,6 +166,15 @@ public class CascadeLayout extends ViewGroup {
         super.onViewAdded(child);
     }
 
+    @Override
+    public void onViewRemoved(View child) {
+        CardLayout[] v = getAllCards();
+        if (((CardLayout) child).getIsFin() && getChildCount() != 0)
+            v[getChildCount() - 1].setFin(true);
+
+        super.onViewAdded(child);
+    }
+
     /**
      * 获取所有的子扑克牌布局
      * @return

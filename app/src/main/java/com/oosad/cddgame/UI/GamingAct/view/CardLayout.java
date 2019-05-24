@@ -25,6 +25,15 @@ public class CardLayout extends View {
      */
     boolean IsFin = false;
     private int VerticalMovingSpacing;
+    private boolean canCardSelected = false;
+
+    public boolean isCanCardSelected() {
+        return canCardSelected;
+    }
+
+    public void setCanCardSelected(boolean canCardSelected) {
+        this.canCardSelected = canCardSelected;
+    }
 
     private Card card = new Card(1, CardSuit.Spade);
 
@@ -41,13 +50,14 @@ public class CardLayout extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CardLayout);
 
         VerticalMovingSpacing = a.getDimensionPixelSize(R.styleable.CardLayout_vertical_padding, (int) getResources().getDimension(R.dimen.Card_Vertical_Padding));
+        canCardSelected = a.getBoolean(R.styleable.CardLayout_can_selected, false);
         a.recycle();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (checkIsInView(event)) {
+            if (canCardSelected && checkIsInView(event)) {
                 if (IsUp)
                     SetViewMoveDown();
                 else

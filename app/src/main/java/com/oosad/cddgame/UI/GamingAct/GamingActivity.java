@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.presenter.GamingPresenterCompl;
 import com.oosad.cddgame.UI.GamingAct.presenter.IGamingPresenter;
+import com.oosad.cddgame.UI.GamingAct.util.CardUtil;
 import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
 import com.oosad.cddgame.UI.GamingAct.view.CascadeLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
@@ -30,6 +31,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
     CascadeLayout m_CardSetLayout;
+    CascadeLayout m_ShowCardSetDownLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_DistributeCardButton);
 
         m_CardSetLayout = findViewById(R.id.id_GamingAct_CardSetCascadeLayout);
+        m_ShowCardSetDownLayout = findViewById(R.id.id_GamingAct_ShowCardSetDownCascadeLayout);
     }
 
     private void ShowLogE(String FunctionName, String data) {
@@ -140,13 +143,48 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         finish();
     }
 
+    /**
+     * 添加到 主CardSet 内，扑克牌可选
+     * @param cardLayout
+     */
     @Override
-    public void onAddCardLayout(View cardLayoutArrayList) {
-        m_CardSetLayout.addView(cardLayoutArrayList);
+    public void onAddCardLayout(View cardLayout) {
+        m_CardSetLayout.addView(cardLayout);
     }
 
+    /**
+     * 刷新 CardSet 布局
+     */
     @Override
     public void onRefreshCardLayout() {
         m_CardSetLayout.refreshLayout();
+    }
+
+    @Override
+    public void onShowWinAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_title)
+                .setMessage("赢了")
+                .setPositiveButton("确定", null)
+                .show();
+    }
+
+    /**
+     * 出牌，从 主CardSet 内删除，并添加到 出牌处，不可选
+     * @param cardLayout
+     */
+    @Override
+    public void onShowCardSet(CardLayout cardLayout) {
+        if (m_CardSetLayout.getAllCards().length == 1) {
+            onShowWinAlert();
+            m_CardSetLayout.removeAllViews();
+            return;
+        }
+        if (cardLayout != null) {
+            m_CardSetLayout.removeView(cardLayout);
+            cardLayout = CardUtil.getShowCardLayoutFromMainCardLayout(this, cardLayout);
+            onRefreshCardLayout();
+            m_ShowCardSetDownLayout.addView(cardLayout);
+        }
     }
 }

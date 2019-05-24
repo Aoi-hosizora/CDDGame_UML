@@ -65,10 +65,12 @@ public class GamingPresenterCompl implements IGamingPresenter {
      */
     @Override
     public void Handle_PushCard(CardLayout[] cardLayouts) {
-        Card[] cardset = CardUtil.getCardSetUp(cardLayouts);
-        for (Card c : cardset) {
-            if (c != null)
-                ShowLogE("Handle_PushCardButton_Click", "" + c.getCardNum());
+        CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
+        for (CardLayout c : cardSetLayout) {
+            if (c != null) {
+                m_GamingView.onShowCardSet(c);
+                ShowLogE("Handle_PushCardButton_Click", "" + c.getCard().getCardNum());
+            }
         }
     }
 
@@ -80,15 +82,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
         Context context = m_GamingView.getThisPtr();
         Card[] cards = CardUtil.DistributeCards();
         for (Card c : cards) {
-            CardLayout cl = new CardLayout(m_GamingView.getThisPtr());
-            cl.setCard(c);
-
-            int height = (int) context.getResources().getDimension(R.dimen.Card_Height);
-            int width = (int) context.getResources().getDimension(R.dimen.Card_Width);
-
-            cl.setLayoutSize(width, height, context.getResources().getDisplayMetrics());
-            cl.setBackground(CardUtil.getCardBackGroundFromCard(m_GamingView.getThisPtr(), c));
-            m_GamingView.onAddCardLayout(cl);
+            m_GamingView.onAddCardLayout(CardUtil.getMainCardLayoutFromCard(context, c));
         }
         m_GamingView.onRefreshCardLayout();
     }

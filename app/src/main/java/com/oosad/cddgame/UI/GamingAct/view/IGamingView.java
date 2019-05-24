@@ -11,4 +11,6 @@ public interface IGamingView {
     GamingActivity getThisPtr();
     void onAddCardLayout(View cardLayoutArrayList);
     void onRefreshCardLayout();
+    void onShowCardSet(CardLayout cardLayout);
+    void onShowWinAlert();
 }

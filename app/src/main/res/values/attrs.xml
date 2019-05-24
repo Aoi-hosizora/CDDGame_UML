@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CardLayout">
-        <attr name="vertical_padding" format="dimension"/>
-    </declare-styleable>
-
     <declare-styleable name="CascadeLayout">
         <attr name="horizontal_spacing" format="dimension"/>
         <attr name="vertical_spacing" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="CardLayout">
+        <attr name="vertical_padding" format="dimension"/>
+        <attr name="can_selected" format="boolean"/>
     </declare-styleable>
 </resources>
