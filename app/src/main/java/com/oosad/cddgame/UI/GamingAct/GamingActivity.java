@@ -27,8 +27,13 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     Button m_PauseGameButton;
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
+    Button m_JumpShowCardButton;
     CascadeLayout m_CardSetLayout;
     CascadeLayout m_ShowCardSetDownLayout;
+    TextView m_UserUpCardCntTextView;
+    TextView m_UserDownCardCntTextView;
+    TextView m_UserLeftCardCntTextView;
+    TextView m_UserRightCardCntTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +56,30 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_PauseGameButton = findViewById(R.id.id_GamingAct_PauseGameButton);
         m_ExitGameButton = findViewById(R.id.id_GamingAct_ExitGameButton);
         m_PushOrDistributeCardButton = findViewById(R.id.id_GamingAct_PushOrDistributeCardButton);
+        m_JumpShowCardButton = findViewById(R.id.id_GamingAct_JumpShowCardButton);
+
+        m_UserUpCardCntTextView = findViewById(R.id.id_GamingAct_UserUpCardCntTextView);
+        m_UserDownCardCntTextView = findViewById(R.id.id_GamingAct_UserDownCardCntTextView);
+        m_UserLeftCardCntTextView = findViewById(R.id.id_GamingAct_UserLeftCardCntTextView);
+        m_UserRightCardCntTextView = findViewById(R.id.id_GamingAct_UserRightCardCntTextView);
+
+        m_UserUpCardCntTextView.setVisibility(View.GONE);
+        m_UserDownCardCntTextView.setVisibility(View.GONE);
+        m_UserLeftCardCntTextView.setVisibility(View.GONE);
+        m_UserRightCardCntTextView.setVisibility(View.GONE);
 
         m_PauseGameButton.setOnClickListener(this);
         m_ExitGameButton.setOnClickListener(this);
         m_PushOrDistributeCardButton.setOnClickListener(this);
+        m_JumpShowCardButton.setOnClickListener(this);
+
         m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_DistributeCardButton);
+        m_JumpShowCardButton.setVisibility(View.GONE);
 
         m_CardSetLayout = findViewById(R.id.id_GamingAct_CardSetCascadeLayout);
         m_ShowCardSetDownLayout = findViewById(R.id.id_GamingAct_ShowCardSetDownCascadeLayout);
+
+        m_CardSetLayout.setOnClickListener(this);
     }
 
     private void ShowLogE(String FunctionName, String data) {
@@ -94,7 +115,33 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
             case R.id.id_GamingAct_PushOrDistributeCardButton: // 出发牌
                 PushOrDistributeCardButton_Click();
             break;
+            case R.id.id_GamingAct_CardSetCascadeLayout:
+                // 当前为出牌阶段，判断是否有选择牌
+                RefreshShowCardButton_Enabled();
+            break;
+            case R.id.id_GamingAct_JumpShowCardButton:
+                JumpShowCardButton_Click();
+            break;
         }
+    }
+
+    /**
+     * 根据是否有选择牌来更新出牌按钮的 enable
+     */
+    private void RefreshShowCardButton_Enabled() {
+        // ShowLogE("onClick", CardLayout.CardUpCnt + "");
+        if (getString(R.string.str_GamingAct_PushCardButton).equals(m_PushOrDistributeCardButton.getText().toString()))
+            m_PushOrDistributeCardButton.setEnabled(CardLayout.HasSelectCardUp());
+    }
+
+    /**
+     * 更新界面的牌数
+     */
+    private void onRefreshShowCardCnt() {
+        m_UserDownCardCntTextView.setText("" + m_CardSetLayout.getChildCount());
+        m_UserUpCardCntTextView.setText("13");
+        m_UserLeftCardCntTextView.setText("13");
+        m_UserRightCardCntTextView.setText("13");
     }
 
     /**
@@ -129,10 +176,22 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         if (getString(R.string.str_GamingAct_DistributeCardButton).equals(m_PushOrDistributeCardButton.getText().toString())) {
             m_gamingPresenter.Handle_DistributeCard();
             m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_PushCardButton);
+
+            RefreshShowCardButton_Enabled();
+
+            m_JumpShowCardButton.setVisibility(View.VISIBLE);
+            m_UserUpCardCntTextView.setVisibility(View.VISIBLE);
+            m_UserDownCardCntTextView.setVisibility(View.VISIBLE);
+            m_UserLeftCardCntTextView.setVisibility(View.VISIBLE);
+            m_UserRightCardCntTextView.setVisibility(View.VISIBLE);
         }
         else {
             m_gamingPresenter.Handle_PushCard(m_CardSetLayout.getAllCards());
         }
+    }
+
+    public void JumpShowCardButton_Click() {
+        m_gamingPresenter.Handle_JumpShowCard();
     }
 
     /**
@@ -160,15 +219,6 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_CardSetLayout.refreshLayout();
     }
 
-    @Override
-    public void onShowWinAlert() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.alert_title)
-                .setMessage("赢了")
-                .setPositiveButton("确定", null)
-                .show();
-    }
-
     /**
      * 出牌，从 主CardSet 内删除，并添加到 出牌处，不可选
      * @param cardLayouts
@@ -194,8 +244,50 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                     m_ShowCardSetDownLayout.addView(c);
             }
         }
+        // 出牌后删除 Up 并更新 enable
+        CardLayout.clearCardUpCnt();
+
+        onRefreshShowCardCnt();
+        RefreshShowCardButton_Enabled();
         // 拥有的牌为空
         if (m_CardSetLayout.getAllCards().length == 0)
             onShowWinAlert();
+    }
+
+    /**
+     * Handle_PushCard() 判断当前没有选择牌
+     */
+    @Override
+    public void onShowNoSelectCardAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_GamingAct_ShowNoSelectCardAlertMsg)
+                .setPositiveButton(R.string.str_GamingAct_ShowNoSelectCardAlertPosButton, null)
+                .show();
+    }
+
+    /**
+     * Handle_PushCard() 后判断不允许如此出牌
+     */
+    @Override
+    public void onShowCantShowCardAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_GamingAct_ShowCantShowCardAlertMsg)
+                .setPositiveButton(R.string.str_GamingAct_ShowCantShowCardAlertPosButton, null)
+                .show();
+    }
+
+    /**
+     * onShowCardSet() 后判断当前已经没有拥有牌了
+     * 或者 System 判断出机器人已经没有拥有牌了调用
+     */
+    @Override
+    public void onShowWinAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_title)
+                .setMessage("赢了")
+                .setPositiveButton("确定", null)
+                .show();
     }
 }

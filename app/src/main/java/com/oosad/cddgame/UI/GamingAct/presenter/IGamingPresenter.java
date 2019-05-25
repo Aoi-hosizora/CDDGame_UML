@@ -10,5 +10,6 @@ public interface IGamingPresenter {
     void Handle_PauseGameButton_Click();
     void Handle_PushCard(CardLayout[] cardLayouts);
     void Handle_DistributeCard();
+    void Handle_JumpShowCard();
 
 }

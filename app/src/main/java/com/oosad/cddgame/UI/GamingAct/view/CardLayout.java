@@ -16,6 +16,25 @@ import com.oosad.cddgame.UI.GamingAct.model.Card;
 import com.oosad.cddgame.UI.GamingAct.model.CardSuit;
 
 public class CardLayout extends View {
+
+    public static int CardUpCnt = 0;
+
+    /**
+     * 判断当前全局是否有选中牌
+     * @return
+     */
+    public static boolean HasSelectCardUp() {
+        return CardUpCnt != 0;
+    }
+
+    /**
+     * 更新选中牌数目，手动
+     * GomiCode !!!
+     */
+    public static void clearCardUpCnt() {
+        CardUpCnt = 0;
+    }
+
     /**
      * 是否选中(上移)
      */
@@ -26,6 +45,8 @@ public class CardLayout extends View {
     boolean IsFin = false;
     private int VerticalMovingSpacing;
     private boolean canCardSelected = false;
+
+    private OnChangeCardStateListener mListener;
 
     public boolean isCanCardSelected() {
         return canCardSelected;
@@ -59,9 +80,11 @@ public class CardLayout extends View {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (canCardSelected && checkIsInView(event)) {
                 if (IsUp)
-                    SetViewMoveDown();
+                    SetViewMoveDown(true);
                 else
-                    SetViewMoveUp();
+                    SetViewMoveUp(true);
+                if (mListener != null)
+                    mListener.onChange(IsUp);
             }
         }
         return super.onTouchEvent(event);
@@ -69,7 +92,7 @@ public class CardLayout extends View {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        SetViewMoveDown();
+        SetViewMoveDown(false);
     }
 
     /**
@@ -117,20 +140,26 @@ public class CardLayout extends View {
 
     /**
      * 将扑克牌下移，取消选中
+     * @param calcCnt 判断是否计次数, 考虑了 OnLayout()
      */
-    private void SetViewMoveDown() {
+    private void SetViewMoveDown(boolean calcCnt) {
         IsUp = false;
         setTop(getTop() + VerticalMovingSpacing);
         setBottom(getBottom() + VerticalMovingSpacing);
+        if (calcCnt)
+            CardUpCnt --;
     }
 
     /**
      * 将扑克牌上移，选中
+     * @param calcCnt 判断是否计次数
      */
-    private void SetViewMoveUp() {
+    private void SetViewMoveUp(boolean calcCnt) {
         IsUp = true;
         setTop(getTop() - VerticalMovingSpacing);
         setBottom(getBottom() - VerticalMovingSpacing);
+        if (calcCnt)
+            CardUpCnt ++;
     }
 
     /**
@@ -148,6 +177,15 @@ public class CardLayout extends View {
         }
         IsWidthIn = event.getX() > 0 && event.getX() < getResources().getDimension(R.dimen.Card_Horizontal_Spacing);
         return IsHeightIn && IsWidthIn;
+    }
+
+
+    public interface OnChangeCardStateListener {
+        void onChange(boolean isUP);
+    }
+
+    public void setOnChangeCardStateListener(OnChangeCardStateListener mListener) {
+        this.mListener = mListener;
     }
 
 

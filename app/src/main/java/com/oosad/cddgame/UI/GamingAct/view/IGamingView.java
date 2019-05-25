@@ -12,5 +12,7 @@ public interface IGamingView {
     void onAddCardLayout(View cardLayoutArrayList);
     void onRefreshCardLayout();
     void onShowCardSet(CardLayout[] cardLayout);
+    void onShowCantShowCardAlert();
+    void onShowNoSelectCardAlert();
     void onShowWinAlert();
 }

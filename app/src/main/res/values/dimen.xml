@@ -17,6 +17,6 @@
     <dimen name="ShowCard_Vertical_Padding">15dp</dimen>
 
     <dimen name="ShowCardSet_CascadeLayout_Height">85dp</dimen>
-    <dimen name="ShowCardSet_CascadeLayout_Width">150dp</dimen>
+    <dimen name="ShowCardSet_CascadeLayout_Width">180dp</dimen>
 
 </resources>

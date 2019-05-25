@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Data;
 
+import com.oosad.cddgame.R;
+
 import java.io.Serializable;
 
 public class Setting implements Serializable {
@@ -14,7 +16,7 @@ public class Setting implements Serializable {
         if (instance == null) {
             instance = new Setting();
             instance.GameBGMVoloum = instance.GameOtoVoloum = 50;
-            instance.currUser = new User("123");
+            instance.currUser = new User("Default");
         }
         return instance;
     }

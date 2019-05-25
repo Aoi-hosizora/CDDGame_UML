@@ -19,12 +19,22 @@
     <string name="str_SettingAct_ShowNoneUserAlertPosButton">确定</string>
 
     <!-- Gaming Act -->
+    <string name="str_GamingAct_DefUserLeftTextView">Left User</string>
+    <string name="str_GamingAct_DefUserUpTextView">Up User</string>
+    <string name="str_GamingAct_DefUserRightTextView">Right User</string>
+    <string name="str_GamingAct_DefUserDownTextView">Me</string>
+
     <string name="str_GamingAct_PauseGameButton">暂停</string>
     <string name="str_GamingAct_ExitGameButton">退出</string>
     <string name="str_GamingAct_PushCardButton">出牌</string>
+    <string name="str_GamingAct_JumpShowCardButton">跳过</string>
     <string name="str_GamingAct_DistributeCardButton">发牌</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertMessage">确定退出游戏？</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit">退出</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel">取消</string>
+    <string name="str_GamingAct_ShowNoSelectCardAlertMsg">没有选择想出的牌。</string>
+    <string name="str_GamingAct_ShowNoSelectCardAlertPosButton">确定</string>
+    <string name="str_GamingAct_ShowCantShowCardAlertMsg">不允许如此出牌。</string>
+    <string name="str_GamingAct_ShowCantShowCardAlertPosButton">确定</string>
 
 </resources>

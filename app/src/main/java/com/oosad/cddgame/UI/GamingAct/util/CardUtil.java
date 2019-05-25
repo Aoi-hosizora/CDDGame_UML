@@ -6,37 +6,24 @@ import android.graphics.drawable.Drawable;
 
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.model.Card;
-import com.oosad.cddgame.UI.GamingAct.model.CardSuit;
 import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.ArrayList;
 
 public class CardUtil {
 
     /**
-     * 获得随机数，闭区间
-     * @param from
-     * @param to
-     * @return
+     * 扑克牌总数
      */
-    private static int getRandom(int from, int to) {
-        Random random = new Random();
-        return random.nextInt(to - from + 1) + from;
-    }
-
+    public static final int AllCardCnt = 52;
     /**
-     * 发牌，目前为随机算法，不考虑重复
-     * @return
+     * 扑克牌花色总数
      */
-    public static Card[] DistributeCards() {
-        int CardCnt = 13;
-        Card[] cards = new Card[CardCnt];
-        for (int i = 0; i < CardCnt; i++)
-            cards[i] = new Card(getRandom(1, 13), CardSuit.values()[getRandom(0, 3)]);
-        Arrays.sort(cards);
-        return cards;
-    }
+    public static final int AllCardSuitCnt = 4;
+    /**
+     * 玩家个数
+     */
+    public static final int PlayerCnt = 4;
 
     /**
      * 从 Card 获得 CardLayout
@@ -68,18 +55,33 @@ public class CardUtil {
     }
 
     /**
+     * 从 CardLayout[] 获得 Card[]
+     * @param cardLayouts
+     * @return
+     */
+    public static Card[] getCardsFromCardLayouts(CardLayout[] cardLayouts) {
+        Card[] cards = new Card[cardLayouts.length];
+        int idx = 0;
+        for (CardLayout cl : cardLayouts) {
+            if (cl != null) {
+                cards[idx] = cl.getCard();
+            }
+        }
+        return cards;
+    }
+
+    /**
      * 通过 CardLayout[] 获取选中的 CardSet
      * @param cardLayouts
      * @return
      */
     public static CardLayout[] getCardSetLayoutUp(CardLayout[] cardLayouts) {
-        CardLayout[] cards = new CardLayout[cardLayouts.length];
-        int idx = 0;
+        ArrayList<CardLayout> cards = new ArrayList<>();
         for (CardLayout v : cardLayouts) {
             if (v.getIsUp())
-                cards[idx++] = v;
+                cards.add(v);
         }
-        return cards;
+        return (CardLayout[]) cards.toArray(new CardLayout[cards.size()]);
     }
 
     /**

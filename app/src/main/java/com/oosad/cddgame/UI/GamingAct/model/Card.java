@@ -37,4 +37,11 @@ public class Card implements Comparable<Card> {
             return this.getCardNum() > card.getCardNum() ? 1 : -1;
         return this.getCardSuit().compareTo(card.getCardSuit());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Card
+            && this.getCardNum() == ((Card) obj).getCardNum()
+            && this.getCardSuit() == ((Card) obj).getCardSuit();
+    }
 }
