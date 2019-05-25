@@ -1,6 +1,6 @@
 package com.oosad.cddgame.UI.GamingAct.model;
 
-public class Card {
+public class Card implements Comparable<Card> {
 
     public Card(int cardNum, CardSuit cardSuit) {
         this.cardNum = cardNum;
@@ -29,5 +29,12 @@ public class Card {
 
     public void setCardSuit(CardSuit cardSuit) {
         this.cardSuit = cardSuit;
+    }
+
+    @Override
+    public int compareTo(Card card) {
+        if (this.getCardNum() != card.getCardNum())
+            return this.getCardNum() > card.getCardNum() ? 1 : -1;
+        return this.getCardSuit().compareTo(card.getCardSuit());
     }
 }

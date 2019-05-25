@@ -2,16 +2,14 @@ package com.oosad.cddgame.UI.GamingAct.util;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.model.Card;
 import com.oosad.cddgame.UI.GamingAct.model.CardSuit;
 import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class CardUtil {
@@ -33,75 +31,40 @@ public class CardUtil {
      */
     public static Card[] DistributeCards() {
         int CardCnt = 13;
-        Random random = new Random();
         Card[] cards = new Card[CardCnt];
-        for (int i = 0; i < CardCnt; i++) {
+        for (int i = 0; i < CardCnt; i++)
             cards[i] = new Card(getRandom(1, 13), CardSuit.values()[getRandom(0, 3)]);
-        }
+        Arrays.sort(cards);
         return cards;
     }
 
     /**
-     * 通过 CardLayout[] 获取 CardSet
-     * @param cardLayouts
-     * @return
-     */
-    public static Card[] getCardSet(CardLayout[] cardLayouts) {
-        Card[] cards = new Card[cardLayouts.length];
-        int idx = 0;
-        for (CardLayout v : cardLayouts)
-            cards[idx++] = v.getCard();
-        return cards;
-    }
-
-    /**
-     * 从 Card 获得 MainCardLayout
+     * 从 Card 获得 CardLayout
      * @param context
      * @param card
+     * @param IsShowCardLayout
+     *      true: 指定布局为 用于展示的 CardLayout
+     *      false: 指定布局为 个人用有的 CardLayout
      * @return
      */
-    public static CardLayout getMainCardLayoutFromCard(Context context, Card card) {
+    public static CardLayout getCardLayoutFromCard(Context context, Card card, boolean IsShowCardLayout) {
         CardLayout cl = new CardLayout(context);
         cl.setCard(card);
 
-        int height = (int) context.getResources().getDimension(R.dimen.Card_Height);
-        int width = (int) context.getResources().getDimension(R.dimen.Card_Width);
+        int height, width;
+        if (IsShowCardLayout) { // ShowCardLayout
+            height = (int) context.getResources().getDimension(R.dimen.ShowCard_Height);
+            width = (int) context.getResources().getDimension(R.dimen.ShowCard_Width);
+        }
+        else { // MainCardLayout
+            height = (int) context.getResources().getDimension(R.dimen.Card_Height);
+            width = (int) context.getResources().getDimension(R.dimen.Card_Width);
+        }
 
         cl.setLayoutSize(width, height, context.getResources().getDisplayMetrics());
         cl.setBackground(CardUtil.getCardBackGroundFromCard(context, card));
-        cl.setCanCardSelected(true);
+        cl.setCanCardSelected(!IsShowCardLayout); // 拥有的牌 -> 可选
         return cl;
-    }
-
-    /**
-     * 从 MainCardLayout 获得 ShowCardLayout
-     * @param context
-     * @param cardLayout ShowCardLayout
-     * @return
-     */
-    public static CardLayout getShowCardLayoutFromMainCardLayout(Context context, CardLayout cardLayout) {
-        int height = (int) context.getResources().getDimension(R.dimen.ShowCard_Height);
-        int width = (int) context.getResources().getDimension(R.dimen.ShowCard_Width);
-
-        cardLayout.setLayoutSize(width, height, context.getResources().getDisplayMetrics());
-        cardLayout.setBackground(CardUtil.getCardBackGroundFromCard(context, cardLayout.getCard()));
-        cardLayout.setCanCardSelected(false);
-        return cardLayout;
-    }
-
-    /**
-     * 通过 CardLayout[] 获取选中的 CardSet
-     * @param cardLayouts
-     * @return
-     */
-    public static Card[] getCardSetUp(CardLayout[] cardLayouts) {
-        Card[] cards = new Card[cardLayouts.length];
-        int idx = 0;
-        for (CardLayout v : cardLayouts) {
-            if (v.getIsUp())
-                cards[idx++] = v.getCard();
-        }
-        return cards;
     }
 
     /**
@@ -119,6 +82,12 @@ public class CardUtil {
         return cards;
     }
 
+    /**
+     * 业余处理显示图片
+     * @param context
+     * @param card 要显示的扑克牌
+     * @return 该扑克牌对应的 Drawable
+     */
     public static Drawable getCardBackGroundFromCard(Context context, Card card) {
         Resources r = context.getResources();
         Drawable ret = r.getDrawable(R.drawable.card_40);

@@ -4,20 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.User;
-import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.model.Card;
 import com.oosad.cddgame.UI.GamingAct.util.CardUtil;
 import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GamingPresenterCompl implements IGamingPresenter {
 
@@ -60,21 +53,6 @@ public class GamingPresenterCompl implements IGamingPresenter {
     }
 
     /**
-     * 处理出牌
-     * @param cardLayouts
-     */
-    @Override
-    public void Handle_PushCard(CardLayout[] cardLayouts) {
-        CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
-        for (CardLayout c : cardSetLayout) {
-            if (c != null) {
-                m_GamingView.onShowCardSet(c);
-                ShowLogE("Handle_PushCardButton_Click", "" + c.getCard().getCardNum());
-            }
-        }
-    }
-
-    /**
      * 处理发牌，并显示
      */
     @Override
@@ -82,8 +60,22 @@ public class GamingPresenterCompl implements IGamingPresenter {
         Context context = m_GamingView.getThisPtr();
         Card[] cards = CardUtil.DistributeCards();
         for (Card c : cards) {
-            m_GamingView.onAddCardLayout(CardUtil.getMainCardLayoutFromCard(context, c));
+            m_GamingView.onAddCardLayout(CardUtil.getCardLayoutFromCard(context, c, false));
         }
         m_GamingView.onRefreshCardLayout();
+    }
+
+    /**
+     * 处理出牌，重要
+     * @param cardLayouts
+     */
+    @Override
+    public void Handle_PushCard(CardLayout[] cardLayouts) {
+        // cardset.vvvv
+
+        // Sys.出牌(cards, 用户) : bool
+
+        CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
+        m_GamingView.onShowCardSet(cardSetLayout);
     }
 }

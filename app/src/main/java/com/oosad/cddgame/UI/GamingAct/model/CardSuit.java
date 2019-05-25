@@ -2,16 +2,9 @@ package com.oosad.cddgame.UI.GamingAct.model;
 
 /**
  * 扑克牌花色
+ * 顺序: Diamond < Club < Heart < Spade
  */
-public enum CardSuit {
-    /**
-     * 黑桃 ♠
-     */
-    Spade,
-    /**
-     * 红桃 ♥
-     */
-    Heart,
+public enum CardSuit implements Comparable<CardSuit> {
     /**
      * 方块 ♦
      */
@@ -19,5 +12,13 @@ public enum CardSuit {
     /**
      * 梅花 ♣
      */
-    Club
+    Club,
+    /**
+     * 红桃 ♥
+     */
+    Heart,
+    /**
+     * 黑桃 ♠
+     */
+    Spade
 }

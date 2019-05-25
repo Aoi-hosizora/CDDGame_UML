@@ -17,9 +17,6 @@ import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
 import com.oosad.cddgame.UI.GamingAct.view.CascadeLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class GamingActivity extends AppCompatActivity implements IGamingView, View.OnClickListener {
 
     IGamingPresenter m_gamingPresenter;
@@ -125,6 +122,9 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_gamingPresenter.Handle_PauseGameButton_Click();
     }
 
+    /**
+     * 分牌 出牌 重要
+     */
     private void PushOrDistributeCardButton_Click() {
         if (getString(R.string.str_GamingAct_DistributeCardButton).equals(m_PushOrDistributeCardButton.getText().toString())) {
             m_gamingPresenter.Handle_DistributeCard();
@@ -171,20 +171,31 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
     /**
      * 出牌，从 主CardSet 内删除，并添加到 出牌处，不可选
-     * @param cardLayout
+     * @param cardLayouts
      */
     @Override
-    public void onShowCardSet(CardLayout cardLayout) {
-        if (m_CardSetLayout.getAllCards().length == 1) {
+    public void onShowCardSet(CardLayout[] cardLayouts) {
+        // 有出牌
+        if (cardLayouts.length != 0) {
+            CardLayout[] showcardLayouts = new CardLayout[cardLayouts.length];
+            int idx = 0;
+            for (CardLayout c : cardLayouts) {
+                if (c != null) {
+                    m_CardSetLayout.removeView(c); // 出牌，从自己拥有的牌删除
+                    onRefreshCardLayout();
+                    c = CardUtil.getCardLayoutFromCard(this, c.getCard(), true); // 从拥有的牌转化成展示的牌
+                    showcardLayouts[idx++] = c; // 记录进 showcardLayouts
+                }
+            }
+            // 添加 ShowCardSetDownLayout
+            m_ShowCardSetDownLayout.removeAllViews();
+            for (CardLayout c : showcardLayouts) {
+                if (c != null)
+                    m_ShowCardSetDownLayout.addView(c);
+            }
+        }
+        // 拥有的牌为空
+        if (m_CardSetLayout.getAllCards().length == 0)
             onShowWinAlert();
-            m_CardSetLayout.removeAllViews();
-            return;
-        }
-        if (cardLayout != null) {
-            m_CardSetLayout.removeView(cardLayout);
-            cardLayout = CardUtil.getShowCardLayoutFromMainCardLayout(this, cardLayout);
-            onRefreshCardLayout();
-            m_ShowCardSetDownLayout.addView(cardLayout);
-        }
     }
 }
