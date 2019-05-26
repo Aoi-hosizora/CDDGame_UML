@@ -88,7 +88,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
         }
 
         // 处理出牌规则判断 !!!!!!
-        boolean ret = GameSystem.getInstance().canShowCard(cards, Setting.getInstance().getCurrUser());
+        boolean ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, Setting.getInstance().getCurrUser());
 
         if (ret)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
             m_GamingView.onShowCardSet(cardSetLayout);
@@ -101,7 +101,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
      */
     @Override
     public void Handle_JumpShowCard() {
-        GameSystem.getInstance().canShowCard(null, Setting.getInstance().getCurrUser());
+        GameSystem.getInstance().canShowCardWithCheckTurn(null, Setting.getInstance().getCurrUser());
 
         Toast.makeText(m_GamingView.getThisPtr(), "跳过出牌", Toast.LENGTH_SHORT).show();
     }

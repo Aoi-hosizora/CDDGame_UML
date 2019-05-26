@@ -13,19 +13,6 @@ import java.util.ArrayList;
 public class CardUtil {
 
     /**
-     * 扑克牌总数
-     */
-    public static final int AllCardCnt = 52;
-    /**
-     * 扑克牌花色总数
-     */
-    public static final int AllCardSuitCnt = 4;
-    /**
-     * 玩家个数
-     */
-    public static final int PlayerCnt = 4;
-
-    /**
      * 从 Card 获得 CardLayout
      * @param context
      * @param card
