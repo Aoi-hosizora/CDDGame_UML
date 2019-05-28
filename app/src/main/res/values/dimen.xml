@@ -19,4 +19,6 @@
     <dimen name="ShowCardSet_CascadeLayout_Height">85dp</dimen>
     <dimen name="ShowCardSet_CascadeLayout_Width">180dp</dimen>
 
+    <dimen name="ShowCardSet_PassTextSize">30sp</dimen>
+
 </resources>

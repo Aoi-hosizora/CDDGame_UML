@@ -23,11 +23,12 @@
     <string name="str_GamingAct_DefUserUpTextView">Up User</string>
     <string name="str_GamingAct_DefUserRightTextView">Right User</string>
     <string name="str_GamingAct_DefUserDownTextView">Me</string>
+    <string name="str_GamingAct_PassTextView">pass</string>
 
     <string name="str_GamingAct_PauseGameButton">暂停</string>
     <string name="str_GamingAct_ExitGameButton">退出</string>
     <string name="str_GamingAct_PushCardButton">出牌</string>
-    <string name="str_GamingAct_JumpShowCardButton">跳过</string>
+    <string name="str_GamingAct_PassShowCardButton">跳过</string>
     <string name="str_GamingAct_DistributeCardButton">发牌</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertMessage">确定退出游戏？</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit">退出</string>

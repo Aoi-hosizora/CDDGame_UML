@@ -43,13 +43,17 @@ public class Robot extends Player implements Serializable {
         GameSystem.getInstance().canShowCardWithCheckTurn(showcards, this);
 
         if (onRobotShowCard != null) {
-            onRobotShowCard.onShowCard(showcards); // 顺便通知订阅者更新
+            if (showcards.length != 0)
+                onRobotShowCard.onShowCard(showcards); // 顺便通知订阅者更新
+            else
+                onRobotShowCard.onPassCard();
         }
         return true;
     }
 
     public interface OnRobotShowCardListener {
         void onShowCard(Card[] cards);
+        void onPassCard();
     }
 
     /**

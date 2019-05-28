@@ -47,10 +47,10 @@
 
 
     <Button
-        android:id="@+id/id_GamingAct_JumpShowCardButton"
+        android:id="@+id/id_GamingAct_PassShowCardButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/str_GamingAct_JumpShowCardButton"
+        android:text="@string/str_GamingAct_PassShowCardButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.944"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -251,7 +251,6 @@
 
     </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
-
     <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_ShowCardSetUpCascadeLayout"
         android:layout_width="@dimen/ShowCardSet_CascadeLayout_Width"
@@ -306,5 +305,62 @@
             android:layout_height="@dimen/ShowCard_Height"
             android:background="@drawable/card_1" />
     -->
+
+    <!-- pass -->
+
+    <TextView
+        android:id="@+id/id_GamingAct_ShowCardSetUpPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_GamingAct_PassTextView"
+        android:textSize="@dimen/ShowCardSet_PassTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.377"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.172" />
+
+
+    <TextView
+        android:id="@+id/id_GamingAct_ShowCardSetRightPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_GamingAct_PassTextView"
+        android:textSize="@dimen/ShowCardSet_PassTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.668"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.367" />
+
+
+    <TextView
+        android:id="@+id/id_GamingAct_ShowCardSetLeftPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_GamingAct_PassTextView"
+        android:textSize="@dimen/ShowCardSet_PassTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.196"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.467" />
+
+
+    <TextView
+        android:id="@+id/id_GamingAct_ShowCardSetDownPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_GamingAct_PassTextView"
+        android:textSize="@dimen/ShowCardSet_PassTextSize"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.629" />
 
 </android.support.constraint.ConstraintLayout>

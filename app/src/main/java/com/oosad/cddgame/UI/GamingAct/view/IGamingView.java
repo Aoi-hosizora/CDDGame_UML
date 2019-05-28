@@ -18,4 +18,6 @@ public interface IGamingView {
     void onShowNoSelectCardAlert();
     void onShowWinAlert();
     void onRefreshShowCardCnt();
+    void onPassShowCard(int PlayerId);
+    void onHidePassShowCard(int PlayerId);
 }

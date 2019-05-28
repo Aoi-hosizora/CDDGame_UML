@@ -106,10 +106,9 @@ public class GamingPresenterCompl implements IGamingPresenter {
      * 跳过出牌
      */
     @Override
-    public void Handle_JumpShowCard() {
+    public void Handle_UserPassShowCard() {
         GameSystem.getInstance().canShowCardWithCheckTurn(null, Setting.getInstance().getCurrUser());
-
-        Toast.makeText(m_GamingView.getThisPtr(), "跳过出牌", Toast.LENGTH_SHORT).show();
+        m_GamingView.onPassShowCard(Constant.PLAYER_USER);
     }
 
     /**
@@ -118,7 +117,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
      * @param RobotIdx
      */
     @Override
-    public void Handle_SetupRobotShowCardLayout(final CascadeLayout cascadeLayout, int RobotIdx) {
+    public void Handle_SetupRobotShowCardLayout(final CascadeLayout cascadeLayout, final int RobotIdx) {
 
         Robot robot = GameSystem.getInstance().getRobot(RobotIdx);
 
@@ -134,6 +133,8 @@ public class GamingPresenterCompl implements IGamingPresenter {
                         for (Card c : cards) {
                             // 获得机器人出的每一张牌，并转换成 ShowCardLayout
                             CardLayout cl = CardUtil.getCardLayoutFromCard(m_GamingView.getThisPtr(), c, true);
+
+                            m_GamingView.onHidePassShowCard(RobotIdx);
                             cascadeLayout.addView(cl);
                         }
                         m_GamingView.onRefreshShowCardCnt();
@@ -142,6 +143,11 @@ public class GamingPresenterCompl implements IGamingPresenter {
                 }, Constant.TIME_WaitByClearRobotShowCardLayout);
 
 
+            }
+
+            @Override
+            public void onPassCard() {
+                m_GamingView.onPassShowCard(RobotIdx);
             }
         });
     }

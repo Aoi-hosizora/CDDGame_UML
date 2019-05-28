@@ -170,14 +170,4 @@ public class CardMgr {
     public void setLastShownCard(Card[] lastShownCard) {
         LastShownCard = lastShownCard;
     }
-
-    /**
-     * 调用规则模块
-     * @param showcards 为 null 表示跳过
-     * @return
-     */
-    public boolean checkShowCardThroughRule(Card[] showcards) {
-        // checkrule(showcards, getLastShownCard());
-        return true;
-    }
 }

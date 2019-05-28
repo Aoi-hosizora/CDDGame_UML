@@ -72,12 +72,14 @@ public class GameSystem {
                 return Constant.ERR_NOT_ROUND;
 
             // 轮到了不符合规则
-            if (!cardMgr.checkShowCardThroughRule(showcards))
+            if (!checkShowCardThroughRule(showcards))
                 return Constant.ERR_NOT_RULE;
 
             // 跳过出牌
-            if (showcards == null)
+            if (showcards == null) {
+                gameRound.setNextPlayer();
                 return Constant.NO_ERR;
+            }
 
             // 符合规则并进行出牌处理，待处理
             cardMgr.removePlayerCardShown(showcards, player);
@@ -101,8 +103,22 @@ public class GameSystem {
 
         CardMgr.getInstance().DistributeCards();
 
-        Player[] players = new Player[] {Setting.getInstance().getCurrUser(), RobotMgr[0], RobotMgr[1], RobotMgr[2]};
+        Player[] players = new Player[] {
+                Setting.getInstance().getCurrUser(),
+                RobotMgr[0], RobotMgr[1], RobotMgr[2]
+        };
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
         return CardMgr.getInstance().getPlayerCards(Setting.getInstance().getCurrUser());
+    }
+
+
+    /**
+     * 调用规则模块
+     * @param showcards 为 null 表示跳过
+     * @return
+     */
+    private boolean checkShowCardThroughRule(Card[] showcards) {
+        // checkrule(showcards, getLastShownCard());
+        return true;
     }
 }

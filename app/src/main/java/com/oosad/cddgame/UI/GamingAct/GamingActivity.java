@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.R;
@@ -27,13 +28,13 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     TextView m_UserNameDownTextView, m_UserNameLeftTextView, m_UserNameRightTextView, m_UserNameUpTextView;
     CascadeLayout m_ShowCardSetDownLayout, m_ShowCardSetUpLayout, m_ShowCardSetLeftLayout, m_ShowCardSetRightLayout;
     TextView m_UserUpCardCntTextView, m_UserDownCardCntTextView, m_UserLeftCardCntTextView, m_UserRightCardCntTextView;
-
+    TextView m_UserUpPassTextView, m_UserDownPassTextView, m_UserLeftPassTextView, m_UserRightPassTextView;
     CascadeLayout m_CardSetLayout;
 
     Button m_PauseGameButton;
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
-    Button m_JumpShowCardButton;
+    Button m_PassShowCardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,17 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_ShowCardSetLeftLayout = findViewById(R.id.id_GamingAct_ShowCardSetLeftCascadeLayout);
         m_ShowCardSetRightLayout = findViewById(R.id.id_GamingAct_ShowCardSetRightCascadeLayout);
 
+        // Pass
+        m_UserDownPassTextView = findViewById(R.id.id_GamingAct_ShowCardSetDownPass);
+        m_UserUpPassTextView = findViewById(R.id.id_GamingAct_ShowCardSetUpPass);
+        m_UserLeftPassTextView = findViewById(R.id.id_GamingAct_ShowCardSetLeftPass);
+        m_UserRightPassTextView = findViewById(R.id.id_GamingAct_ShowCardSetRightPass);
+
         // 各种按钮
         m_PauseGameButton = findViewById(R.id.id_GamingAct_PauseGameButton);
         m_ExitGameButton = findViewById(R.id.id_GamingAct_ExitGameButton);
         m_PushOrDistributeCardButton = findViewById(R.id.id_GamingAct_PushOrDistributeCardButton);
-        m_JumpShowCardButton = findViewById(R.id.id_GamingAct_JumpShowCardButton);
+        m_PassShowCardButton = findViewById(R.id.id_GamingAct_PassShowCardButton);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,16 +86,22 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_PauseGameButton.setOnClickListener(this);
         m_ExitGameButton.setOnClickListener(this);
         m_PushOrDistributeCardButton.setOnClickListener(this);
-        m_JumpShowCardButton.setOnClickListener(this);
+        m_PassShowCardButton.setOnClickListener(this);
 
         m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_DistributeCardButton);
-        m_JumpShowCardButton.setVisibility(View.GONE);
+        m_PassShowCardButton.setVisibility(View.GONE);
 
         // 默认牌数隐藏
         m_UserUpCardCntTextView.setVisibility(View.GONE);
         m_UserDownCardCntTextView.setVisibility(View.GONE);
         m_UserLeftCardCntTextView.setVisibility(View.GONE);
         m_UserRightCardCntTextView.setVisibility(View.GONE);
+
+        // Pass 隐藏
+        m_UserDownPassTextView.setVisibility(View.GONE);
+        m_UserUpPassTextView.setVisibility(View.GONE);
+        m_UserLeftPassTextView.setVisibility(View.GONE);
+        m_UserRightPassTextView.setVisibility(View.GONE);
 
         // 出牌布局事件订阅
         m_CardSetLayout.setOnClickListener(this);
@@ -130,8 +143,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
             case R.id.id_GamingAct_PushOrDistributeCardButton: // 出发牌
                 PushOrDistributeCardButton_Click();
             break;
-            case R.id.id_GamingAct_JumpShowCardButton: // 跳过出牌
-                JumpShowCardButton_Click();
+            case R.id.id_GamingAct_PassShowCardButton: // 跳过出牌
+                PassShowCardButton_Click();
             break;
 
             case R.id.id_GamingAct_CardSetCascadeLayout: // 点击牌
@@ -196,7 +209,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
             RefreshShowCardButton_Enabled();
 
-            m_JumpShowCardButton.setVisibility(View.VISIBLE);
+            m_PassShowCardButton.setVisibility(View.VISIBLE);
             m_UserUpCardCntTextView.setVisibility(View.VISIBLE);
             m_UserDownCardCntTextView.setVisibility(View.VISIBLE);
             m_UserLeftCardCntTextView.setVisibility(View.VISIBLE);
@@ -207,8 +220,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         }
     }
 
-    public void JumpShowCardButton_Click() {
-        m_gamingPresenter.Handle_JumpShowCard();
+    public void PassShowCardButton_Click() {
+        m_gamingPresenter.Handle_UserPassShowCard();
     }
 
     /**
@@ -260,6 +273,10 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                     showcardLayouts[idx++] = c; // 记录进 showcardLayouts
                 }
             }
+
+            // 隐藏 PASS
+            m_UserDownPassTextView.setVisibility(View.GONE);
+
             // 添加 ShowCardSetDownLayout
             m_ShowCardSetDownLayout.removeAllViews();
             for (CardLayout c : showcardLayouts) {
@@ -273,9 +290,52 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         onRefreshShowCardCnt();
         RefreshShowCardButton_Enabled();
+        
         // 拥有的牌为空
         if (m_CardSetLayout.getAllCards().length == 0)
             onShowWinAlert();
+    }
+
+    @Override
+    public void onPassShowCard(int PlayerId) {
+        ShowLogE("onPassShowCard", "ID: " + PlayerId);
+        switch (PlayerId) {
+            case Constant.PLAYER_USER:
+                m_ShowCardSetDownLayout.removeAllViews();
+                m_UserDownPassTextView.setVisibility(View.VISIBLE);
+            break;
+            case Constant.PLAYER_ROBOT_1:
+                m_ShowCardSetLeftLayout.removeAllViews();
+                m_UserLeftPassTextView.setVisibility(View.VISIBLE);
+            break;
+            case Constant.PLAYER_ROBOT_2:
+                m_ShowCardSetUpLayout.removeAllViews();
+                m_UserUpPassTextView.setVisibility(View.VISIBLE);
+            break;
+            case Constant.PLAYER_ROBOT_3:
+                m_ShowCardSetRightLayout.removeAllViews();
+                m_UserRightPassTextView.setVisibility(View.VISIBLE);
+            break;
+        }
+    }
+
+
+    @Override
+    public void onHidePassShowCard(int PlayerId) {
+        switch (PlayerId) {
+            case Constant.PLAYER_USER:
+                m_UserDownPassTextView.setVisibility(View.GONE);
+            break;
+            case Constant.PLAYER_ROBOT_1:
+                m_UserLeftPassTextView.setVisibility(View.GONE);
+            break;
+            case Constant.PLAYER_ROBOT_2:
+                m_UserUpPassTextView.setVisibility(View.GONE);
+            break;
+            case Constant.PLAYER_ROBOT_3:
+                m_UserRightPassTextView.setVisibility(View.GONE);
+            break;
+        }
     }
 
     /**
