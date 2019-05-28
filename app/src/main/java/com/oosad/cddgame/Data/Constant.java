@@ -2,6 +2,8 @@ package com.oosad.cddgame.Data;
 
 public class Constant {
 
+    // region 与扑克牌游戏相关 AllCardCnt AllCardSuitCnt PlayerCnt PlayerCardCnt
+
     /**
      * 扑克牌总数
      */
@@ -23,24 +25,9 @@ public class Constant {
      */
     public static final int PlayerCardCnt = (int) Math.floor( (double) AllCardCnt / PlayerCnt);
 
+    // endregion 与扑克牌游戏相关
 
-    public static final int PLAYER_USER = 0;
-    public static final int PLAYER_ROBOT_1 = 1;
-    public static final int PLAYER_ROBOT_2 = 2;
-    public static final int PLAYER_ROBOT_3 = 3;
-
-    /**
-     * canShowCardWithCheckTurn(): 正常出牌
-     */
-    public static final int NO_ERR = 1;
-    /**
-     * canShowCardWithCheckTurn(): 不符合规则
-     */
-    public static final int ERR_NOTRULE = -1;
-    /**
-     * canShowCardWithCheckTurn(): 还没轮到
-     */
-    public static final int ERR_NOTROUND = -2;
+    // region 与时延信息相关
 
     /**
      * 机器人出牌时 清除出牌记录 与 发出新的出牌 之间的时延
@@ -49,5 +36,38 @@ public class Constant {
     /**
      * 机器人出牌时 每个机器人之间的时延, TIME_WaitByClearRobotShowCardLayout + 500
      */
-    public static final int TIME_WaitBeforeRobotShowCard = 800;
+    public static final int TIME_WaitBeforeRobotShowCard = 700;
+
+    // endregion 与时延信息相关
+
+    // region 与玩家信息相关 USER ROBOT
+
+    public static final int PLAYER_USER = 0;
+    public static final int PLAYER_ROBOT_1 = 1;
+    public static final int PLAYER_ROBOT_2 = 2;
+    public static final int PLAYER_ROBOT_3 = 3;
+
+    // endregion 与玩家信息相关
+
+    // region 与出牌信息相关 NO_ERR ERR_NOT_RULE ERR_NOT_ROUND
+
+    /**
+     * canShowCardWithCheckTurn(): 正常出牌
+     */
+    public static final int NO_ERR = 1;
+    /**
+     * canShowCardWithCheckTurn(): 不符合规则
+     */
+    public static final int ERR_NOT_RULE = -1;
+    /**
+     * canShowCardWithCheckTurn(): 还没轮到
+     */
+    public static final int ERR_NOT_ROUND = -2;
+    /**
+     * canShowCardWithCheckTurn(): 有胜者
+     */
+    public static final int ERR_HAS_WINNER = -3;
+
+    // endregion 与出牌信息相关
+
 }

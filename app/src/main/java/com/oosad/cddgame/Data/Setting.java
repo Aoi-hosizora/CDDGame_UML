@@ -1,6 +1,6 @@
 package com.oosad.cddgame.Data;
 
-import com.oosad.cddgame.R;
+import com.oosad.cddgame.Data.Entity.Player.User;
 
 import java.io.Serializable;
 

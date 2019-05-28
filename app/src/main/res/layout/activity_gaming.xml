@@ -217,7 +217,7 @@
 
 
     <!-- Main CardSet -->
-    <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_CardSetCascadeLayout"
         android:layout_width="@dimen/CardSet_CascadeLayout_Width"
         android:layout_height="@dimen/CardSet_CascadeLayout_Height"
@@ -232,10 +232,10 @@
         cascade:horizontal_spacing="@dimen/Card_Horizontal_Spacing"
         cascade:vertical_spacing="@dimen/Card_Vertical_Spacing">
 
-    </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
 
-    <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_ShowCardSetDownCascadeLayout"
         android:layout_width="@dimen/ShowCardSet_CascadeLayout_Width"
         android:layout_height="@dimen/ShowCardSet_CascadeLayout_Height"
@@ -249,10 +249,10 @@
         cascade:horizontal_spacing="@dimen/ShowCard_Horizontal_Spacing"
         cascade:vertical_spacing="@dimen/ShowCard_Vertical_Spacing">
 
-    </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
 
-    <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_ShowCardSetUpCascadeLayout"
         android:layout_width="@dimen/ShowCardSet_CascadeLayout_Width"
         android:layout_height="@dimen/ShowCardSet_CascadeLayout_Height"
@@ -266,28 +266,9 @@
         cascade:horizontal_spacing="@dimen/ShowCard_Horizontal_Spacing"
         cascade:vertical_spacing="@dimen/ShowCard_Vertical_Spacing">
 
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-    </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
-
-    <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_ShowCardSetLeftCascadeLayout"
         android:layout_width="@dimen/ShowCardSet_CascadeLayout_Width"
         android:layout_height="@dimen/ShowCardSet_CascadeLayout_Height"
@@ -301,29 +282,9 @@
         cascade:horizontal_spacing="@dimen/ShowCard_Horizontal_Spacing"
         cascade:vertical_spacing="@dimen/ShowCard_Vertical_Spacing">
 
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-    </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
-
-    <com.oosad.cddgame.UI.GamingAct.view.CascadeLayout
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
         android:id="@+id/id_GamingAct_ShowCardSetRightCascadeLayout"
         android:layout_width="@dimen/ShowCardSet_CascadeLayout_Width"
         android:layout_height="@dimen/ShowCardSet_CascadeLayout_Height"
@@ -337,25 +298,13 @@
         cascade:horizontal_spacing="@dimen/ShowCard_Horizontal_Spacing"
         cascade:vertical_spacing="@dimen/ShowCard_Vertical_Spacing">
 
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
 
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
+    <!--
+        <com.oosad.cddgame.UI.Widget.CardLayout
             android:layout_width="@dimen/ShowCard_Width"
             android:layout_height="@dimen/ShowCard_Height"
             android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-
-        <com.oosad.cddgame.UI.GamingAct.view.CardLayout
-            android:layout_width="@dimen/ShowCard_Width"
-            android:layout_height="@dimen/ShowCard_Height"
-            android:background="@drawable/card_1" />
-    </com.oosad.cddgame.UI.GamingAct.view.CascadeLayout>
+    -->
 
 </android.support.constraint.ConstraintLayout>

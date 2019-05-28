@@ -1,12 +1,12 @@
-package com.oosad.cddgame.UI.GamingAct.model.system;
-
-import android.util.Log;
+package com.oosad.cddgame.Data.Boundary;
 
 import com.oosad.cddgame.Data.Constant;
-import com.oosad.cddgame.Data.Player;
-import com.oosad.cddgame.Data.Robot;
+import com.oosad.cddgame.Data.Entity.Player.Player;
+import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Setting;
-import com.oosad.cddgame.UI.GamingAct.model.Card;
+import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.Data.Controller.CardMgr;
+import com.oosad.cddgame.Data.Controller.GameRound;
 
 public class GameSystem {
 
@@ -33,14 +33,30 @@ public class GameSystem {
 
     private CardMgr cardMgr;
     private GameRound gameRound;
-    private Robot[] RobotMgr;
 
+    private Robot[] RobotMgr;
+    private Player Winner = null;
+
+    /**
+     * 通过 PLAYER_ROBOT_x 获取机器人
+     * @param idx
+     * @return
+     */
     public Robot getRobot(int idx) {
         return RobotMgr[idx-1];
     }
 
     /**
-     * 判断 当前是否轮到出牌 并且是否能如此出牌
+     * 通过本身指针 获取玩家的牌数
+     * @param player
+     * @return
+     */
+    public int getPlayerCardsCnt(Player player) {
+        return CardMgr.getInstance().getPlayerCards(player).length;
+    }
+
+    /**
+     * 判断 当前是否轮到出牌 并且是否能如此出牌 待改
      * 不能: ret false, fin
      * 能: ret true, 将谁出的牌的出牌信息记录进 CardMgr
      *     包括更新拥有的牌，记录已经出过的牌
@@ -49,20 +65,33 @@ public class GameSystem {
      * @return
      */
     public int canShowCardWithCheckTurn(Card[] showcards, Player player) {
+        // 没有胜者
+        if (Winner == null) {
+            // 没有轮到
+            if (!gameRound.checkIsRound(player))
+                return Constant.ERR_NOT_ROUND;
 
-        // 没有轮到
-        if (!gameRound.checkIsRound(player))
-            return Constant.ERR_NOTROUND;
+            // 轮到了不符合规则
+            if (!cardMgr.checkShowCardThroughRule(showcards))
+                return Constant.ERR_NOT_RULE;
 
-        // 轮到了不符合规则
-        if (!cardMgr.checkShowCardThroughRule(showcards))
-            return Constant.ERR_NOTRULE;
+            // 跳过出牌
+            if (showcards == null)
+                return Constant.NO_ERR;
 
-        // 符合规则并进行出牌处理
+            // 符合规则并进行出牌处理，待处理
+            cardMgr.removePlayerCardShown(showcards, player);
+            gameRound.setNextPlayer();
 
-        gameRound.setNextPlayer();
+            // 判断是否胜出
+            if (getPlayerCardsCnt(player) == 0)
+                Winner = player;
 
-        return Constant.NO_ERR;
+            return Constant.NO_ERR;
+        }
+
+        // 有胜者
+        return Constant.ERR_HAS_WINNER;
     }
 
     /**
@@ -74,6 +103,6 @@ public class GameSystem {
 
         Player[] players = new Player[] {Setting.getInstance().getCurrUser(), RobotMgr[0], RobotMgr[1], RobotMgr[2]};
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
-        return CardMgr.getInstance().Get_User_Cards();
+        return CardMgr.getInstance().getPlayerCards(Setting.getInstance().getCurrUser());
     }
 }

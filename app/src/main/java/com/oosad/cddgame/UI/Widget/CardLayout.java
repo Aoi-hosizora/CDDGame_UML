@@ -1,4 +1,4 @@
-package com.oosad.cddgame.UI.GamingAct.view;
+package com.oosad.cddgame.UI.Widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,11 +9,10 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.oosad.cddgame.R;
-import com.oosad.cddgame.UI.GamingAct.model.Card;
-import com.oosad.cddgame.UI.GamingAct.model.CardSuit;
+import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.Data.Entity.CardSuit;
 
 public class CardLayout extends View {
 

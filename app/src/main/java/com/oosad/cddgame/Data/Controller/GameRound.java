@@ -1,10 +1,11 @@
-package com.oosad.cddgame.UI.GamingAct.model.system;
+package com.oosad.cddgame.Data.Controller;
 
 import android.os.Handler;
 import android.util.Log;
 
+import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Constant;
-import com.oosad.cddgame.Data.Player;
+import com.oosad.cddgame.Data.Entity.Player.Player;
 
 public class GameRound {
 
@@ -21,14 +22,19 @@ public class GameRound {
     }
 
     /**
-     * 当前玩家在列表中的idx
+     * 当前玩家在列表中的 idx
      */
     private int currPlayerIdx;
+
     /**
      * 玩家顺序列表: PLAYER_USER, PLAYER_ROBOT_1, PLAYER_ROBOT_2, PLAYER_ROBOT_3
      */
     private Player[] PlayerOrder;
 
+    /**
+     * 获取当前玩家
+     * @return
+     */
     public Player getCurrPlayer() {
         return PlayerOrder[currPlayerIdx];
     }
@@ -44,6 +50,7 @@ public class GameRound {
 
     /**
      * 设置轮次顺序，并且指定初始玩家
+     * 如果为机器人则让机器人出牌
      * @param players 考虑了顺序的玩家列表
      * @param CurrPlayerIndex
      */
@@ -55,6 +62,10 @@ public class GameRound {
         LetRobotShowCard();
     }
 
+    /**
+     * 设置为下一个玩家
+     * 如果为机器人则让机器人出牌
+     */
     public void setNextPlayer() {
         currPlayerIdx = (currPlayerIdx + 1) % Constant.PlayerCnt; // 4
         Log.e("TAG", "currPlayerIdx: " + currPlayerIdx );
@@ -62,6 +73,10 @@ public class GameRound {
         LetRobotShowCard();
     }
 
+    /**
+     * 机器人出牌，有时延
+     * 伪外部事件 <<<<<<<<<<
+     */
     private void LetRobotShowCard() {
         if (currPlayerIdx != Constant.PLAYER_USER) {
             new Handler().postDelayed(new Runnable() {
@@ -70,7 +85,7 @@ public class GameRound {
                     GameSystem.getInstance().getRobot(currPlayerIdx).showCard();
                 }
 
-            }, Constant.TIME_WaitBeforeRobotShowCard);
+            }, Constant.TIME_WaitBeforeRobotShowCard); // 800 = 200 + 500
 
         }
     }

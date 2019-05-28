@@ -8,14 +8,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.oosad.cddgame.Data.Constant;
-import com.oosad.cddgame.Data.Robot;
+import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Setting;
-import com.oosad.cddgame.Data.User;
-import com.oosad.cddgame.UI.GamingAct.model.Card;
-import com.oosad.cddgame.UI.GamingAct.model.system.GameSystem;
-import com.oosad.cddgame.UI.GamingAct.util.CardUtil;
-import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
-import com.oosad.cddgame.UI.GamingAct.view.CascadeLayout;
+import com.oosad.cddgame.Data.Entity.Player.User;
+import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Util.CardUtil;
+import com.oosad.cddgame.UI.Widget.CardLayout;
+import com.oosad.cddgame.UI.Widget.CascadeLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
 
 public class GamingPresenterCompl implements IGamingPresenter {
@@ -95,10 +95,10 @@ public class GamingPresenterCompl implements IGamingPresenter {
         int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, Setting.getInstance().getCurrUser());
 
         if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
-            m_GamingView.onShowCardSet(cardSetLayout);
-        else if (ret == Constant.ERR_NOTRULE)
+            m_GamingView.onUserShowCardSet(cardSetLayout);
+        else if (ret == Constant.ERR_NOT_RULE)
             m_GamingView.onShowCantShowCardForRuleAlert();
-        else if (ret == Constant.ERR_NOTROUND)
+        else if (ret == Constant.ERR_NOT_ROUND)
             m_GamingView.onShowCantShowCardForRoundAlert();
     }
 
@@ -112,9 +112,17 @@ public class GamingPresenterCompl implements IGamingPresenter {
         Toast.makeText(m_GamingView.getThisPtr(), "跳过出牌", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 处理机器人出牌后数据的更新
+     * @param cascadeLayout
+     * @param RobotIdx
+     */
     @Override
     public void Handle_SetupRobotShowCardLayout(final CascadeLayout cascadeLayout, int RobotIdx) {
-        GameSystem.getInstance().getRobot(RobotIdx).setOnRobotShowCard(new Robot.OnRobotShowCardListener() {
+
+        Robot robot = GameSystem.getInstance().getRobot(RobotIdx);
+
+        robot.setOnRobotShowCard(new Robot.OnRobotShowCardListener() {
             @Override
             public void onShowCard(final Card[] cards) {
 
@@ -123,11 +131,12 @@ public class GamingPresenterCompl implements IGamingPresenter {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
                         for (Card c : cards) {
+                            // 获得机器人出的每一张牌，并转换成 ShowCardLayout
                             CardLayout cl = CardUtil.getCardLayoutFromCard(m_GamingView.getThisPtr(), c, true);
-                            cascadeLayout.addView(cl); // 从拥有的牌转化成展示的牌
+                            cascadeLayout.addView(cl);
                         }
+                        m_GamingView.onRefreshShowCardCnt();
                     }
 
                 }, Constant.TIME_WaitByClearRobotShowCardLayout);
@@ -135,5 +144,18 @@ public class GamingPresenterCompl implements IGamingPresenter {
 
             }
         });
+    }
+
+    /**
+     * 通过 PlayerId 获得 剩下的牌数
+     * @param PlayerId
+     * @return
+     */
+    @Override
+    public int Handle_GetCardCnt(int PlayerId) {
+        if (PlayerId == 0) // User
+            return GameSystem.getInstance().getPlayerCardsCnt(Setting.getInstance().getCurrUser());
+
+        return GameSystem.getInstance().getPlayerCardsCnt(GameSystem.getInstance().getRobot(PlayerId));
     }
 }

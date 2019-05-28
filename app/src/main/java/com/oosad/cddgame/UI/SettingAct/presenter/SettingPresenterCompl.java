@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.oosad.cddgame.Data.Setting;
-import com.oosad.cddgame.Data.User;
+import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.UI.SettingAct.view.ISettingView;
 
 public class SettingPresenterCompl implements ISettingPresenter {

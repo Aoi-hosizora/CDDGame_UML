@@ -1,4 +1,4 @@
-package com.oosad.cddgame.UI.GamingAct.model;
+package com.oosad.cddgame.Data.Entity;
 
 public class Card implements Comparable<Card> {
 

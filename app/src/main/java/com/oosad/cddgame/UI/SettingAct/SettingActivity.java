@@ -1,6 +1,5 @@
 package com.oosad.cddgame.UI.SettingAct;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +10,6 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.oosad.cddgame.Data.Setting;
-import com.oosad.cddgame.Data.User;
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.SettingAct.presenter.ISettingPresenter;
 import com.oosad.cddgame.UI.SettingAct.presenter.SettingPresenterCompl;

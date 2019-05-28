@@ -1,4 +1,4 @@
-package com.oosad.cddgame.UI.GamingAct.view;
+package com.oosad.cddgame.UI.Widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -1,12 +1,12 @@
-package com.oosad.cddgame.UI.GamingAct.util;
+package com.oosad.cddgame.Util;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 import com.oosad.cddgame.R;
-import com.oosad.cddgame.UI.GamingAct.model.Card;
-import com.oosad.cddgame.UI.GamingAct.view.CardLayout;
+import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.UI.Widget.CardLayout;
 
 import java.util.ArrayList;
 
@@ -50,9 +50,8 @@ public class CardUtil {
         Card[] cards = new Card[cardLayouts.length];
         int idx = 0;
         for (CardLayout cl : cardLayouts) {
-            if (cl != null) {
-                cards[idx] = cl.getCard();
-            }
+            if (cl != null)
+                cards[idx++] = cl.getCard();
         }
         return cards;
     }
