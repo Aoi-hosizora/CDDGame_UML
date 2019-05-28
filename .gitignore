@@ -20,5 +20,6 @@ build/
 generated/
 bin/
 captures/
+.settings/
 
 /app/src/main/tmp
