@@ -142,10 +142,30 @@ public class CardMgr {
     /**
      * 调用规则模块
      * @param showcards 为 null 表示跳过
-     * @param player
      * @return
      */
-    public boolean checkShowCardThroughRule(Card[] showcards, Player player) {
+    public boolean checkShowCardThroughRule(Card[] showcards) {
+        // checkrule(showcards, getLastShownCard());
         return true;
+    }
+
+    public int getInitialPlayerIdx() {
+        for (Card c : user_CardSet) {
+            if (c.getCardNum() == 3 && c.getCardSuit() == CardSuit.Diamond) { // 方块 3
+                return Constant.PLAYER_USER;
+            }
+        }
+
+        for (Card c : robot_1_CardSet) {
+            if (c.getCardNum() == 3 && c.getCardSuit() == CardSuit.Diamond) { // 方块 3
+                return Constant.PLAYER_ROBOT_1;
+            }
+        }
+        for (Card c : robot_2_CardSet) {
+            if (c.getCardNum() == 3 && c.getCardSuit() == CardSuit.Diamond) { // 方块 3
+                return Constant.PLAYER_ROBOT_2;
+            }
+        }
+        return Constant.PLAYER_ROBOT_3;
     }
 }

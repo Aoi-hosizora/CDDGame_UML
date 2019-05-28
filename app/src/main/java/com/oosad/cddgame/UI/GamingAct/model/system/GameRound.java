@@ -1,5 +1,8 @@
 package com.oosad.cddgame.UI.GamingAct.model.system;
 
+import android.os.Handler;
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Player;
 
@@ -22,7 +25,7 @@ public class GameRound {
      */
     private int currPlayerIdx;
     /**
-     * 玩家顺序列表
+     * 玩家顺序列表: PLAYER_USER, PLAYER_ROBOT_1, PLAYER_ROBOT_2, PLAYER_ROBOT_3
      */
     private Player[] PlayerOrder;
 
@@ -36,7 +39,7 @@ public class GameRound {
      * @return
      */
     public boolean checkIsRound(Player player) {
-        return PlayerOrder[currPlayerIdx] == player;
+        return getCurrPlayer() == player;
     }
 
     /**
@@ -47,9 +50,28 @@ public class GameRound {
     public void setInitPlayer(Player[] players, int CurrPlayerIndex) {
         this.PlayerOrder = players;
         this.currPlayerIdx = CurrPlayerIndex;
+
+        Log.e("TAG", "currPlayerIdx: " + currPlayerIdx );
+        LetRobotShowCard();
     }
 
     public void setNextPlayer() {
         currPlayerIdx = (currPlayerIdx + 1) % Constant.PlayerCnt; // 4
+        Log.e("TAG", "currPlayerIdx: " + currPlayerIdx );
+
+        LetRobotShowCard();
+    }
+
+    private void LetRobotShowCard() {
+        if (currPlayerIdx != Constant.PLAYER_USER) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    GameSystem.getInstance().getRobot(currPlayerIdx).showCard();
+                }
+
+            }, Constant.TIME_WaitBeforeRobotShowCard);
+
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.presenter.GamingPresenterCompl;
 import com.oosad.cddgame.UI.GamingAct.presenter.IGamingPresenter;
@@ -30,6 +31,9 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     Button m_JumpShowCardButton;
     CascadeLayout m_CardSetLayout;
     CascadeLayout m_ShowCardSetDownLayout;
+    CascadeLayout m_ShowCardSetUpLayout;
+    CascadeLayout m_ShowCardSetLeftLayout;
+    CascadeLayout m_ShowCardSetRightLayout;
     TextView m_UserUpCardCntTextView;
     TextView m_UserDownCardCntTextView;
     TextView m_UserLeftCardCntTextView;
@@ -78,6 +82,13 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         m_CardSetLayout = findViewById(R.id.id_GamingAct_CardSetCascadeLayout);
         m_ShowCardSetDownLayout = findViewById(R.id.id_GamingAct_ShowCardSetDownCascadeLayout);
+        m_ShowCardSetUpLayout = findViewById(R.id.id_GamingAct_ShowCardSetUpCascadeLayout);
+        m_ShowCardSetLeftLayout = findViewById(R.id.id_GamingAct_ShowCardSetLeftCascadeLayout);
+        m_ShowCardSetRightLayout = findViewById(R.id.id_GamingAct_ShowCardSetRightCascadeLayout);
+
+        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetLeftLayout, Constant.PLAYER_ROBOT_1);
+        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetUpLayout, Constant.PLAYER_ROBOT_2);
+        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetRightLayout, Constant.PLAYER_ROBOT_3);
 
         m_CardSetLayout.setOnClickListener(this);
     }
@@ -267,14 +278,26 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     }
 
     /**
-     * Handle_PushCard() 后判断不允许如此出牌
+     * Handle_PushCard() 后判断不符合规则
      */
     @Override
-    public void onShowCantShowCardAlert() {
+    public void onShowCantShowCardForRuleAlert() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.alert_title)
-                .setMessage(R.string.str_GamingAct_ShowCantShowCardAlertMsg)
-                .setPositiveButton(R.string.str_GamingAct_ShowCantShowCardAlertPosButton, null)
+                .setMessage(R.string.str_GamingAct_ShowCantShowCardForRuleAlertMsg)
+                .setPositiveButton(R.string.str_GamingAct_ShowCantShowCardForRuleAlertPosButton, null)
+                .show();
+    }
+
+    /**
+     * Handle_PushCard() 后判断还没轮到
+     */
+    @Override
+    public void onShowCantShowCardForRoundAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.alert_title)
+                .setMessage(R.string.str_GamingAct_ShowCantShowCardForRoundAlertMsg)
+                .setPositiveButton(R.string.str_GamingAct_ShowCantShowCardForRoundAlertPosButton, null)
                 .show();
     }
 

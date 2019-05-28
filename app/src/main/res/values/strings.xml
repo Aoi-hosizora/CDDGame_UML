@@ -34,7 +34,9 @@
     <string name="str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel">取消</string>
     <string name="str_GamingAct_ShowNoSelectCardAlertMsg">没有选择想出的牌。</string>
     <string name="str_GamingAct_ShowNoSelectCardAlertPosButton">确定</string>
-    <string name="str_GamingAct_ShowCantShowCardAlertMsg">不允许如此出牌。</string>
-    <string name="str_GamingAct_ShowCantShowCardAlertPosButton">确定</string>
+    <string name="str_GamingAct_ShowCantShowCardForRuleAlertMsg">不符合规则的出牌。</string>
+    <string name="str_GamingAct_ShowCantShowCardForRuleAlertPosButton">确定</string>
+    <string name="str_GamingAct_ShowCantShowCardForRoundAlertMsg">还没轮到出牌。</string>
+    <string name="str_GamingAct_ShowCantShowCardForRoundAlertPosButton">确定</string>
 
 </resources>
