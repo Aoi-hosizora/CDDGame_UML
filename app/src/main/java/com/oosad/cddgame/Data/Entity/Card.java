@@ -31,11 +31,20 @@ public class Card implements Comparable<Card> {
         this.cardSuit = cardSuit;
     }
 
-    @Override
-    public int compareTo(Card card) {
+    public int compareBasic(Card card){
         if (this.getCardNum() != card.getCardNum())
             return this.getCardNum() > card.getCardNum() ? 1 : -1;
         return this.getCardSuit().compareTo(card.getCardSuit());
+    }
+    @Override
+    public int compareTo(Card card) {
+        if(this.getCardNum()<3)
+            if(card.getCardNum()<3)
+                return this.compareBasic(card);
+            else return 1;
+        else if(card.getCardNum()<3)
+            return -1;
+        else return this.compareBasic(card);
     }
 
     @Override
