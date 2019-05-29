@@ -63,6 +63,9 @@ public class GamingPresenterCompl implements IGamingPresenter {
      */
     @Override
     public void Handle_DistributeCard() {
+        // 发牌前初始化游戏数据
+        GameSystem.getInstance().initGame();
+
         Context context = m_GamingView.getThisPtr();
         // 记录：更新Cnt，调试问题
         CardLayout.clearCardUpCnt();

@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Data.Boundary;
 
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
@@ -7,6 +9,7 @@ import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Controller.CardMgr;
 import com.oosad.cddgame.Data.Controller.GameRound;
+import com.oosad.cddgame.Util.RuleUtil;
 
 public class GameSystem {
 
@@ -25,10 +28,19 @@ public class GameSystem {
                             new Robot(Constant.PLAYER_ROBOT_2),
                             new Robot(Constant.PLAYER_ROBOT_3)
                     };
-
                 }
             }
         return instance;
+    }
+
+    /**
+     * 初始化游戏数据，发牌前用
+     */
+    public void initGame() {
+        cardMgr.initInstance();
+        gameRound.initInstance();
+        // RobotMgr 有事件注册，不能初始化
+        Winner = null;
     }
 
     private CardMgr cardMgr;
@@ -83,6 +95,8 @@ public class GameSystem {
 
             // 符合规则并进行出牌处理，待处理
             cardMgr.removePlayerCardShown(showcards, player);
+            cardMgr.setLastShownCard(showcards);
+
             gameRound.setNextPlayer();
 
             // 判断是否胜出
@@ -113,12 +127,13 @@ public class GameSystem {
 
 
     /**
-     * 调用规则模块
+     * 调用规则模块 待改
      * @param showcards 为 null 表示跳过
      * @return
      */
     private boolean checkShowCardThroughRule(Card[] showcards) {
-        // checkrule(showcards, getLastShownCard());
+        boolean ret = RuleUtil.judgement(cardMgr.getLastShownCard(), showcards);
+        Log.e("TAG", "checkShowCardThroughRule: " + ret);
         return true;
     }
 }

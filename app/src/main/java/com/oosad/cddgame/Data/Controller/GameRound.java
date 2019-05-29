@@ -16,9 +16,18 @@ public class GameRound {
         if (Instance == null) synchronized (GameRound.class) {
             if (Instance == null) {
                 Instance = new GameRound();
+                Instance.initInstance();
             }
         }
         return Instance;
+    }
+
+    /**
+     * 初始化实例
+     */
+    public void initInstance() {
+        currPlayerIdx = Constant.PLAYER_USER;
+        PlayerOrder = new Player[Constant.PlayerCnt];
     }
 
     /**

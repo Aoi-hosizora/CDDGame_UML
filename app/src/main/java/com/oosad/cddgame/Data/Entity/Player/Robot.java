@@ -33,10 +33,7 @@ public class Robot extends Player implements Serializable {
         Card[] cards = CardMgr.getInstance().getPlayerCards(this);
 
         Card[] showcards;
-        if (cards.length != 1)
-            showcards = new Card[] {cards[0], cards[1]};
-        else
-            showcards = new Card[] {cards[0]};
+        showcards = new Card[] {cards[0]};
 
         /// 算法待改
 

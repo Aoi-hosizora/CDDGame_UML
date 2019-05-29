@@ -25,12 +25,23 @@ public class CardMgr {
             synchronized (CardMgr.class){
                 if(cardMgr==null){
                     cardMgr=new CardMgr();
-                    for (int i = 0; i < Constant.PlayerCnt; i++)
-                        cardMgr.Players_CardSets.add(new Card[Constant.PlayerCardCnt]);
+                    cardMgr.initInstance();
                 }
             }
         }
         return cardMgr;
+    }
+
+    /**
+     * 初始化实例
+     */
+    public void initInstance() {
+        Players_CardSets = new ArrayList<>();
+        for (int i = 0; i < Constant.PlayerCnt; i++)
+            cardMgr.Players_CardSets.add(new Card[Constant.PlayerCardCnt]);
+        initPlayerIdx = Constant.PLAYER_USER;
+        LastShownCard = null;
+        HasJumpedCnt = 0;
     }
 
     /**
