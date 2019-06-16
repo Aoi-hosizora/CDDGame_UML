@@ -38,5 +38,8 @@ dependencies {
 
     // chrome://inspect/#devices
     implementation 'com.facebook.stetho:stetho:1.5.0'
-    implementation 'com.android.support:support-v4:27.1.1'
+
+    // Socket.IO
+    implementation 'com.github.nkzawa:socket.io-client:0.6.0'
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
 }
