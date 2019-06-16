@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Player.User;
+import com.oosad.cddgame.UI.LoginAct.LoginActivity;
 import com.oosad.cddgame.UI.SettingAct.view.ISettingView;
 
 public class SettingPresenterCompl implements ISettingPresenter {
@@ -34,9 +35,8 @@ public class SettingPresenterCompl implements ISettingPresenter {
     public void Handle_SetupBundle(Intent intent) {
         Bundle bundle = intent.getBundleExtra(INT_BUNDLE_INFO);
         Setting setting = (Setting) bundle.getSerializable(INT_SETTING_INFO);
-        User currUser = setting.getCurrUser();
 
-        m_settingView.onSetupUI(currUser.getName(), setting.getGameBGMVoloum(), setting.getGameOtoVoloum());
+        m_settingView.onSetupUI(setting.getGameBGMVoloum(), setting.getGameOtoVoloum());
     }
 
     /**
@@ -48,17 +48,13 @@ public class SettingPresenterCompl implements ISettingPresenter {
     }
 
     /**
-     * 提交设置，从用户键入的数据设置Setting
-     * @param userName
+     * 提交设置，从用户设置Setting
      * @param BGMVoloum
      * @param OtoVoloum
      */
     @Override
-    public void Handle_OKButton_Click(String userName, int BGMVoloum, int OtoVoloum) {
-        User currUser = new User(userName);
-
+    public void Handle_OKButton_Click(int BGMVoloum, int OtoVoloum) {
         Setting setting = Setting.getInstance();
-        setting.setCurrUser(currUser);
         setting.setGameBGMVoloum(BGMVoloum);
         setting.setGameOtoVoloum(OtoVoloum);
 
@@ -72,5 +68,12 @@ public class SettingPresenterCompl implements ISettingPresenter {
     public void Handle_ResetButton_Click() {
         // Setting.getInstance().resetSetting();
         m_settingView.onResetUI();
+    }
+
+    @Override
+    public void Handle_ReLoginButton_Click() {
+        Intent intent = new Intent(m_settingView.getThisPtr(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        m_settingView.getThisPtr().startActivity(intent);
     }
 }

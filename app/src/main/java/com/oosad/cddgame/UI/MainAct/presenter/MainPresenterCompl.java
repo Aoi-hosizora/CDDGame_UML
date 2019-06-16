@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.UI.GamingAct.GamingActivity;
 import com.oosad.cddgame.UI.GamingAct.presenter.GamingPresenterCompl;
@@ -37,7 +38,7 @@ public class MainPresenterCompl implements IMainPresenter {
             m_mainView.ShowNoneUserAlert();
             return;
         }
-        ShowLogE("Handle_StartGameButton_Click", "CurrUserName: " + Setting.getInstance().getCurrUser().getName());
+        ShowLogE("Handle_StartGameButton_Click", "CurrUserName: " + GameSystem.getInstance().getCurrUser().getName());
 
         Intent GamingIntent = new Intent(m_mainView.getThisPtr(), GamingActivity.class);
         Bundle GamingBundle = new Bundle();
@@ -69,6 +70,11 @@ public class MainPresenterCompl implements IMainPresenter {
      * @return
      */
     private boolean hasUser() {
-        return !Setting.getInstance().getCurrUser().getName().isEmpty();
+        return !GameSystem.getInstance().getCurrUser().getName().isEmpty();
+    }
+
+    @Override
+    public String Handle_GetUserName() {
+        return GameSystem.getInstance().getCurrUser().getName();
     }
 }

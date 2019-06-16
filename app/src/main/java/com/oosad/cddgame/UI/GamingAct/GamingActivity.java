@@ -343,7 +343,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onShowNoSelectCardAlert() {
-        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowNoSelectCardAlertMsg, R.string.str_GamingAct_ShowNoSelectCardAlertPosButton);
+        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowNoSelectCardAlertMsg, R.string.alert_PosOK);
     }
 
     /**
@@ -351,7 +351,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onShowCantShowCardForRuleAlert() {
-        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowCantShowCardForRuleAlertMsg, R.string.str_GamingAct_ShowCantShowCardForRuleAlertPosButton);
+        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowCantShowCardForRuleAlertMsg, R.string.alert_PosOK);
     }
 
     /**
@@ -359,7 +359,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onShowCantShowCardForRoundAlert() {
-        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowCantShowCardForRoundAlertMsg, R.string.str_GamingAct_ShowCantShowCardForRoundAlertPosButton);
+        onShowAlert(R.string.alert_title, R.string.str_GamingAct_ShowCantShowCardForRoundAlertMsg, R.string.alert_PosOK);
     }
 
     /**

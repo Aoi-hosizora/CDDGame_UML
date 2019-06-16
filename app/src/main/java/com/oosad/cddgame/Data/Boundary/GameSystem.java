@@ -5,6 +5,7 @@ import android.util.Log;
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
+import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Controller.CardMgr;
@@ -47,7 +48,24 @@ public class GameSystem {
     private GameRound gameRound;
 
     private Robot[] RobotMgr;
+    private User GameUser;
     private Player Winner = null;
+
+    /**
+     * 设置当前玩家
+     * @param user
+     */
+    public void setUser(User user) {
+        this.GameUser = user;
+    }
+
+    /**
+     * 获得当前玩家
+     * @return
+     */
+    public User getCurrUser() {
+        return GameUser;
+    }
 
     /**
      * 通过 PLAYER_ROBOT_x 获取机器人
@@ -118,11 +136,11 @@ public class GameSystem {
         CardMgr.getInstance().DistributeCards();
 
         Player[] players = new Player[] {
-                Setting.getInstance().getCurrUser(),
+                getCurrUser(),
                 RobotMgr[0], RobotMgr[1], RobotMgr[2]
         };
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
-        return CardMgr.getInstance().getPlayerCards(Setting.getInstance().getCurrUser());
+        return CardMgr.getInstance().getPlayerCards(getCurrUser());
     }
 
 

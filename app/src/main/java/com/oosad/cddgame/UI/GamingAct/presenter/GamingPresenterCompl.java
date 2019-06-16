@@ -45,7 +45,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
     public void Handle_SetupBundle(Intent intent) {
         Bundle bundle = intent.getBundleExtra(INT_BUNDLE_INFO);
         Setting setting = (Setting) bundle.getSerializable(INT_SETTING_INFO);
-        User currUser = setting.getCurrUser();
+        User currUser = GameSystem.getInstance().getCurrUser();
 
         m_GamingView.onSetupUI(currUser.getName());
     }
@@ -95,7 +95,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
         }
 
         // 处理出牌规则判断 !!!!!!
-        int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, Setting.getInstance().getCurrUser());
+        int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
 
         if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
             m_GamingView.onUserShowCardSet(cardSetLayout);
@@ -110,7 +110,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
      */
     @Override
     public void Handle_UserPassShowCard() {
-        GameSystem.getInstance().canShowCardWithCheckTurn(null, Setting.getInstance().getCurrUser());
+        GameSystem.getInstance().canShowCardWithCheckTurn(null, GameSystem.getInstance().getCurrUser());
         m_GamingView.onPassShowCard(Constant.PLAYER_USER);
     }
 
@@ -163,7 +163,7 @@ public class GamingPresenterCompl implements IGamingPresenter {
     @Override
     public int Handle_GetCardCnt(int PlayerId) {
         if (PlayerId == 0) // User
-            return GameSystem.getInstance().getPlayerCardsCnt(Setting.getInstance().getCurrUser());
+            return GameSystem.getInstance().getPlayerCardsCnt(GameSystem.getInstance().getCurrUser());
 
         return GameSystem.getInstance().getPlayerCardsCnt(GameSystem.getInstance().getRobot(PlayerId));
     }

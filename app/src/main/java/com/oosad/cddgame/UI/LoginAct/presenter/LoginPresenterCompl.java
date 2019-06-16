@@ -1,12 +1,16 @@
 package com.oosad.cddgame.UI.LoginAct.presenter;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.oosad.cddgame.DB.UserDAO;
+import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.UI.LoginAct.view.ILoginView;
+import com.oosad.cddgame.UI.MainAct.MainActivity;
 import com.oosad.cddgame.Util.PassUtil;
 
 import java.util.Set;
@@ -29,14 +33,29 @@ public class LoginPresenterCompl implements ILoginPresenter {
         Log.e(TAG, msg);
     }
 
+    /**
+     * 查询数据库，获取用户密码
+     * @param userName
+     * @return
+     */
     private String getUserPassWord(String userName) {
         return userDAO.queryPassWord(userName);
     }
 
+    /**
+     * 查询数据库，获取是否存在用户
+     * @param username
+     * @return
+     */
     private User getUser(String username) {
         return userDAO.queryUser(username);
     }
 
+    /**
+     * 判读密码是否可用，长度范围
+     * @param plainPassWord
+     * @return
+     */
     private boolean checkPassWordValidable(String plainPassWord) {
         return plainPassWord.length() > Constant.PassWordMinLen && plainPassWord.length() < Constant.PassWordMaxLen;
     }
@@ -65,7 +84,9 @@ public class LoginPresenterCompl implements ILoginPresenter {
         }
 
         User currUser = getUser(UserName);
+        GameSystem.getInstance().setUser(currUser);
         m_loginView.onShowLoginSuccessToast(UserName);
+        gotoMainActivity();
     }
 
     /**
@@ -125,5 +146,13 @@ public class LoginPresenterCompl implements ILoginPresenter {
         ShowLogE("insertUser", "RegisterSuccess");
 
         return true;
+    }
+
+    /**
+     * 登陆成功，跳转到主界面
+     */
+    private void gotoMainActivity() {
+        Intent MainActIntent = new Intent(m_loginView.getThisPtr(), MainActivity.class);
+        m_loginView.getThisPtr().startActivity(MainActIntent);
     }
 }

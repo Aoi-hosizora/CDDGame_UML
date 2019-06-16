@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
 import com.oosad.cddgame.UI.MainAct.presenter.IMainPresenter;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     IMainPresenter m_mainPresenter;
     Button m_StartGameButton;
     Button m_SettingButton;
+    TextView m_WelcomeUserTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     private void setupView() {
         m_StartGameButton = findViewById(R.id.id_MainAct_StartGameButton);
         m_SettingButton = findViewById(R.id.id_MainAct_SettingButton);
+        m_WelcomeUserTextView = findViewById(R.id.id_MainAct_WelcomeUserTextView);
+
+        m_WelcomeUserTextView.setText(String.format(getString(R.string.str_MainAct_WelcomeUserForFormat), m_mainPresenter.Handle_GetUserName()));
 
         m_StartGameButton.setOnClickListener(this);
         m_SettingButton.setOnClickListener(this);
@@ -66,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         new AlertDialog.Builder(this)
                 .setTitle(R.string.alert_title)
                 .setMessage(R.string.str_MainAct_ShowNoneUserAlertMessage)
-                .setPositiveButton(getString(R.string.str_MainAct_ShowNoneUserAlertPosButton), null)
+                .setPositiveButton(getString(R.string.alert_PosOK), null)
                 .show();
     }
 

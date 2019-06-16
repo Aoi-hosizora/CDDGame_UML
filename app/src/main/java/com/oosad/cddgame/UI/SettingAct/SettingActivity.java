@@ -21,11 +21,11 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
     Button m_BackButton;
     Button m_OKButton;
     Button m_ResetButton;
+    Button m_ReLoginButton;
     SeekBar m_GameBGMSeekBar;
     SeekBar m_GameOtoSeekBar;
     TextView m_GameBGMTextView;
     TextView m_GameOtoTextView;
-    EditText m_UserNameEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +46,26 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
         Log.e(TAG, msg);
     }
 
+    @Override
+    public SettingActivity getThisPtr() {
+        return this;
+    }
+
     private void setupView() {
         m_BackButton = findViewById(R.id.id_SettingAct_BackButton);
         m_OKButton = findViewById(R.id.id_SettingAct_OKButton);
         m_ResetButton = findViewById(R.id.id_SettingAct_ResetButton);
+        m_ReLoginButton = findViewById(R.id.id_SettingAct_ReLoginButton);
+
         m_GameBGMSeekBar = findViewById(R.id.id_SettingAct_GameBGMSeekBar);
         m_GameOtoSeekBar = findViewById(R.id.id_SettingAct_GameOtoSeekBar);
         m_GameBGMTextView = findViewById(R.id.id_SettingAct_GameBGMTextView);
         m_GameOtoTextView = findViewById(R.id.id_SettingAct_GameOtoTextView);
-        m_UserNameEditText = findViewById(R.id.id_SettingAct_UserNameEditText);
 
         m_BackButton.setOnClickListener(this);
         m_OKButton.setOnClickListener(this);
         m_ResetButton.setOnClickListener(this);
+        m_ReLoginButton.setOnClickListener(this);
 
         m_GameBGMSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -99,6 +106,9 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
             case R.id.id_SettingAct_ResetButton: // 重置设置
                 ResetButton_Click();
             break;
+            case R.id.id_SettingAct_ReLoginButton: // 重置设置
+                ReLoginButton_Click();
+            break;
         }
     }
 
@@ -113,16 +123,10 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
      * 单击确定设置按钮
      */
     private void OKButton_Click() {
-        String currUserName = m_UserNameEditText.getText().toString();
-        if (currUserName.isEmpty()) {
-            onShowNoneUserAlert();
-            return;
-        }
-
         int GameBGMVoloum = m_GameBGMSeekBar.getProgress();
         int GameOtoVoloum = m_GameOtoSeekBar.getProgress();
 
-        m_settingPresenter.Handle_OKButton_Click(currUserName, GameBGMVoloum, GameOtoVoloum);
+        m_settingPresenter.Handle_OKButton_Click(GameBGMVoloum, GameOtoVoloum);
     }
 
     /**
@@ -130,6 +134,10 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
      */
     private void ResetButton_Click() {
         m_settingPresenter.Handle_ResetButton_Click();
+    }
+
+    private void ReLoginButton_Click() {
+        m_settingPresenter.Handle_ReLoginButton_Click();
     }
 
     /**
@@ -147,31 +155,16 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
     public void onResetUI() {
         m_GameBGMSeekBar.setProgress(50);
         m_GameOtoSeekBar.setProgress(50);
-        m_UserNameEditText.setText("");
     }
 
     /**
      * 根据 Setting 设置用户界面
-     * @param UserName
      * @param BGMVoloum
      * @param OtoVoloum
      */
     @Override
-    public void onSetupUI(String UserName, int BGMVoloum, int OtoVoloum) {
+    public void onSetupUI(int BGMVoloum, int OtoVoloum) {
         m_GameBGMSeekBar.setProgress(BGMVoloum);
         m_GameOtoSeekBar.setProgress(OtoVoloum);
-        m_UserNameEditText.setText(UserName);
-    }
-
-    /**
-     * 没有输入用户名
-     */
-    @Override
-    public void onShowNoneUserAlert() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.alert_title)
-                .setMessage(R.string.str_SettingAct_ShowNoneUserAlertMessage)
-                .setPositiveButton(getString(R.string.str_SettingAct_ShowNoneUserAlertPosButton), null)
-                .show();
     }
 }

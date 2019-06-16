@@ -19,7 +19,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     ILoginPresenter m_loginPresenter;
     private Button m_LoginButton;
     private Button m_RegisterButton;
-    private Button m_CancelButton;
     private EditText m_UserNameEditText;
     private EditText m_PassWordEditText;
 
@@ -40,9 +39,6 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_LoginAct_CancelButton:
-                CancelButton_Click();
-            break;
             case R.id.id_LoginAct_LoginButton:
                 LoginButton_Click();
             break;
@@ -60,18 +56,12 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     private void setupView() {
         m_LoginButton = findViewById(R.id.id_LoginAct_LoginButton);
         m_RegisterButton = findViewById(R.id.id_LoginAct_RegisterButton);
-        m_CancelButton = findViewById(R.id.id_LoginAct_CancelButton);
 
         m_UserNameEditText = findViewById(R.id.id_LoginAct_UserNameEditText);
         m_PassWordEditText = findViewById(R.id.id_LoginAct_PassWordEditText);
 
         m_LoginButton.setOnClickListener(this);
         m_RegisterButton.setOnClickListener(this);
-        m_CancelButton.setOnClickListener(this);
-    }
-
-    private void CancelButton_Click() {
-        finish();
     }
 
     private void LoginButton_Click() {
@@ -88,42 +78,42 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
     @Override
     public void onShowNoUserNameOrPassWordAlert() {
-        onShowAlert("提醒", "没有输入用户名或密码。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_NoUserNameOrPassWordAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowNoUserAlert() {
-        onShowAlert("提醒", "没有该用户。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_NoUserAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowErrorPassWordAlert() {
-        onShowAlert("提醒", "密码错误。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_ErrorPassWordAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowAlwaysExistUserAlert() {
-        onShowAlert("提醒", "已经存在该用户。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_AlwaysExistUserAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowErrorPassWordFormatAlert() {
-        onShowAlert("提醒", "密码格式错误。", "确定");
+        onShowAlert(R.string.alert_title,R.string.str_LoginAct_ErrorPassWordFormatAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowErrorRegisterAlert() {
-        onShowAlert("提醒", "注册失败。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_ErrorRegisterAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowRegisterSuccessAlert() {
-        onShowAlert("提醒", "注册成功，请登录。", "确定");
+        onShowAlert(R.string.alert_title, R.string.str_LoginAct_RegisterSuccessAlertMessage, R.string.alert_PosOK);
     }
 
     @Override
     public void onShowLoginSuccessToast(String username) {
-        Toast.makeText(this, "用户 " + username +  " 登录成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, String.format(getString(R.string.str_LoginAct_LoginSuccessToast), username), Toast.LENGTH_SHORT).show();
     }
 
     @Override
