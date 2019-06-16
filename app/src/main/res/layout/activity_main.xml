@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UI.MainAct.MainActivity"
-    android:background="@drawable/bg_main">
+    android:background="@drawable/bg_main"
+    tools:context=".UI.MainAct.MainActivity">
 
     <Button
         android:id="@+id/id_MainAct_StartGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/str_MainAct_StartGameButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.396"
-        android:text="@string/str_MainAct_StartGameButton" />
+        app:layout_constraintVertical_bias="0.396" />
 
     <Button
         android:id="@+id/id_MainAct_SettingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/str_MainAct_SettingButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.641"
-        android:text="@string/str_MainAct_SettingButton" />
+        app:layout_constraintVertical_bias="0.641" />
 
 </android.support.constraint.ConstraintLayout>

@@ -5,8 +5,18 @@
     <!-- Main Act -->
     <string name="str_MainAct_StartGameButton">开始游戏</string>
     <string name="str_MainAct_SettingButton">游戏设置</string>
+    <string name="str_MainAct_LoginButton">游戏登陆</string>
     <string name="str_MainAct_ShowNoneUserAlertMessage">无用户，请先设置用户。</string>
     <string name="str_MainAct_ShowNoneUserAlertPosButton">确定</string>
+
+    <!-- Login Act -->
+    <string name="str_LoginAct_Title">锄大地登录</string>
+    <string name="str_LoginAct_UserNameTextView">用户名</string>
+    <string name="str_LoginAct_UserNameEditTextHint">请输入用户名...</string>
+    <string name="str_LoginAct_PassWordTextView">密码</string>
+    <string name="str_LoginAct_LoginButton">登陆</string>
+    <string name="str_LoginAct_RegisterButton">注册</string>
+    <string name="str_LoginAct_CancelButton">返回</string>
 
     <!-- Setting Act -->
     <string name="str_SettingAct_BackButton">返回</string>

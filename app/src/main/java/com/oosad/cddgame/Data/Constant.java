@@ -2,6 +2,19 @@ package com.oosad.cddgame.Data;
 
 public class Constant {
 
+    // region 登陆用户相关
+
+    /**
+     * 密码允许的最小长度
+     */
+    public static final int PassWordMinLen = 5;
+    /**
+     * 密码允许的最大长度
+     */
+    public static final int PassWordMaxLen = 20;
+
+    // endregion
+
     // region 与扑克牌游戏相关 AllCardCnt AllCardSuitCnt PlayerCnt PlayerCardCnt
 
     /**

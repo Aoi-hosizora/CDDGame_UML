@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.stetho.Stetho;
 import com.oosad.cddgame.UI.MainAct.presenter.IMainPresenter;
 import com.oosad.cddgame.UI.MainAct.presenter.MainPresenterCompl;
 import com.oosad.cddgame.UI.MainAct.view.IMainView;
