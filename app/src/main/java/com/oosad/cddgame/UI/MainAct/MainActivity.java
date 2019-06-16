@@ -18,7 +18,8 @@ import com.oosad.cddgame.R;
 public class MainActivity extends AppCompatActivity implements IMainView, View.OnClickListener {
 
     IMainPresenter m_mainPresenter;
-    Button m_StartGameButton;
+    Button m_StartSingleGameButton;
+    Button m_StartOnlineGameButton;
     Button m_SettingButton;
     TextView m_WelcomeUserTextView;
 
@@ -34,13 +35,15 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     }
 
     private void setupView() {
-        m_StartGameButton = findViewById(R.id.id_MainAct_StartGameButton);
+        m_StartSingleGameButton = findViewById(R.id.id_MainAct_StartSingleGameButton);
+        m_StartOnlineGameButton = findViewById(R.id.id_MainAct_StartOnlineGameButton);
         m_SettingButton = findViewById(R.id.id_MainAct_SettingButton);
         m_WelcomeUserTextView = findViewById(R.id.id_MainAct_WelcomeUserTextView);
 
         m_WelcomeUserTextView.setText(String.format(getString(R.string.str_MainAct_WelcomeUserForFormat), m_mainPresenter.Handle_GetUserName()));
 
-        m_StartGameButton.setOnClickListener(this);
+        m_StartSingleGameButton.setOnClickListener(this);
+        m_StartOnlineGameButton.setOnClickListener(this);
         m_SettingButton.setOnClickListener(this);
     }
 
@@ -54,8 +57,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_MainAct_StartGameButton: // 开始游戏
-                m_mainPresenter.Handle_StartGameButton_Click();
+            case R.id.id_MainAct_StartSingleGameButton: // 单机游戏
+                m_mainPresenter.Handle_StartGameButton_Click(true);
+            break;
+            case R.id.id_MainAct_StartOnlineGameButton: // 联机游戏
+                m_mainPresenter.Handle_StartGameButton_Click(false);
             break;
             case R.id.id_MainAct_SettingButton: // 游戏设置
                 m_mainPresenter.Handle_SettingButton_Click();

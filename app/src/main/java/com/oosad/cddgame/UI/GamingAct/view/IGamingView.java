@@ -7,7 +7,7 @@ import com.oosad.cddgame.UI.Widget.CardLayout;
 
 public interface IGamingView {
 
-    void onSetupUI(String UserName);
+    void onSetupUI(String UserName, boolean isSingle);
     void onBackToMainActivity();
     GamingActivity getThisPtr();
     void onAddCardLayout(View cardLayoutArrayList);

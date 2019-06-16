@@ -1,16 +1,14 @@
 package com.oosad.cddgame.Data.Boundary;
 
-import android.util.Log;
-
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Rules.NormalRuleCheckAdapter;
+import com.oosad.cddgame.Data.Rules.RuleCheckAdapter;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Entity.Player.User;
-import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Controller.CardMgr;
 import com.oosad.cddgame.Data.Controller.GameRound;
-import com.oosad.cddgame.Util.RuleUtil;
 
 public class GameSystem {
 
@@ -29,6 +27,9 @@ public class GameSystem {
                             new Robot(Constant.PLAYER_ROBOT_2),
                             new Robot(Constant.PLAYER_ROBOT_3)
                     };
+
+                    // Adapter
+                    instance.ruleCheck = new NormalRuleCheckAdapter();
                 }
             }
         return instance;
@@ -50,6 +51,27 @@ public class GameSystem {
     private Robot[] RobotMgr;
     private User GameUser;
     private Player Winner = null;
+
+    private boolean isSingle;
+
+    private RuleCheckAdapter ruleCheck;
+
+    /**
+     * 设置是否为单机游戏
+     * 在 Handle_SetupBundle(GameAct) 会访问
+     * @param isSingle
+     */
+    public void setIsSingle(boolean isSingle) {
+        this.isSingle = isSingle;
+    }
+
+    /**
+     * 返回是否为单机游戏
+     * @return
+     */
+    public boolean getIsSingle() {
+        return isSingle;
+    }
 
     /**
      * 设置当前玩家
@@ -76,8 +98,13 @@ public class GameSystem {
         return RobotMgr[idx-1];
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
     /**
-     * 通过本身指针 获取玩家的牌数
+     * SG 通过本身指针 获取玩家的牌数
+     * OG 访问服务器请求
      * @param player
      * @return
      */
@@ -86,10 +113,20 @@ public class GameSystem {
     }
 
     /**
+     *
      * 判断 当前是否轮到出牌 并且是否能如此出牌 待改
      * 不能: ret false, fin
      * 能: ret true, 将谁出的牌的出牌信息记录进 CardMgr
      *     包括更新拥有的牌，记录已经出过的牌
+     *
+     * OG
+     *
+     * 判断存在胜者           服务器
+     * 判断轮到出牌           服务器
+     * 判断符合规则           本机
+     * 执行跳过出牌           本机 & 服务器
+     * 执行指定出牌           本机 & 服务器
+     *
      * @param showcards 为 null 表示跳过
      * @param player
      * @return
@@ -102,7 +139,7 @@ public class GameSystem {
                 return Constant.ERR_NOT_ROUND;
 
             // 轮到了不符合规则
-            if (!checkShowCardThroughRule(showcards))
+            if (!ruleCheck.checkShowCardRule(cardMgr.getLastShownCard(), showcards))
                 return Constant.ERR_NOT_RULE;
 
             // 跳过出牌
@@ -129,7 +166,9 @@ public class GameSystem {
     }
 
     /**
-     * 启动游戏，分发四个玩家的牌
+     * SG 启动游戏，分发四个玩家的牌，并初始化 gameRound 的玩家记录，同时会启动发牌
+     *
+     * OG TODO: 访问服务器请求分牌，并获取本玩家的牌返回
      */
     public Card[] DistributeCardForStartGame() {
 
@@ -139,19 +178,15 @@ public class GameSystem {
                 getCurrUser(),
                 RobotMgr[0], RobotMgr[1], RobotMgr[2]
         };
+
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
         return CardMgr.getInstance().getPlayerCards(getCurrUser());
-    }
 
-
-    /**
-     * 调用规则模块 待改
-     * @param showcards 为 null 表示跳过
-     * @return
-     */
-    private boolean checkShowCardThroughRule(Card[] showcards) {
-        boolean ret = RuleUtil.judgement(cardMgr.getLastShownCard(), showcards);
-        Log.e("TAG", "checkShowCardThroughRule: " + ret);
-        return true;
+        // if (isSingle) {
+        //
+        // }
+        // else {
+        //
+        // }
     }
 }

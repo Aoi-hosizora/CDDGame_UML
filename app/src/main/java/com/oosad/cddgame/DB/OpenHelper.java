@@ -22,7 +22,8 @@ public class OpenHelper extends SQLiteOpenHelper {
         db.execSQL("create table if not exists tbl_User(" +
                 "userid integer primary key autoincrement, " +
                 "username varchar unique, " +
-                "password varchar not null)");
+                "password varchar not null," +
+                "islast smallint default 0)");
     }
 
     @Override

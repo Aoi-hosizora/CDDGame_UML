@@ -4,4 +4,5 @@ public interface ILoginPresenter {
 
     void HandleLogin(String UserName, String PlainPassWord);
     void HandleRegister(String UserName, String PlainPassWord);
+    String HandleGetLastLoginUser();
 }

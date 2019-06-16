@@ -10,5 +10,8 @@
 + minSdk 23 (Android 6)
 + targetSdk 28 (Android 9)
 
+### 后端说明
++ 后端部分：[CDD-backend](https://github.com/651291702/CDD-backend)
+
 ### 参考链接
 + [CascadeLayout](https://github.com/CameloeAnthony/CascadeLayout)

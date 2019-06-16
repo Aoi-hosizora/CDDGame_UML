@@ -8,16 +8,28 @@
     tools:context=".UI.MainAct.MainActivity">
 
     <Button
-        android:id="@+id/id_MainAct_StartGameButton"
+        android:id="@+id/id_MainAct_StartSingleGameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/str_MainAct_StartGameButton"
+        android:text="@string/str_MainAct_StartSingleGameButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.63" />
+        app:layout_constraintVertical_bias="0.561" />
+
+    <Button
+        android:id="@+id/id_MainAct_StartOnlineGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_MainAct_StartOnlineGameButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.892"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.694" />
 
     <Button
         android:id="@+id/id_MainAct_SettingButton"
@@ -29,7 +41,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.763" />
+        app:layout_constraintVertical_bias="0.826" />
 
     <TextView
         android:id="@+id/id_MainAct_WelcomeUserTextView"
@@ -44,6 +56,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintVertical_bias="0.354" />
 
 </android.support.constraint.ConstraintLayout>

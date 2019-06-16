@@ -22,9 +22,13 @@ public class GamingPresenterCompl implements IGamingPresenter {
 
     private IGamingView m_GamingView;
 
-    public static final String INT_SETTING_INFO = "SETTING_INFO";
+    public static final String INT_SINGLE_ONLINE = "SINGLE_ONLINE";
     public static final String INT_BUNDLE_INFO = "BUNDLE_INFO";
 
+    /**
+     * 当前是否为单机游戏
+     */
+    private boolean isSingle;
 
     public GamingPresenterCompl(IGamingView iGamingView) {
         this.m_GamingView = iGamingView;
@@ -38,28 +42,35 @@ public class GamingPresenterCompl implements IGamingPresenter {
     }
 
     /**
+     * !!!!!!!!!!
+     * 返回是否是单机游戏，用在：
+     *      setupPlayerLayout
+     * @return
+     */
+    @Override
+    public boolean Handle_GetIsSingle() {
+        return isSingle;
+    }
+
+    /**
      * 处理从 MainAct 传递进来的 Bundle 数据
      * @param intent
      */
     @Override
     public void Handle_SetupBundle(Intent intent) {
         Bundle bundle = intent.getBundleExtra(INT_BUNDLE_INFO);
-        Setting setting = (Setting) bundle.getSerializable(INT_SETTING_INFO);
+        isSingle = bundle.getBoolean(INT_SINGLE_ONLINE, true);
+        GameSystem.getInstance().setIsSingle(isSingle);
+
         User currUser = GameSystem.getInstance().getCurrUser();
 
-        m_GamingView.onSetupUI(currUser.getName());
+        m_GamingView.onSetupUI(currUser.getName(), isSingle);
     }
 
     /**
-     * 暂停游戏
-     */
-    @Override
-    public void Handle_PauseGameButton_Click() {
-
-    }
-
-    /**
-     * 处理发牌，并显示
+     * SG 本机发牌，返回玩家的牌显示
+     *
+     * OG 服务器请求发牌，返回本玩家的牌
      */
     @Override
     public void Handle_DistributeCard() {

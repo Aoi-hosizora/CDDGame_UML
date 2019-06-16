@@ -26,6 +26,11 @@ public class LoginPresenterCompl implements ILoginPresenter {
         userDAO = new UserDAO(m_loginView.getThisPtr());
     }
 
+    @Override
+    public String HandleGetLastLoginUser() {
+        return userDAO.queryLast();
+    }
+
     private void ShowLogE(String FunctionName, String data) {
         String TAG = "CDDGame";
         String CN = "LoginPresenterCompl";
@@ -83,6 +88,7 @@ public class LoginPresenterCompl implements ILoginPresenter {
             return;
         }
 
+        userDAO.setIsLast(UserName);
         User currUser = getUser(UserName);
         GameSystem.getInstance().setUser(currUser);
         m_loginView.onShowLoginSuccessToast(UserName);

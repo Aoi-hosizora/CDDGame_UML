@@ -31,7 +31,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     TextView m_UserUpPassTextView, m_UserDownPassTextView, m_UserLeftPassTextView, m_UserRightPassTextView;
     CascadeLayout m_CardSetLayout;
 
-    Button m_PauseGameButton;
+    TextView m_SingleOrOnlineTextView;
+
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
     Button m_PassShowCardButton;
@@ -46,6 +47,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         setupView();
         m_gamingPresenter.Handle_SetupBundle(getIntent());
+        setupPlayerLayout();
     }
 
     private void setupView() {
@@ -75,15 +77,16 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_UserRightPassTextView = findViewById(R.id.id_GamingAct_ShowCardSetRightPass);
 
         // 各种按钮
-        m_PauseGameButton = findViewById(R.id.id_GamingAct_PauseGameButton);
         m_ExitGameButton = findViewById(R.id.id_GamingAct_ExitGameButton);
         m_PushOrDistributeCardButton = findViewById(R.id.id_GamingAct_PushOrDistributeCardButton);
         m_PassShowCardButton = findViewById(R.id.id_GamingAct_PassShowCardButton);
 
+        // 单机联机标志
+        m_SingleOrOnlineTextView = findViewById(R.id.id_GamingAct_SingleOrOnlineTextView);
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // 按钮事件订阅 显示
-        m_PauseGameButton.setOnClickListener(this);
         m_ExitGameButton.setOnClickListener(this);
         m_PushOrDistributeCardButton.setOnClickListener(this);
         m_PassShowCardButton.setOnClickListener(this);
@@ -105,9 +108,23 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         // 出牌布局事件订阅
         m_CardSetLayout.setOnClickListener(this);
-        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetLeftLayout, Constant.PLAYER_ROBOT_1);
-        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetUpLayout, Constant.PLAYER_ROBOT_2);
-        m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetRightLayout, Constant.PLAYER_ROBOT_3);
+    }
+
+    /**
+     * SG 设置 布局 和 机器人/玩家 绑定
+     * OG 每次都访问服务器获得数据
+     */
+    private void setupPlayerLayout() {
+        if (m_gamingPresenter.Handle_GetIsSingle()) {
+            // 单机游戏，直接将布局和机器人绑定
+            m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetLeftLayout, Constant.PLAYER_ROBOT_1);
+            m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetUpLayout, Constant.PLAYER_ROBOT_2);
+            m_gamingPresenter.Handle_SetupRobotShowCardLayout(m_ShowCardSetRightLayout, Constant.PLAYER_ROBOT_3);
+        }
+        else {
+            // TODO: 联机游戏，将布局和服务器访问关联
+
+        }
     }
 
     private void ShowLogE(String FunctionName, String data) {
@@ -125,18 +142,20 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     /**
      * 设置用户界面
      * @param UserName
+     * @param isSingle
      */
     @Override
-    public void onSetupUI(String UserName) {
+    public void onSetupUI(String UserName, boolean isSingle) {
         this.m_UserNameDownTextView.setText(UserName);
+        if (isSingle)
+            m_SingleOrOnlineTextView.setText(R.string.str_GamingAct_SingleTextView);
+        else
+            m_SingleOrOnlineTextView.setText(R.string.str_GamingAct_OnlineTextView);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.id_GamingAct_PauseGameButton: // 暂停游戏
-                PauseGameButton_Click();
-            break;
             case R.id.id_GamingAct_ExitGameButton: // 退出游戏
                 ExitGameButton_Click();
             break;
@@ -190,13 +209,6 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 })
                 .setNegativeButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel), null)
                 .show();
-    }
-
-    /**
-     * 单击暂停游戏按钮
-     */
-    private void PauseGameButton_Click() {
-        m_gamingPresenter.Handle_PauseGameButton_Click();
     }
 
     /**

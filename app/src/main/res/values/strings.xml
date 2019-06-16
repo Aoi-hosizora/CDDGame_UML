@@ -4,7 +4,8 @@
     <string name="alert_PosOK">确定</string>
 
     <!-- Main Act -->
-    <string name="str_MainAct_StartGameButton">开始游戏</string>
+    <string name="str_MainAct_StartSingleGameButton">单机游戏</string>
+    <string name="str_MainAct_StartOnlineGameButton">联机游戏</string>
     <string name="str_MainAct_WelcomeUser">欢迎用户</string>
     <string name="str_MainAct_WelcomeUserForFormat">欢迎 %s</string>
     <string name="str_MainAct_SettingButton">游戏设置</string>
@@ -43,6 +44,8 @@
     <string name="str_GamingAct_DefUserDownTextView">Me</string>
     <string name="str_GamingAct_PassTextView">pass</string>
 
+    <string name="str_GamingAct_SingleTextView">单机</string>
+    <string name="str_GamingAct_OnlineTextView">联机</string>
     <string name="str_GamingAct_PauseGameButton">暂停</string>
     <string name="str_GamingAct_ExitGameButton">退出</string>
     <string name="str_GamingAct_PushCardButton">出牌</string>

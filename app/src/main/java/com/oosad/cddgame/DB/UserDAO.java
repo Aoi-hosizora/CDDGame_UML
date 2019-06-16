@@ -90,6 +90,34 @@ public class UserDAO {
     }
 
     /**
+     * 查询上次登录
+     */
+    public String queryLast() {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String username = "";
+        Cursor cursor = null;
+
+        try {
+            String sql = "select * from " + TBL_NAME + " where islast = 1";
+            cursor = db.rawQuery(sql, null);
+            cursor.moveToFirst();
+            if (cursor.moveToFirst())
+                username = cursor.getString(cursor.getColumnIndex("username"));
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            if (cursor != null)
+                cursor.close();
+            if (db != null)
+                db.close();
+        }
+        return username;
+    }
+
+    /**
      * 插入用户
      * @param user
      * @param pass 加密后的密码
@@ -201,5 +229,41 @@ public class UserDAO {
         }
         ShowLogE("deleteUsers", "DeleteUsers: " + ret);
         return ret;
+    }
+
+    /**
+     * 更新 IsLast
+     * @param username
+     */
+    public void setIsLast(String username) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues vals = new ContentValues();
+        vals.put("islast", 0);
+
+        try {
+            db.update(TBL_NAME, vals, "", null);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            if (db != null)
+                db.close();
+        }
+
+        db = helper.getWritableDatabase();
+        vals = new ContentValues();
+        vals.put("islast", 1);
+
+        try {
+            db.update(TBL_NAME, vals, "username = ?", new String[] { username });
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            if (db != null)
+                db.close();
+        }
     }
 }

@@ -60,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
         m_UserNameEditText = findViewById(R.id.id_LoginAct_UserNameEditText);
         m_PassWordEditText = findViewById(R.id.id_LoginAct_PassWordEditText);
 
+        m_UserNameEditText.setText(m_loginPresenter.HandleGetLastLoginUser());
+
         m_LoginButton.setOnClickListener(this);
         m_RegisterButton.setOnClickListener(this);
     }

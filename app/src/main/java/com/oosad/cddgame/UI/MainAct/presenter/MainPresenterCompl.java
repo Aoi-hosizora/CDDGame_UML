@@ -30,10 +30,11 @@ public class MainPresenterCompl implements IMainPresenter {
     }
 
     /**
-     * 开始游戏，判断是否设置了用户，并启动 GamingActivity
+     * 开始游戏，判断是否设置了用户，并启动 GamingActivity, 判断单机联机
+     * @param isSingle
      */
     @Override
-    public void Handle_StartGameButton_Click() {
+    public void Handle_StartGameButton_Click(boolean isSingle) {
         if (!hasUser()) {
             m_mainView.ShowNoneUserAlert();
             return;
@@ -43,12 +44,12 @@ public class MainPresenterCompl implements IMainPresenter {
         Intent GamingIntent = new Intent(m_mainView.getThisPtr(), GamingActivity.class);
         Bundle GamingBundle = new Bundle();
 
-        Setting setting = Setting.getInstance();
-        GamingBundle.putSerializable(GamingPresenterCompl.INT_SETTING_INFO, setting);
+        GamingBundle.putBoolean(GamingPresenterCompl.INT_SINGLE_ONLINE, isSingle);
 
         GamingIntent.putExtra(GamingPresenterCompl.INT_BUNDLE_INFO, GamingBundle);
         m_mainView.getThisPtr().startActivity(GamingIntent);
     }
+
 
     /**
      * 设置，启动 SettingActivity
