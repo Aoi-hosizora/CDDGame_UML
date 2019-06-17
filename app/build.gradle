@@ -41,5 +41,7 @@ dependencies {
 
     // Socket.IO
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
-    implementation 'com.squareup.okhttp:okhttp:2.4.0'
+
+    // OKHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
 }
