@@ -1,19 +1,17 @@
 package com.oosad.cddgame.UI.LoginAct.presenter;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.oosad.cddgame.DB.UserDAO;
 import com.oosad.cddgame.Data.Boundary.GameSystem;
-import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.User;
-import com.oosad.cddgame.Data.Setting;
+import com.oosad.cddgame.Net.PostLoginRegister;
 import com.oosad.cddgame.UI.LoginAct.view.ILoginView;
 import com.oosad.cddgame.UI.MainAct.MainActivity;
-import com.oosad.cddgame.Util.PassUtil;
 
-import java.util.Set;
 
 public class LoginPresenterCompl implements ILoginPresenter {
 
@@ -38,32 +36,34 @@ public class LoginPresenterCompl implements ILoginPresenter {
         Log.e(TAG, msg);
     }
 
-    /**
-     * 查询数据库，获取用户密码
-     * @param userName
-     * @return
-     */
-    private String getUserPassWord(String userName) {
-        return userDAO.queryPassWord(userName);
-    }
+    private final int RegisterSuccess = 0;
+    private final int RegisterError = 1;
+    private final int LoginSuccess = 2;
+    private final int LoginError = 3;
+    private final Handler handler = new Handler(new Handler.Callback() {
 
-    /**
-     * 查询数据库，获取是否存在用户
-     * @param username
-     * @return
-     */
-    private User getUser(String username) {
-        return userDAO.queryUser(username);
-    }
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case RegisterSuccess:
+                    m_loginView.onClearPassWord();
+                    m_loginView.onShowRegisterSuccessAlert();
+                break;
+                case RegisterError:
+                    m_loginView.onShowErrorRegisterAlert();
+                break;
+                case LoginSuccess:
+                    m_loginView.onShowLoginSuccessToast(GameSystem.getInstance().getCurrUser().getName());
+                    gotoMainActivity();
+                break;
+                case LoginError:
+                    m_loginView.onShowErrorPassWordAlert();
+                break;
 
-    /**
-     * 判读密码是否可用，长度范围
-     * @param plainPassWord
-     * @return
-     */
-    private boolean checkPassWordValidable(String plainPassWord) {
-        return plainPassWord.length() > Constant.PassWordMinLen && plainPassWord.length() < Constant.PassWordMaxLen;
-    }
+            }
+            return false;
+        }
+    });
 
     /**
      * 处理登陆，并判断有效性
@@ -71,28 +71,37 @@ public class LoginPresenterCompl implements ILoginPresenter {
      * @param PlainPassWord
      */
     @Override
-    public void HandleLogin(String UserName, String PlainPassWord) {
+    public void HandleLogin(final String UserName, final String PlainPassWord) {
+
+        // 用户名为空
         if (UserName.isEmpty() || PlainPassWord.isEmpty()) {
             m_loginView.onShowNoUserNameOrPassWordAlert();
             return;
         }
 
-        String passInDb = getUserPassWord(UserName);
-        if (passInDb.isEmpty()) {
-            m_loginView.onShowNoUserAlert();
-            return;
-        }
+        new Thread() {
+            @Override
+            public void run() {
+                String token = PostLoginRegister.PostLogin(UserName, PlainPassWord);
+                if (!token.isEmpty()) {
 
-        if (!PassUtil.ComparePassWord(PlainPassWord, passInDb)) {
-            m_loginView.onShowErrorPassWordAlert();
-            return;
-        }
+                    GameSystem.getInstance().setCurrUserToken(token);
+                    GameSystem.getInstance().setCurrUser(new User(UserName));
+                    if (userDAO.queryUser(UserName) == null)
+                        userDAO.insertUser(UserName);
+                    userDAO.setIsLast(UserName);
 
-        userDAO.setIsLast(UserName);
-        User currUser = getUser(UserName);
-        GameSystem.getInstance().setUser(currUser);
-        m_loginView.onShowLoginSuccessToast(UserName);
-        gotoMainActivity();
+                    Message message = new Message();
+                    message.what = LoginSuccess;
+                    handler.sendMessage(message);
+                }
+                else {
+                    Message message = new Message();
+                    message.what = LoginError;
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
     }
 
     /**
@@ -101,57 +110,29 @@ public class LoginPresenterCompl implements ILoginPresenter {
      * @param PlainPassWord
      */
     @Override
-    public void HandleRegister(String UserName, String PlainPassWord) {
+    public void HandleRegister(final String UserName, final String PlainPassWord) {
+
         // 用户名密码空
         if (UserName.isEmpty() || PlainPassWord.isEmpty()) {
             m_loginView.onShowNoUserNameOrPassWordAlert();
             return;
         }
 
-        // 密码无效
-        if (!checkPassWordValidable(PlainPassWord)) {
-            m_loginView.onShowErrorPassWordFormatAlert();
-            return;
-        }
-
-        // 已经存在用户
-        User currUser = getUser(UserName);
-        if (currUser != null) {
-            m_loginView.onShowAlwaysExistUserAlert();
-            return;
-        }
-
-        // 插入失败
-        if (!insertUser(UserName, PlainPassWord)) {
-            m_loginView.onShowErrorRegisterAlert();
-            return;
-        }
-
-        m_loginView.onClearPassWord();
-        m_loginView.onShowRegisterSuccessAlert();
-    }
-
-    /**
-     * 新建用户，在本地数据库与服务器后端同步
-     * @param UserName
-     * @param PlainPassWord
-     * @return
-     */
-    private boolean insertUser(String UserName, String PlainPassWord) {
-
-        boolean regInServer = true;
-        // net back-end register
-        if (!regInServer)
-            return false;
-
-        userDAO.insertUser(UserName, PassUtil.EncryptPassWord(PlainPassWord));
-        User currUser = getUser(UserName);
-        if (currUser == null)
-            return false;
-
-        ShowLogE("insertUser", "RegisterSuccess");
-
-        return true;
+        new Thread() {
+            @Override
+            public void run() {
+                if (!PostLoginRegister.PostRegister(UserName, PlainPassWord)) {
+                    Message message = new Message();
+                    message.what = RegisterError;
+                    handler.sendMessage(message);
+                }
+                else {
+                    Message message = new Message();
+                    message.what = RegisterSuccess;
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.oosad.cddgame.Socket;
+package com.oosad.cddgame.Net;
 
 import android.util.Log;
 
@@ -7,16 +7,14 @@ import com.github.nkzawa.socketio.client.Socket;
 import com.github.nkzawa.emitter.Emitter;
 
 import com.oosad.cddgame.Data.Entity.Card;
-import com.oosad.cddgame.Util.HttpUtil;
+import com.oosad.cddgame.Net.SocketJson.PlayCardObj;
+import com.oosad.cddgame.Net.SocketJson.PlayerRoomInfoObj;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 public class SocketHandlers {
 
@@ -27,11 +25,9 @@ public class SocketHandlers {
         Log.e(TAG, msg);
     }
 
-    private static String RegisterURL = "http://api.gajon.xyz:8888/cdd/user/register";
-    private static String LoginURL = "http://api.gajon.xyz:8888/cdd/user/login";
-
     private static String URL = "http://api.gajon.xyz:8888";
     private static String Path = "/cdd/room";
+
     private static Socket mSocket;
 
     /**
@@ -60,64 +56,22 @@ public class SocketHandlers {
         SetSocketOff(mSocket);
     }
 
-    ///////////////////////////////// post /////////////////////////////////
-
-    private static String PostHandler(String Url, String UserName, String PassWord) {
-        JSONObject UserPassInfo;
-        try {
-            UserPassInfo = new JSONObject();
-            UserPassInfo.put("username", UserName);
-            UserPassInfo.put("password", PassWord);
-        }
-        catch (JSONException ex) {
-            ex.printStackTrace();
-            return "";
-        }
-
-        String resp;
-        try {
-            resp = HttpUtil.HttpPost(new URL(Url), UserPassInfo.toString());
-        }
-        catch (MalformedURLException ex) {
-            ex.printStackTrace();
-            return "";
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-            return "";
-        }
-
-        return resp;
-    }
-
-    public static boolean PostLogin(String UserName, String PassWord) {
-        String ret = PostHandler(LoginURL, UserName, PassWord);
-        ShowLogE("PostLogin", "RET: " + ret);
-        return true;
-    }
-
-    public static boolean PostReegister(String UserName, String PassWord) {
-        String ret = PostHandler(RegisterURL, UserName, PassWord);
-        ShowLogE("PostLogin", "RET: " + ret);
-        return true;
-    }
-
     ///////////////////////////////// emit /////////////////////////////////
 
     public static void EmitPrepare() {
-        mSocket.emit(SocketConst.EmitEvent.Prepare);
+        mSocket.emit(EventConst.EmitEvent.Prepare);
     }
 
     public static void EmitCanclePrepare() {
-        mSocket.emit(SocketConst.EmitEvent.CanclePrepare);
+        mSocket.emit(EventConst.EmitEvent.CanclePrepare);
     }
 
     public static void EmitShowCard(Card[] cards) {
-        SocketJsonObjs.PlayCardObj[] playCardObjs = new SocketJsonObjs.PlayCardObj[cards.length];
+        PlayCardObj[] playCardObjs = new PlayCardObj[cards.length];
         for (int i = 0; i < cards.length; i++) {
-            playCardObjs[i] = SocketJsonObjs.PlayCardObj.toPlayCardObj(cards[i]);
+            playCardObjs[i] = PlayCardObj.toPlayCardObj(cards[i]);
         }
-        mSocket.emit(SocketConst.EmitEvent.PlayCard, playCardObjs);
+//        mSocket.emit(EventConst.EmitEvent.PlayCard, playCardObjs);
     }
 
     ///////////////////////////////// listen /////////////////////////////////
@@ -127,9 +81,9 @@ public class SocketHandlers {
      * @param mSocket
      */
     private static void SetSocketOn(Socket mSocket) {
-        mSocket.on(SocketConst.RcvdEvent.Waiting, onWaiting);
-        mSocket.on(SocketConst.RcvdEvent.Playing, onPlaying);
-        mSocket.on(SocketConst.RcvdEvent.End, onEnd);
+        mSocket.on(EventConst.RcvdEvent.Waiting, onWaiting);
+        mSocket.on(EventConst.RcvdEvent.Playing, onPlaying);
+        mSocket.on(EventConst.RcvdEvent.End, onEnd);
     }
 
     /**
@@ -137,9 +91,9 @@ public class SocketHandlers {
      * @param mSocket
      */
     private static void SetSocketOff(Socket mSocket) {
-        mSocket.off(SocketConst.RcvdEvent.Waiting, onWaiting);
-        mSocket.off(SocketConst.RcvdEvent.Playing, onPlaying);
-        mSocket.off(SocketConst.RcvdEvent.End, onEnd);
+        mSocket.off(EventConst.RcvdEvent.Waiting, onWaiting);
+        mSocket.off(EventConst.RcvdEvent.Playing, onPlaying);
+        mSocket.off(EventConst.RcvdEvent.End, onEnd);
     }
 
     /**
@@ -152,8 +106,8 @@ public class SocketHandlers {
             JSONObject data = (JSONObject) args[0];
 
             try {
-                SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo =
-                        SocketJsonObjs.PlayerRoomInfoObj.toPlayerRoomInfoObj(data);
+                PlayerRoomInfoObj playerRoomInfo =
+                        PlayerRoomInfoObj.toPlayerRoomInfoObj(data);
 
                 if (mOnWaitingListener != null)
                     mOnWaitingListener.onWaiting(playerRoomInfo);
@@ -175,13 +129,13 @@ public class SocketHandlers {
             JSONArray jsonPlayerCards = (JSONArray) args[1];
 
             try {
-                SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo =
-                        SocketJsonObjs.PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
+                PlayerRoomInfoObj playerRoomInfo =
+                        PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
 
-                SocketJsonObjs.PlayCardObj playCard =
-                        SocketJsonObjs.PlayCardObj.toPlayCardObj(jsonPlayerCards);
+                PlayCardObj playCard =
+                        PlayCardObj.toPlayCardObj(jsonPlayerCards);
 
-                Card card = SocketJsonObjs.PlayCardObj.toCard(playCard);
+                Card card = PlayCardObj.toCard(playCard);
 
                 if (mOnPlayingListener != null)
                     mOnPlayingListener.onPlaying(playerRoomInfo, card);
@@ -192,7 +146,6 @@ public class SocketHandlers {
             }
         }
     };
-
 
     /**
      * Param: PlayerRoomInfo, PlayerCards
@@ -205,13 +158,13 @@ public class SocketHandlers {
             JSONArray jsonPlayerCards = (JSONArray) args[1];
 
             try {
-                SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo =
-                        SocketJsonObjs.PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
+                PlayerRoomInfoObj playerRoomInfo =
+                        PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
 
-                SocketJsonObjs.PlayCardObj[] playCards =
-                        SocketJsonObjs.PlayCardObj.toPlayCardObjArray(jsonPlayerCards);
+                PlayCardObj[] playCards =
+                        PlayCardObj.toPlayCardObjArray(jsonPlayerCards);
 
-                Card[] cards = SocketJsonObjs.PlayCardObj.toCardArr(playCards);
+                Card[] cards = PlayCardObj.toCardArr(playCards);
 
                 if (mOnEndListener != null)
                     mOnEndListener.onEnd(playerRoomInfo, cards);
@@ -225,15 +178,15 @@ public class SocketHandlers {
     ///////////////////////////////// listener interface /////////////////////////////////
 
     public interface onWaitingListener {
-        void onWaiting(SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo);
+        void onWaiting(PlayerRoomInfoObj playerRoomInfo);
     }
 
     public interface onPlayingListener {
-        void onPlaying(SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo, Card card);
+        void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card card);
     }
 
     public interface onEndListener {
-        void onEnd(SocketJsonObjs.PlayerRoomInfoObj playerRoomInfo, Card[] cards);
+        void onEnd(PlayerRoomInfoObj playerRoomInfo, Card[] cards);
     }
 
     private static onWaitingListener mOnWaitingListener;

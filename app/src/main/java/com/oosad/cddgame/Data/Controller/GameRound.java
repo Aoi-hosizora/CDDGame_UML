@@ -7,12 +7,21 @@ import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 
+/**
+ * GameRound Controller:
+ *
+ * +checkIsRound
+ * +setInitPlayer / +setNextPlayer
+ *
+ * -getCurrPlayer
+ * -LetRobotShowCard
+ */
 public class GameRound {
 
     private GameRound() {}
     private static volatile GameRound Instance;
 
-    public static GameRound getInstane() {
+    public static GameRound getInstance() {
         if (Instance == null) synchronized (GameRound.class) {
             if (Instance == null) {
                 Instance = new GameRound();

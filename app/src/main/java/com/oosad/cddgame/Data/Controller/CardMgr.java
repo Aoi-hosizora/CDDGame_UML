@@ -1,19 +1,25 @@
 package com.oosad.cddgame.Data.Controller;
 
-import android.util.Log;
-
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Entity.CardSuit;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
+/**
+ * CardMgr Controller:
+ *
+ * +DistributeCards / +getInitialPlayerIdx
+ *
+ * +getPlayerCards <<<<<
+ * +removePlayerCardShown <<<<<
+ *
+ * +getLastShownCard / +setLastShownCard
+ */
 public class CardMgr {
 
     private static volatile CardMgr cardMgr=null;

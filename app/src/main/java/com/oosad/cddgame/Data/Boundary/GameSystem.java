@@ -1,6 +1,7 @@
 package com.oosad.cddgame.Data.Boundary;
 
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Controller.PlayerMgr;
 import com.oosad.cddgame.Data.Rules.NormalRuleCheckAdapter;
 import com.oosad.cddgame.Data.Rules.RuleCheckAdapter;
 import com.oosad.cddgame.Data.Entity.Player.Player;
@@ -10,6 +11,14 @@ import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Controller.CardMgr;
 import com.oosad.cddgame.Data.Controller.GameRound;
 
+/**
+ * GameSystem Boundary:
+ *
+ * +setIsSingle / +getIsSingle
+ * +getPlayerCardsCnt / +getRobot
+ *
+ * +canShowCardWithCheckTurn / +DistributeCardForStartGame
+ */
 public class GameSystem {
 
     private GameSystem() {}
@@ -21,12 +30,8 @@ public class GameSystem {
                 if (instance == null) { // 判空操作 单例唯一
                     instance = new GameSystem();
                     instance.cardMgr = CardMgr.getInstance();
-                    instance.gameRound = GameRound.getInstane();
-                    instance.RobotMgr = new Robot[] {
-                            new Robot(Constant.PLAYER_ROBOT_1),
-                            new Robot(Constant.PLAYER_ROBOT_2),
-                            new Robot(Constant.PLAYER_ROBOT_3)
-                    };
+                    instance.gameRound = GameRound.getInstance();
+                    instance.playerMgr = PlayerMgr.getInstance();
 
                     // Adapter
                     instance.ruleCheck = new NormalRuleCheckAdapter();
@@ -47,9 +52,8 @@ public class GameSystem {
 
     private CardMgr cardMgr;
     private GameRound gameRound;
+    private PlayerMgr playerMgr;
 
-    private Robot[] RobotMgr;
-    private User GameUser;
     private Player Winner = null;
 
     private boolean isSingle;
@@ -73,30 +77,6 @@ public class GameSystem {
         return isSingle;
     }
 
-    /**
-     * 设置当前玩家
-     * @param user
-     */
-    public void setUser(User user) {
-        this.GameUser = user;
-    }
-
-    /**
-     * 获得当前玩家
-     * @return
-     */
-    public User getCurrUser() {
-        return GameUser;
-    }
-
-    /**
-     * 通过 PLAYER_ROBOT_x 获取机器人
-     * @param idx
-     * @return
-     */
-    public Robot getRobot(int idx) {
-        return RobotMgr[idx-1];
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
@@ -110,6 +90,50 @@ public class GameSystem {
      */
     public int getPlayerCardsCnt(Player player) {
         return CardMgr.getInstance().getPlayerCards(player).length;
+    }
+
+    /**
+     * SG 委托获取机器人，GameRound用
+     * OG 无操作
+     * @param idx
+     * @return
+     */
+    public Robot getRobot(int idx) {
+        return playerMgr.getRobot(idx);
+    }
+
+    /**
+     * 委托设置当前用户
+     * @param currUser
+     */
+    public void setCurrUser(User currUser) {
+        playerMgr.setCurrUser(currUser);
+    }
+
+    /**
+     * SG 无操作
+     * OG 委托设置当前用户的 Token
+     * @param Token
+     */
+    public void setCurrUserToken(String Token) {
+        playerMgr.setCurrUserToken(Token);
+    }
+
+    /**
+     * SG 无操作
+     * OG 委托获取当前用户的 Token
+     * @return
+     */
+    public String getCurrUserToken() {
+        return playerMgr.getCurrUserToken();
+    }
+
+    /**
+     * 委托获取当前用户
+     * @return
+     */
+    public User getCurrUser() {
+        return playerMgr.getCurrUser();
     }
 
     /**
@@ -174,13 +198,10 @@ public class GameSystem {
 
         CardMgr.getInstance().DistributeCards();
 
-        Player[] players = new Player[] {
-                getCurrUser(),
-                RobotMgr[0], RobotMgr[1], RobotMgr[2]
-        };
+        Player[] players = playerMgr.getPlayers();
 
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
-        return CardMgr.getInstance().getPlayerCards(getCurrUser());
+        return CardMgr.getInstance().getPlayerCards(playerMgr.getCurrUser());
 
         // if (isSingle) {
         //
