@@ -23,4 +23,6 @@ public interface IGamingView {
     void onHidePassShowCard(int PlayerId);
     void onSetUpOnlinePlayingLayout(String UserNameLeft, String UserNameUp, String UserNameRight);
     void onUpdateOnlinePlayingLayout(int idx, Card[] cards);
+    void onUpdateProgressDialog(int cnt);
+    void onShowProgressDialog();
 }

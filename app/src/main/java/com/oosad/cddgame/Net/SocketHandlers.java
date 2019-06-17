@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.List;
 
 public class SocketHandlers {
 
@@ -40,8 +41,10 @@ public class SocketHandlers {
             opts.path = Path;
             opts.query = "token=" + token.split(" ")[1];
 
-            SetSocketOn(mSocket);
+            ShowLogE("Connect", opts.query);
             mSocket = IO.socket(URL, opts);
+            SetSocketOn(mSocket);
+            mSocket.connect();
         }
         catch (URISyntaxException ex) {
             ex.printStackTrace();
@@ -52,8 +55,10 @@ public class SocketHandlers {
      * 结束连接，退出游戏
      */
     public static void DisConnect() {
-        mSocket.disconnect();
-        SetSocketOff(mSocket);
+        if (mSocket != null) {
+            SetSocketOff(mSocket);
+            mSocket.disconnect();
+        }
     }
 
     ///////////////////////////////// emit /////////////////////////////////
@@ -66,18 +71,28 @@ public class SocketHandlers {
         mSocket.emit(EventConst.EmitEvent.CanclePrepare);
     }
 
+    /**
+     * 以序列化 PlayCardObj[] 发送
+     * @param cards
+     */
     public static void EmitShowCard(Card[] cards) {
-        PlayCardObj[] playCardObjs = new PlayCardObj[cards.length];
-        for (int i = 0; i < cards.length; i++) {
-            playCardObjs[i] = PlayCardObj.toPlayCardObj(cards[i]);
+        PlayCardObj[] playCardObjs = PlayCardObj.toPlayCardObjArray(cards);
+
+        try {
+            String cardsStr = new JSONArray(playCardObjs).toString();
+            // JSON.stringify([{"number":3,"type":"RED DIAMOND"}, ...])
+
+            mSocket.emit(EventConst.EmitEvent.PlayCard, cardsStr);
         }
-        mSocket.emit(EventConst.EmitEvent.PlayCard, playCardObjs);
+        catch (JSONException ex) {
+            ex.printStackTrace();
+        }
     }
 
     ///////////////////////////////// listen /////////////////////////////////
 
     /**
-     * 在连接之前设置监听
+     * 在连接之后设置监听
      * @param mSocket
      */
     private static void SetSocketOn(Socket mSocket) {
@@ -87,7 +102,7 @@ public class SocketHandlers {
     }
 
     /**
-     * 在断开之后取消监听
+     * 在断开之前取消监听
      * @param mSocket
      */
     private static void SetSocketOff(Socket mSocket) {
@@ -103,9 +118,10 @@ public class SocketHandlers {
         @Override
         public void call(final Object... args) {
 
-            JSONObject data = (JSONObject) args[0];
-
             try {
+                JSONObject data = new JSONObject((String) args[0]);
+                ShowLogE("Waiting", (String) args[0]);
+
                 PlayerRoomInfoObj playerRoomInfo =
                         PlayerRoomInfoObj.toPlayerRoomInfoObj(data);
 
@@ -119,23 +135,25 @@ public class SocketHandlers {
     };
 
     /**
-     * Param: PlayerRoomInfo, PlayerCards
+     * Param: PlayerRoomInfo, PlayerCards[]
      */
     private static Emitter.Listener onPlaying = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
 
-            JSONObject jsonPlayerRoomInfo = (JSONObject) args[0];
-            JSONArray jsonPlayerCards = (JSONArray) args[1];
-
             try {
+                JSONObject jsonPlayerRoomInfo = new JSONObject((String) args[0]);
+                JSONArray jsonPlayerCards = new JSONArray((String) args[1]);
+
+                ShowLogE("Playing", (String) args[0]);
+
                 PlayerRoomInfoObj playerRoomInfo =
                         PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
 
-                PlayCardObj playCard =
-                        PlayCardObj.toPlayCardObj(jsonPlayerCards);
+                PlayCardObj[] playCard =
+                        PlayCardObj.toPlayCardObjArray(jsonPlayerCards);
 
-                Card card = PlayCardObj.toCard(playCard);
+                Card[] card = PlayCardObj.toCardArr(playCard);
 
                 if (mOnPlayingListener != null)
                     mOnPlayingListener.onPlaying(playerRoomInfo, card);
@@ -148,7 +166,7 @@ public class SocketHandlers {
     };
 
     /**
-     * Param: PlayerRoomInfo, PlayerCards
+     * Param: PlayerRoomInfo, PlayerCards[][]
      */
     private static Emitter.Listener onEnd = new Emitter.Listener() {
         @Override
@@ -161,10 +179,10 @@ public class SocketHandlers {
                 PlayerRoomInfoObj playerRoomInfo =
                         PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
 
-                PlayCardObj[] playCards =
-                        PlayCardObj.toPlayCardObjArray(jsonPlayerCards);
+                List<PlayCardObj[]> playCards =
+                        PlayCardObj.toPlayCardObj4Array(jsonPlayerCards);
 
-                Card[] cards = PlayCardObj.toCardArr(playCards);
+                List<Card[]> cards = PlayCardObj.toCard4Array(playCards);
 
                 if (mOnEndListener != null)
                     mOnEndListener.onEnd(playerRoomInfo, cards);
@@ -182,11 +200,11 @@ public class SocketHandlers {
     }
 
     public interface onPlayingListener {
-        void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card card);
+        void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card[] card);
     }
 
     public interface onEndListener {
-        void onEnd(PlayerRoomInfoObj playerRoomInfo, Card[] cards);
+        void onEnd(PlayerRoomInfoObj playerRoomInfo, List<Card[]> cards);
     }
 
     private static onWaitingListener mOnWaitingListener;

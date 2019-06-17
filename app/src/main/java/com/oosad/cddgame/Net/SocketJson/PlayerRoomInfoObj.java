@@ -8,32 +8,32 @@ public class PlayerRoomInfoObj {
     /**
      * len 5
      */
-    String room_number;
+    private String room_number;
     /**
      * PlayerObj[]
      */
-    PlayerObj[] players;
+    private PlayerObj[] players;
     /**
      * PlayerInRoomStatus
      * "WAITING" || "PLAYING"
      */
-    String status;
+    private String status;
     /**
      * 0 - 3
      */
-    int current;
+    private int current;
     /**
      * PlayCard[]
      */
-    PlayCardObj[] precard;
+    private PlayCardObj[] precard;
     /**
      * 0 - 3
      */
-    int prePlayer;
+    private int prePlayer;
     /**
      * 0 - 30
      */
-    int rest_second;
+    private int rest_second;
 
     public String getRoom_number() {
         return room_number;

@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
     ILoginPresenter m_loginPresenter;
     private Button m_LoginButton;
     private Button m_RegisterButton;
+    private Button m_NoLoginButton;
     private EditText m_UserNameEditText;
     private EditText m_PassWordEditText;
 
@@ -45,6 +46,9 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
             case R.id.id_LoginAct_RegisterButton:
                 RegisterButton_Click();
             break;
+            case R.id.id_LoginAct_NotLoginButton:
+                NoLoginButton_Click();
+            break;
         }
     }
 
@@ -55,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
 
     private void setupView() {
         m_LoginButton = findViewById(R.id.id_LoginAct_LoginButton);
+        m_NoLoginButton = findViewById(R.id.id_LoginAct_NotLoginButton);
         m_RegisterButton = findViewById(R.id.id_LoginAct_RegisterButton);
 
         m_UserNameEditText = findViewById(R.id.id_LoginAct_UserNameEditText);
@@ -63,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
         m_UserNameEditText.setText(m_loginPresenter.HandleGetLastLoginUser());
 
         m_LoginButton.setOnClickListener(this);
+        m_NoLoginButton.setOnClickListener(this);
         m_RegisterButton.setOnClickListener(this);
     }
 
@@ -76,6 +82,10 @@ public class LoginActivity extends AppCompatActivity implements ILoginView, View
         String UserName = m_UserNameEditText.getText().toString();
         String PlainPassWord = m_PassWordEditText.getText().toString();
         m_loginPresenter.HandleRegister(UserName, PlainPassWord);
+    }
+
+    private void NoLoginButton_Click() {
+        m_loginPresenter.HandleJumpLogin();
     }
 
     @Override

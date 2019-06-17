@@ -115,6 +115,10 @@ public class RuleUtil {
     //判断能否出牌,返回true代表能打上家的牌
     public static boolean judgement(Card[] upCards,Card[] curCards){
 
+        if (curCards == null) return true;
+
+        if (typeOfCards(curCards) == errorType) return false;
+
         if (upCards == null) return true;
 
         if(typeOfCards(upCards)==0||typeOfCards(curCards)==0)

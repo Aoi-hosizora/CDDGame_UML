@@ -1,4 +1,4 @@
-package com.oosad.cddgame.Data.Rules;
+package com.oosad.cddgame.Data.Adapter;
 
 import com.oosad.cddgame.Data.Entity.Card;
 

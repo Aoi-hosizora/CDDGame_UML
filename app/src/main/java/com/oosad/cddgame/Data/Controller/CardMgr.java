@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Data.Controller;
 
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
@@ -170,7 +172,7 @@ public class CardMgr {
     /**
      * 玩家选择跳过的次数，超过 PlayerCnt-1 就清空 LastShownCard 待改
      */
-    private short HasJumpedCnt;
+    private short HasJumpedCnt = 0;
 
     /**
      * 获取上个玩家出的牌
@@ -181,10 +183,21 @@ public class CardMgr {
     }
 
     /**
-     * 设置上个玩家出的牌
+     * 设置上个玩家出的牌，并计数清空
      * @param lastShownCard
      */
     public void setLastShownCard(Card[] lastShownCard) {
-        LastShownCard = lastShownCard;
+        if (lastShownCard != null)
+            HasJumpedCnt = 0;
+
+        if (lastShownCard == null)
+            HasJumpedCnt++;
+
+        if (HasJumpedCnt == 3)
+            LastShownCard = null;
+        else
+            LastShownCard = lastShownCard;
+
+        Log.e("TAG", "setLastShownCard: " + HasJumpedCnt );
     }
 }

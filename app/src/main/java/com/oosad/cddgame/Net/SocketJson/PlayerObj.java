@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 public class PlayerObj {
 
-    String username;
+    private String username;
     /**
      * PlayerStatus:
      * "Not Prepare" || "Prepare"
      */
-    String status;
+    private String status;
 
     public String getUsername() {
         return username;

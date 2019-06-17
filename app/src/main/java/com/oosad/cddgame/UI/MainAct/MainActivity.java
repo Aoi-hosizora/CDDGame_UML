@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     }
 
     /**
-     * 没有设置用户就开始游戏
+     * 没有登录就开始联机游戏
      */
     @Override
-    public void ShowNoneUserAlert() {
+    public void ShowNoLoginAlert() {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.alert_title)
-                .setMessage(R.string.str_MainAct_ShowNoneUserAlertMessage)
+                .setMessage(R.string.str_MainAct_ShowNoLoginAlertMessage)
                 .setPositiveButton(getString(R.string.alert_PosOK), null)
                 .show();
     }

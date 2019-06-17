@@ -4,7 +4,6 @@ import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Entity.Player.User;
-import com.oosad.cddgame.Data.Rules.NormalRuleCheckAdapter;
 
 /**
  * PlayerMgr Controller:

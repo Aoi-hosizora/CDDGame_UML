@@ -1,9 +1,10 @@
 package com.oosad.cddgame.Data.Boundary;
 
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Controller.OnlineInfoMgr;
 import com.oosad.cddgame.Data.Controller.PlayerMgr;
-import com.oosad.cddgame.Data.Rules.NormalRuleCheckAdapter;
-import com.oosad.cddgame.Data.Rules.RuleCheckAdapter;
+import com.oosad.cddgame.Data.Adapter.NormalRuleCheckAdapter;
+import com.oosad.cddgame.Data.Adapter.RuleCheckAdapter;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Entity.Player.User;
@@ -32,7 +33,7 @@ public class GameSystem {
                     instance.cardMgr = CardMgr.getInstance();
                     instance.gameRound = GameRound.getInstance();
                     instance.playerMgr = PlayerMgr.getInstance();
-
+                    instance.onlineInfoMgr = OnlineInfoMgr.getInstance();
                     // Adapter
                     instance.ruleCheck = new NormalRuleCheckAdapter();
                 }
@@ -46,6 +47,7 @@ public class GameSystem {
     public void initGame() {
         cardMgr.initInstance();
         gameRound.initInstance();
+        onlineInfoMgr.initInstance();
         // RobotMgr 有事件注册，不能初始化
         Winner = null;
     }
@@ -53,12 +55,20 @@ public class GameSystem {
     private CardMgr cardMgr;
     private GameRound gameRound;
     private PlayerMgr playerMgr;
+    private OnlineInfoMgr onlineInfoMgr;
 
     private Player Winner = null;
 
     private boolean isSingle;
 
+    /**
+     *
+     */
     private RuleCheckAdapter ruleCheck;
+
+    public RuleCheckAdapter getRuleCheck() {
+        return ruleCheck;
+    }
 
     /**
      * 设置是否为单机游戏
@@ -77,6 +87,9 @@ public class GameSystem {
         return isSingle;
     }
 
+    public OnlineInfoMgr getOnlineInfoMgr() {
+        return onlineInfoMgr;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +147,14 @@ public class GameSystem {
      */
     public User getCurrUser() {
         return playerMgr.getCurrUser();
+    }
+
+    /**
+     * 委托获取上次发的牌
+     * @return
+     */
+    public Card[] getLastShownCard() {
+        return cardMgr.getLastShownCard();
     }
 
     /**
@@ -202,12 +223,5 @@ public class GameSystem {
 
         gameRound.setInitPlayer(players, cardMgr.getInitialPlayerIdx());
         return CardMgr.getInstance().getPlayerCards(playerMgr.getCurrUser());
-
-        // if (isSingle) {
-        //
-        // }
-        // else {
-        //
-        // }
     }
 }

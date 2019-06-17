@@ -1,4 +1,4 @@
-package com.oosad.cddgame.Data.Rules;
+package com.oosad.cddgame.Data.Adapter;
 
 import android.util.Log;
 
@@ -16,6 +16,8 @@ public class NormalRuleCheckAdapter implements RuleCheckAdapter {
     public boolean checkShowCardRule(Card[] upcards, Card[] showcards) {
         boolean ret = RuleUtil.judgement(upcards, showcards);
         Log.e("TAG", "checkShowCardThroughRule: " + ret);
+
+        // TODO
         return true;
     }
 }

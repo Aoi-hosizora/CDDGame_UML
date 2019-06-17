@@ -1,6 +1,8 @@
 package com.oosad.cddgame.UI.GamingAct.presenter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Controller.OnlineInfoMgr;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Setting;
@@ -23,6 +26,8 @@ import com.oosad.cddgame.Util.CardUtil;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 import com.oosad.cddgame.UI.Widget.CascadeLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,7 +83,10 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         m_GamingView.onSetupUI(currUser.getName(), isSingle);
 
-        setupSocketListener();
+        if (!isSingle) {
+
+            setupSocketListener();
+        }
     }
 
     /**
@@ -135,20 +143,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         }
         else {
-
-
-            // todo
-            
-            // 处理出牌规则判断 !!!!!!
-            int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
-
-            if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
-                m_GamingView.onUserShowCardSet(cardSetLayout);
-            else if (ret == Constant.ERR_NOT_RULE)
-                m_GamingView.onShowCantShowCardForRuleAlert();
-            else if (ret == Constant.ERR_NOT_ROUND)
-                m_GamingView.onShowCantShowCardForRoundAlert();
-
+            // TODO
+            Handle_ShowCardOnline(cardLayouts);
         }
 
     }
@@ -220,22 +216,37 @@ public class GamingPresenterCompl implements IGamingPresenter,
     ////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////// Online ////////////////////////////////////////
 
-    private boolean isPlayingGame = false;
-    private List<String> OthersUserNameList = new ArrayList<>();
+    OnlineInfoMgr onlineInfoMgr = null;
 
     /**
      * 设置监听并启动 Socket
      */
     private void setupSocketListener() {
+        onlineInfoMgr = GameSystem.getInstance().getOnlineInfoMgr();
         SocketHandlers.Connect(GameSystem.getInstance().getCurrUserToken());
         SocketHandlers.setmOnEndListener(this);
         SocketHandlers.setmOnPlayingListener(this);
-        SocketHandlers.setmOnEndListener(this);
+        SocketHandlers.setmOnWaitingListener(this);
+    }
+
+    /**
+     * 取消准备
+     * @param progressDialog
+     */
+    @Override
+    public void Handle_SetupPrepareDialogCancel(ProgressDialog progressDialog) {
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                SocketHandlers.EmitCanclePrepare();
+            }
+        });
     }
 
     @Override
     public void Handle_PrepareButton_Click() {
         SocketHandlers.EmitPrepare();
+        m_GamingView.onShowProgressDialog();
     }
 
     /**
@@ -257,12 +268,26 @@ public class GamingPresenterCompl implements IGamingPresenter,
      */
     @Override
     public void onWaiting(PlayerRoomInfoObj playerRoomInfo) {
-        if (!isPlayingGame) {
-            isPlayingGame = playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Waiting);
+        if (!onlineInfoMgr.getIsPlayingGame()) {
 
-            if (isPlayingGame) {
+            // 设置 等待对话框
+            int cntForPrepare = 0;
+            for (PlayerObj playerObj : playerRoomInfo.getPlayers()) {
+                if (playerObj.getStatus().equals(JsonConst.PlayerStatus.Prepare))
+                    cntForPrepare ++;
+            }
+
+            m_GamingView.onUpdateProgressDialog(cntForPrepare);
+
+            onlineInfoMgr.setIsPlayingGame(playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Playing));
+
+            if (onlineInfoMgr.getIsPlayingGame()) {
+                // 都进入准备
+
                 String currUserName = GameSystem.getInstance().getCurrUser().getName();
                 PlayerObj[] allplays = playerRoomInfo.getPlayers();
+
+                List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
 
                 for (PlayerObj playerObj : allplays) {
                     String pname = playerObj.getUsername();
@@ -271,6 +296,7 @@ public class GamingPresenterCompl implements IGamingPresenter,
                     }
                 }
 
+                // 设置界面，用户名和牌数
                 m_GamingView.onSetUpOnlinePlayingLayout(
                         OthersUserNameList.get(Constant.Left_Player - 1),
                         OthersUserNameList.get(Constant.Up_Player - 1),
@@ -279,17 +305,16 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
             }
         }
-
-        if (!isPlayingGame) {
-            boolean isPlayingGame = true;
-
-            // TODO
-
-        }
     }
 
+    /**
+     * 将 Json 内的数组对应到 List 内的顺序
+     * @param UserName
+     * @return
+     */
     private int getUserPosIdx(String UserName) {
         String ThisUserName = GameSystem.getInstance().getCurrUser().getName();
+        List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
 
         int flag = 1;
         for (int i = 0; i < OthersUserNameList.size() + 1; i++) {
@@ -309,32 +334,40 @@ public class GamingPresenterCompl implements IGamingPresenter,
      *  "status":"PLAYING",
      *  "current":2,
      *  "precard":[
-     *      {"number":1,"type":"RED HEART"}
+     *      {"number":1,"type":"RED HEART"}, ... <- prePlayer 出的牌
      *  ],
      *  "prePlayer":1,
      *  "rest_second":30
      * }
      *
      * [
-     *  {"number":4,"type":"BLACK SPADE"}, ...
+     *  {"number":4,"type":"BLACK SPADE"}, ... <- 玩家出的牌
      * ]
      * @param playerRoomInfo
-     * @param card
+     * @param cards
      */
     @Override
-    public void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card card) {
+    public void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card[] cards) {
         // start timer
+        ShowLogE("onPlaying", "" + playerRoomInfo.getCurrent());
 
-        int current = playerRoomInfo.getCurrent();
-        Card[] shownCards = PlayCardObj.toCardArr(playerRoomInfo.getPrecard());
-        PlayerObj playerObjs = playerRoomInfo.getPlayers()[current];
+        // 通知界面：将 prePlayer 的牌数减少 cards.len，并更新
 
-        m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(playerObjs.getUsername()), shownCards);
+        int prePlayer = playerRoomInfo.getPrePlayer();
+        PlayerObj prePlayerObj = playerRoomInfo.getPlayers()[prePlayer];
+
+        // 更新界面
+        m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(prePlayerObj.getUsername()), cards);
+
+        // 更新数据
+        onlineInfoMgr.setNowPlayRoomInfo(playerRoomInfo);
+        onlineInfoMgr.setPreCards(PlayCardObj.toCardArr(playerRoomInfo.getPrecard()));
+        onlineInfoMgr.setCurrPlayer(playerRoomInfo.getPlayers()[playerRoomInfo.getCurrent()]);
     }
 
 
     /**
-     * 更新出牌布局
+     * 更新他人的出牌布局
      * @param cascadeLayout
      * @param cards
      */
@@ -349,12 +382,36 @@ public class GamingPresenterCompl implements IGamingPresenter,
     }
 
     /**
-     *
-     * @param playerRoomInfo
-     * @param cards
+     * OG 处理出牌，判断
+     * @param cardLayouts
      */
+    private void Handle_ShowCardOnline(CardLayout[] cardLayouts) {
+
+        CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
+
+        // 想要出的 Card[]
+        Card[] cards = CardUtil.getCardsFromCardLayouts(cardSetLayout);
+
+        // TODO check rcvd
+
+        // 当前轮到的玩家
+        PlayerObj nowPlayer = onlineInfoMgr.getCurrPlayer();
+
+        if (!nowPlayer.getUsername().equals(GameSystem.getInstance().getCurrUser().getName()))
+            // ERR_NOT_ROUND
+            m_GamingView.onShowCantShowCardForRoundAlert();
+        else if (!GameSystem.getInstance().getRuleCheck().checkShowCardRule(onlineInfoMgr.getPreCards(), cards))
+            // ERR_NOT_RULE
+            m_GamingView.onShowCantShowCardForRuleAlert();
+        else {
+            // NO_ERR
+            SocketHandlers.EmitShowCard(cards);
+            m_GamingView.onUserShowCardSet(cardSetLayout);
+        }
+    }
+
     @Override
-    public void onEnd(PlayerRoomInfoObj playerRoomInfo, Card[] cards) {
+    public void onEnd(PlayerRoomInfoObj playerRoomInfo, List<Card[]> cards) {
 
     }
 }

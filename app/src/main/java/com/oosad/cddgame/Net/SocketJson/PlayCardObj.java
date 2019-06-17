@@ -8,16 +8,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayCardObj {
     /**
      * 1 - 12
      */
-    int number;
+    private int number;
     /**
      * PlayCardType:
      * "BLACK SPADE" || "BLACK CLUB" || "RED HEART" || "RED DIAMOND"
      */
-    String type;
+    private String type;
 
     public int getNumber() {
         return number;
@@ -103,18 +106,6 @@ public class PlayCardObj {
     }
 
     /**
-     * JSONArray -> PlayCardObj
-     * [{number: 1, type: "BLACK SPADE" }]
-     * @param jsonArray
-     * @return
-     * @throws JSONException
-     */
-    public static PlayCardObj toPlayCardObj(JSONArray jsonArray) throws JSONException {
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
-        return PlayCardObj.toPlayCardObj(jsonObject);
-    }
-
-    /**
      * JSONArray -> PlayCardObj[]
      * [{number: 1, type: "BLACK SPADE" }, {number: 1, type: "BLACK SPADE" }]
      * @param jsonArray
@@ -125,6 +116,19 @@ public class PlayCardObj {
         PlayCardObj[] playCardObjs = new PlayCardObj[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i ++)
             playCardObjs[i] = PlayCardObj.toPlayCardObj(jsonArray.getJSONObject(i));
+        return playCardObjs;
+    }
+
+    /**
+     * Card[] -> PlayCardObj[]
+     * @param cards
+     * @return
+     */
+    public static PlayCardObj[] toPlayCardObjArray(Card[] cards) {
+        PlayCardObj[] playCardObjs = new PlayCardObj[cards.length];
+        for (int i = 0; i < cards.length; i++)
+            playCardObjs[i] = toPlayCardObj(cards[i]);
+
         return playCardObjs;
     }
 
@@ -140,4 +144,36 @@ public class PlayCardObj {
         }
         return cards;
     }
+
+    /**
+     * JSONArray(PlayCardObj[][]) -> List<PlayCardObj[]>
+     * @param jsonArrays
+     * @return
+     * @throws JSONException
+     */
+    public static List<PlayCardObj[]> toPlayCardObj4Array(JSONArray jsonArrays) throws JSONException {
+        List<PlayCardObj[]> playCardObjsList = new ArrayList<>();
+        for (int i = 0; i < jsonArrays.length(); i++) {
+            JSONArray jsonArray = (JSONArray) jsonArrays.get(i);
+            PlayCardObj[] playCardObjs = toPlayCardObjArray(jsonArray);
+            playCardObjsList.add(playCardObjs);
+        }
+
+        return playCardObjsList;
+    }
+
+    /**
+     * List<PlayCardObj[]> -> List<Card[]>
+     * @param playCardObjsList
+     * @return
+     */
+    public static List<Card[]> toCard4Array(List<PlayCardObj[]> playCardObjsList) {
+        List<Card[]> cardsList = new ArrayList<>();
+        for (int i = 0; i < playCardObjsList.size(); i++) {
+            Card[] cards = toCardArr(playCardObjsList.get(i));
+            cardsList.add(cards);
+        }
+        return cardsList;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.oosad.cddgame.UI.GamingAct;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -39,6 +40,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     Button m_PushOrDistributeCardButton;
     Button m_PassShowCardButton;
     Button m_PrePareButton;
+
+    ProgressDialog m_prepareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,12 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         // 单机联机标志
         m_SingleOrOnlineTextView = findViewById(R.id.id_GamingAct_SingleOrOnlineTextView);
+
+        // Progress Diag
+        m_prepareDialog = new ProgressDialog(this);
+        m_prepareDialog.setMessage(String.format(getString(R.string.str_GamingAct_PrePareProgressDialog), 1));
+        m_prepareDialog.setCanceledOnTouchOutside(true);
+        m_gamingPresenter.Handle_SetupPrepareDialogCancel(m_prepareDialog);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -185,6 +194,30 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     }
 
     /**
+     * 更新人数显示
+     * @param cnt
+     */
+    @Override
+    public void onUpdateProgressDialog(int cnt) {
+        String msg = String.format(getString(R.string.str_GamingAct_PrePareProgressDialog), cnt);
+
+        ShowLogE("onUpdateProgressDialog", "" + m_prepareDialog.isShowing() + msg);
+        if (m_prepareDialog.isShowing()) {
+//            m_prepareDialog.dismiss();
+//            m_prepareDialog.cancel();
+//            m_prepareDialog.setMessage(msg);
+//            m_prepareDialog.show();
+        }
+        else
+            m_prepareDialog.setMessage(msg);
+    }
+
+    @Override
+    public void onShowProgressDialog() {
+        m_prepareDialog.show();
+    }
+
+    /**
      * 根据是否有选择牌来更新出牌按钮的 enable
      */
     private void RefreshShowCardButton_Enabled() {
@@ -224,6 +257,12 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 })
                 .setNegativeButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel), null)
                 .show();
+    }
+
+    @Override
+    protected void onPause() {
+        SocketHandlers.DisConnect();
+        super.onPause();
     }
 
     /**
@@ -443,6 +482,11 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_UserNameLeftTextView.setText(UserNameLeft);
         m_UserNameUpTextView.setText(UserNameUp);
         m_UserNameRightTextView.setText(UserNameRight);
+
+        m_UserLeftCardCntTextView.setText(Constant.PlayerCardCnt);
+        m_UserNameUpTextView.setText(Constant.PlayerCardCnt);
+        m_UserNameRightTextView.setText(Constant.PlayerCardCnt);
+        m_UserNameDownTextView.setText(Constant.PlayerCardCnt);
     }
 
     /**
@@ -476,7 +520,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                     break;
                 default:
                     // ME
-                    // TODO 更新自己出牌记录
+                    // onUserShowCardSet() 处理
                     break;
             }
         }

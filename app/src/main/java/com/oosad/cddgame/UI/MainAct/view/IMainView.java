@@ -5,6 +5,6 @@ import com.oosad.cddgame.UI.MainAct.MainActivity;
 
 public interface IMainView {
 
-    void ShowNoneUserAlert();
+    void ShowNoLoginAlert();
     MainActivity getThisPtr();
 }

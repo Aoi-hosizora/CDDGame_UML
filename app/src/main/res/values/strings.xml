@@ -9,8 +9,8 @@
     <string name="str_MainAct_WelcomeUser">欢迎用户</string>
     <string name="str_MainAct_WelcomeUserForFormat">欢迎 %s</string>
     <string name="str_MainAct_SettingButton">游戏设置</string>
-    <string name="str_MainAct_LoginButton">游戏登陆</string>
-    <string name="str_MainAct_ShowNoneUserAlertMessage">无用户，请先设置用户。</string>
+    <string name="str_MainAct_LoginButton">游戏登录</string>
+    <string name="str_MainAct_ShowNoLoginAlertMessage">未登录，请先登录在联机游戏。</string>
 
     <!-- Login Act -->
     <string name="str_LoginAct_Title">锄大地登录</string>
@@ -18,6 +18,7 @@
     <string name="str_LoginAct_UserNameEditTextHint">请输入用户名...</string>
     <string name="str_LoginAct_PassWordTextView">密码</string>
     <string name="str_LoginAct_LoginButton">登陆</string>
+    <string name="str_LoginAct_NotLoginButton">跳过</string>
     <string name="str_LoginAct_RegisterButton">注册</string>
     <string name="str_LoginAct_CancelButton">返回</string>
     <string name="str_LoginAct_NoUserNameOrPassWordAlertMessage">没有输入用户名或密码。</string>
@@ -52,6 +53,7 @@
     <string name="str_GamingAct_PassShowCardButton">跳过</string>
     <string name="str_GamingAct_DistributeCardButton">发牌</string>
     <string name="str_GamingAct_PrePareButton">准备</string>
+    <string name="str_GamingAct_PrePareProgressDialog">准备中，已准备人数 (%d / 4)...</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertMessage">确定退出游戏？</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit">退出</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel">取消</string>

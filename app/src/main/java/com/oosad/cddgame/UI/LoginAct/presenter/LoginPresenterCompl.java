@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.oosad.cddgame.DB.UserDAO;
 import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.Net.PostLoginRegister;
 import com.oosad.cddgame.UI.LoginAct.view.ILoginView;
@@ -118,6 +119,12 @@ public class LoginPresenterCompl implements ILoginPresenter {
             return;
         }
 
+        // 密码格式错
+        if (PlainPassWord.length() < Constant.PassWordMinLen || PlainPassWord.length() > Constant.PassWordMaxLen) {
+            m_loginView.onShowErrorPassWordFormatAlert();
+            return;
+        }
+
         new Thread() {
             @Override
             public void run() {
@@ -141,5 +148,15 @@ public class LoginPresenterCompl implements ILoginPresenter {
     private void gotoMainActivity() {
         Intent MainActIntent = new Intent(m_loginView.getThisPtr(), MainActivity.class);
         m_loginView.getThisPtr().startActivity(MainActIntent);
+    }
+
+    /**
+     * 跳过登陆
+     */
+    @Override
+    public void HandleJumpLogin() {
+        GameSystem.getInstance().setCurrUser(new User("未登录用户"));
+        GameSystem.getInstance().setCurrUserToken(""); // 空 token 判断用
+        gotoMainActivity();
     }
 }

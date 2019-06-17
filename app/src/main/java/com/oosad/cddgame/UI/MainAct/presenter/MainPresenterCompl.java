@@ -30,13 +30,13 @@ public class MainPresenterCompl implements IMainPresenter {
     }
 
     /**
-     * 开始游戏，判断是否设置了用户，并启动 GamingActivity, 判断单机联机
+     * 开始游戏，判断是否登陆，并启动 GamingActivity, 判断单机联机
      * @param isSingle
      */
     @Override
     public void Handle_StartGameButton_Click(boolean isSingle) {
-        if (!hasUser()) {
-            m_mainView.ShowNoneUserAlert();
+        if (!isSingle && !hasUserLogin()) {
+            m_mainView.ShowNoLoginAlert();
             return;
         }
         ShowLogE("Handle_StartGameButton_Click", "CurrUserName: " + GameSystem.getInstance().getCurrUser().getName());
@@ -67,11 +67,13 @@ public class MainPresenterCompl implements IMainPresenter {
     }
 
     /**
-     * 判断是否设置了用户，Handle_StartGameButton_Click() 用
+     * 判断是否设置了登陆用户，Handle_StartGameButton_Click() 用
      * @return
      */
-    private boolean hasUser() {
-        return !GameSystem.getInstance().getCurrUser().getName().isEmpty();
+    private boolean hasUserLogin() {
+        boolean hasUser = !GameSystem.getInstance().getCurrUser().getName().isEmpty();
+        boolean hasToken = !GameSystem.getInstance().getCurrUserToken().isEmpty();
+        return hasUser && hasToken;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.oosad.cddgame.Net;
 
 import android.util.Log;
 
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Util.HttpUtil;
 
 import org.json.JSONException;
@@ -145,6 +146,7 @@ public class PostLoginRegister {
      * @return
      */
     public static boolean PostRegister(String UserName, String PassWord) {
+
         Map<String, String> ret = PostHandler(RegisterURL, UserName, PassWord);
 
         // 空回应
