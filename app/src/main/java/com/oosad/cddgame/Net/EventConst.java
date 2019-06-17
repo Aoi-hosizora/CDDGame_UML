@@ -1,20 +1,20 @@
 package com.oosad.cddgame.Net;
 
-public class EventConst {
+class EventConst {
 
     static class RcvdEvent {
         /**
          * Param: PlayerRoomInfoObj
          */
-        public static final String Waiting = "WAITING";
+        static final String Waiting = "WAITING";
         /**
          * Param: PlayerRoomInfoObj, PlayCardObj[]
          */
-        public static final String Playing = "PLAYING";
+        static final String Playing = "PLAYING";
         /**
          * Param: PlayerRoomInfoObj, PlayCardObj[][]
          */
-        public static final String End = "END";
+        static final String End = "END";
     }
 
     static class EmitEvent {
@@ -23,11 +23,11 @@ public class EventConst {
          */
         static final String Prepare = "Prepare";
         /**
-         * No param
+         * Param: PlayCardParamObj[]
          */
         static final String PlayCard = "Play Card";
         /**
-         * Param: PlayCardParamObj[]
+         * No param
          */
         static final String CanclePrepare = "Cancle Prepare";
     }

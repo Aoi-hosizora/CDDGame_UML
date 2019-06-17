@@ -8,17 +8,29 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Net.JsonConst;
+import com.oosad.cddgame.Net.SocketHandlers;
+import com.oosad.cddgame.Net.SocketJson.PlayCardObj;
+import com.oosad.cddgame.Net.SocketJson.PlayerObj;
+import com.oosad.cddgame.Net.SocketJson.PlayerRoomInfoObj;
 import com.oosad.cddgame.Util.CardUtil;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 import com.oosad.cddgame.UI.Widget.CascadeLayout;
 import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
 
-public class GamingPresenterCompl implements IGamingPresenter {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GamingPresenterCompl implements IGamingPresenter,
+        SocketHandlers.onWaitingListener, SocketHandlers.onEndListener, SocketHandlers.onPlayingListener {
 
     private IGamingView m_GamingView;
 
@@ -65,6 +77,8 @@ public class GamingPresenterCompl implements IGamingPresenter {
         User currUser = GameSystem.getInstance().getCurrUser();
 
         m_GamingView.onSetupUI(currUser.getName(), isSingle);
+
+        setupSocketListener();
     }
 
     /**
@@ -89,11 +103,13 @@ public class GamingPresenterCompl implements IGamingPresenter {
     }
 
     /**
+     * SG OG
      * 处理出牌，重要
      * @param cardLayouts
      */
     @Override
     public void Handle_PushCard(CardLayout[] cardLayouts) {
+
         CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
 
         // 想要出的 Card[]
@@ -105,15 +121,36 @@ public class GamingPresenterCompl implements IGamingPresenter {
             return;
         }
 
-        // 处理出牌规则判断 !!!!!!
-        int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
+        if (isSingle) {
 
-        if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
-            m_GamingView.onUserShowCardSet(cardSetLayout);
-        else if (ret == Constant.ERR_NOT_RULE)
-            m_GamingView.onShowCantShowCardForRuleAlert();
-        else if (ret == Constant.ERR_NOT_ROUND)
-            m_GamingView.onShowCantShowCardForRoundAlert();
+            // 处理出牌规则判断 !!!!!!
+            int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
+
+            if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
+                m_GamingView.onUserShowCardSet(cardSetLayout);
+            else if (ret == Constant.ERR_NOT_RULE)
+                m_GamingView.onShowCantShowCardForRuleAlert();
+            else if (ret == Constant.ERR_NOT_ROUND)
+                m_GamingView.onShowCantShowCardForRoundAlert();
+
+        }
+        else {
+
+
+            // todo
+            
+            // 处理出牌规则判断 !!!!!!
+            int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
+
+            if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
+                m_GamingView.onUserShowCardSet(cardSetLayout);
+            else if (ret == Constant.ERR_NOT_RULE)
+                m_GamingView.onShowCantShowCardForRuleAlert();
+            else if (ret == Constant.ERR_NOT_ROUND)
+                m_GamingView.onShowCantShowCardForRoundAlert();
+
+        }
+
     }
 
     /**
@@ -177,5 +214,147 @@ public class GamingPresenterCompl implements IGamingPresenter {
             return GameSystem.getInstance().getPlayerCardsCnt(GameSystem.getInstance().getCurrUser());
 
         return GameSystem.getInstance().getPlayerCardsCnt(GameSystem.getInstance().getRobot(PlayerId));
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////// Online ////////////////////////////////////////
+
+    private boolean isPlayingGame = false;
+    private List<String> OthersUserNameList = new ArrayList<>();
+
+    /**
+     * 设置监听并启动 Socket
+     */
+    private void setupSocketListener() {
+        SocketHandlers.Connect(GameSystem.getInstance().getCurrUserToken());
+        SocketHandlers.setmOnEndListener(this);
+        SocketHandlers.setmOnPlayingListener(this);
+        SocketHandlers.setmOnEndListener(this);
+    }
+
+    @Override
+    public void Handle_PrepareButton_Click() {
+        SocketHandlers.EmitPrepare();
+    }
+
+    /**
+     * {
+     *  "room_number":"46787",
+     *  "players":[
+     *      {"username":"testuser2","status":"Prepare"},
+     *      {"username":"user1","status":"Prepare"},
+     *      {"username":"user2","status":"Not Prepare"},
+     *      {"username":"1234","status":"Not Prepare"}
+     *  ],
+     *  "status":"WAITING",
+     *  "current":0,
+     *  "precard":[],
+     *  "prePlayer":-1,
+     *  "rest_second":30
+     * }
+     * @param playerRoomInfo
+     */
+    @Override
+    public void onWaiting(PlayerRoomInfoObj playerRoomInfo) {
+        if (!isPlayingGame) {
+            isPlayingGame = playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Waiting);
+
+            if (isPlayingGame) {
+                String currUserName = GameSystem.getInstance().getCurrUser().getName();
+                PlayerObj[] allplays = playerRoomInfo.getPlayers();
+
+                for (PlayerObj playerObj : allplays) {
+                    String pname = playerObj.getUsername();
+                    if (!pname.equals(currUserName)) {
+                        OthersUserNameList.add(pname);
+                    }
+                }
+
+                m_GamingView.onSetUpOnlinePlayingLayout(
+                        OthersUserNameList.get(Constant.Left_Player - 1),
+                        OthersUserNameList.get(Constant.Up_Player - 1),
+                        OthersUserNameList.get(Constant.Right_Player - 1)
+                );
+
+            }
+        }
+
+        if (!isPlayingGame) {
+            boolean isPlayingGame = true;
+
+            // TODO
+
+        }
+    }
+
+    private int getUserPosIdx(String UserName) {
+        String ThisUserName = GameSystem.getInstance().getCurrUser().getName();
+
+        int flag = 1;
+        for (int i = 0; i < OthersUserNameList.size() + 1; i++) {
+            if (OthersUserNameList.get(i).equals(ThisUserName))
+                flag = 0;
+
+            if (OthersUserNameList.get(i).equals(UserName))
+                return flag + i;
+        }
+        return Constant.Down_Player;
+    }
+
+    /**
+     * {
+     *  "room_number":"46787",
+     *  "players":[...]
+     *  "status":"PLAYING",
+     *  "current":2,
+     *  "precard":[
+     *      {"number":1,"type":"RED HEART"}
+     *  ],
+     *  "prePlayer":1,
+     *  "rest_second":30
+     * }
+     *
+     * [
+     *  {"number":4,"type":"BLACK SPADE"}, ...
+     * ]
+     * @param playerRoomInfo
+     * @param card
+     */
+    @Override
+    public void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card card) {
+        // start timer
+
+        int current = playerRoomInfo.getCurrent();
+        Card[] shownCards = PlayCardObj.toCardArr(playerRoomInfo.getPrecard());
+        PlayerObj playerObjs = playerRoomInfo.getPlayers()[current];
+
+        m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(playerObjs.getUsername()), shownCards);
+    }
+
+
+    /**
+     * 更新出牌布局
+     * @param cascadeLayout
+     * @param cards
+     */
+    @Override
+    public void Handle_OthersShowCard(CascadeLayout cascadeLayout, Card[] cards) {
+        cascadeLayout.removeAllViews();
+        for (Card c : cards) {
+            CardLayout cl = CardUtil.getCardLayoutFromCard(m_GamingView.getThisPtr(), c, true);
+            cascadeLayout.addView(cl);
+        }
+        cascadeLayout.refreshLayout();
+    }
+
+    /**
+     *
+     * @param playerRoomInfo
+     * @param cards
+     */
+    @Override
+    public void onEnd(PlayerRoomInfoObj playerRoomInfo, Card[] cards) {
+
     }
 }

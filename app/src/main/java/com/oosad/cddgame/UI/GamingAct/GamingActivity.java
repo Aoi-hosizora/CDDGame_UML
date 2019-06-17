@@ -11,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oosad.cddgame.Data.Constant;
+import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.Net.SocketHandlers;
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.GamingAct.presenter.GamingPresenterCompl;
 import com.oosad.cddgame.UI.GamingAct.presenter.IGamingPresenter;
@@ -36,6 +38,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
     Button m_PassShowCardButton;
+    Button m_PrePareButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_ExitGameButton = findViewById(R.id.id_GamingAct_ExitGameButton);
         m_PushOrDistributeCardButton = findViewById(R.id.id_GamingAct_PushOrDistributeCardButton);
         m_PassShowCardButton = findViewById(R.id.id_GamingAct_PassShowCardButton);
+        m_PrePareButton = findViewById(R.id.id_GamingAct_PrepareButton);
 
         // 单机联机标志
         m_SingleOrOnlineTextView = findViewById(R.id.id_GamingAct_SingleOrOnlineTextView);
@@ -90,9 +94,12 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_ExitGameButton.setOnClickListener(this);
         m_PushOrDistributeCardButton.setOnClickListener(this);
         m_PassShowCardButton.setOnClickListener(this);
+        m_PrePareButton.setOnClickListener(this);
 
         m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_DistributeCardButton);
         m_PassShowCardButton.setVisibility(View.GONE);
+        m_PrePareButton.setVisibility(View.GONE);
+
 
         // 默认牌数隐藏
         m_UserUpCardCntTextView.setVisibility(View.GONE);
@@ -147,10 +154,11 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     @Override
     public void onSetupUI(String UserName, boolean isSingle) {
         this.m_UserNameDownTextView.setText(UserName);
-        if (isSingle)
-            m_SingleOrOnlineTextView.setText(R.string.str_GamingAct_SingleTextView);
-        else
-            m_SingleOrOnlineTextView.setText(R.string.str_GamingAct_OnlineTextView);
+
+        m_SingleOrOnlineTextView.setText(isSingle?R.string.str_GamingAct_SingleTextView:R.string.str_GamingAct_OnlineTextView);
+
+        m_PushOrDistributeCardButton.setVisibility(isSingle?View.VISIBLE:View.GONE);
+        m_PrePareButton.setVisibility(isSingle?View.GONE:View.VISIBLE);
     }
 
     @Override
@@ -164,6 +172,9 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
             break;
             case R.id.id_GamingAct_PassShowCardButton: // 跳过出牌
                 PassShowCardButton_Click();
+            break;
+            case R.id.id_GamingAct_PrepareButton:
+                PrepareButton_Click();
             break;
 
             case R.id.id_GamingAct_CardSetCascadeLayout: // 点击牌
@@ -180,6 +191,10 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         // ShowLogE("onClick", CardLayout.CardUpCnt + "");
         if (getString(R.string.str_GamingAct_PushCardButton).equals(m_PushOrDistributeCardButton.getText().toString()))
             m_PushOrDistributeCardButton.setEnabled(CardLayout.HasSelectCardUp());
+    }
+
+    private void PrepareButton_Click() {
+        m_gamingPresenter.Handle_PrepareButton_Click();
     }
 
     /**
@@ -409,5 +424,61 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 .setMessage(MessageResId)
                 .setPositiveButton(PositiveButtonTextResId, null)
                 .show();
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////// Online ////////////////////////////////////////
+
+
+    /**
+     * 准备完成，已经发牌并初始化布局和玩家名字
+     */
+    @Override
+    public void onSetUpOnlinePlayingLayout(String UserNameLeft, String UserNameUp, String UserNameRight) {
+        m_PrePareButton.setVisibility(View.GONE);
+        m_PushOrDistributeCardButton.setVisibility(View.VISIBLE);
+        m_PassShowCardButton.setVisibility(View.VISIBLE);
+        m_PushOrDistributeCardButton.setText(R.string.str_GamingAct_PushCardButton);
+
+        m_UserNameLeftTextView.setText(UserNameLeft);
+        m_UserNameUpTextView.setText(UserNameUp);
+        m_UserNameRightTextView.setText(UserNameRight);
+    }
+
+    /**
+     * 出牌，更新布局
+     */
+    @Override
+    public void onUpdateOnlinePlayingLayout(int idx, Card[] cards) {
+        if (cards == null || cards.length == 0) {
+            this.onPassShowCard(idx);
+        }
+        else {
+            this.onHidePassShowCard(idx);
+
+            switch (idx) {
+                case Constant.Left_Player:
+                    // Left
+                    m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetLeftLayout, cards);
+                    m_UserLeftCardCntTextView.setText(Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()) - cards.length);
+
+                    break;
+                case Constant.Up_Player:
+                    // Up
+                    m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetUpLayout, cards);
+                    m_UserUpCardCntTextView.setText(Integer.parseInt(m_UserUpCardCntTextView.getText().toString()) - cards.length);
+
+                    break;
+                case Constant.Right_Player:
+                    // Right
+                    m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetRightLayout, cards);
+                    m_UserRightCardCntTextView.setText(Integer.parseInt(m_UserRightCardCntTextView.getText().toString()) - cards.length);
+                    break;
+                default:
+                    // ME
+                    // TODO 更新自己出牌记录
+                    break;
+            }
+        }
     }
 }

@@ -51,6 +51,7 @@
     <string name="str_GamingAct_PushCardButton">出牌</string>
     <string name="str_GamingAct_PassShowCardButton">跳过</string>
     <string name="str_GamingAct_DistributeCardButton">发牌</string>
+    <string name="str_GamingAct_PrePareButton">准备</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertMessage">确定退出游戏？</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit">退出</string>
     <string name="str_GamingAct_ShowConfirmExitGameAlertNegButtonForCancel">取消</string>

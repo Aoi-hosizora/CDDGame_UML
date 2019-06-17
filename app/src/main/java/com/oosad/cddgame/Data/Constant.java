@@ -83,4 +83,13 @@ public class Constant {
 
     // endregion 与出牌信息相关
 
+    // region Online 与布局相关
+
+    public static final int Left_Player = 1;
+    public static final int Up_Player = 2;
+    public static final int Right_Player = 3;
+    public static final int Down_Player = 0;
+
+    // endregion Online 与布局相关
+
 }

@@ -2,6 +2,7 @@ package com.oosad.cddgame.UI.GamingAct.presenter;
 
 import android.content.Intent;
 
+import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 import com.oosad.cddgame.UI.Widget.CascadeLayout;
 
@@ -15,5 +16,7 @@ public interface IGamingPresenter {
 
     int Handle_GetCardCnt(int PlayerId);
     boolean Handle_GetIsSingle();
+    void Handle_PrepareButton_Click();
+    void Handle_OthersShowCard(CascadeLayout cascadeLayout, Card[] cards);
 
 }

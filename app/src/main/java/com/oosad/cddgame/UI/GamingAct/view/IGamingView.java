@@ -2,6 +2,7 @@ package com.oosad.cddgame.UI.GamingAct.view;
 
 import android.view.View;
 
+import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.UI.GamingAct.GamingActivity;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 
@@ -20,4 +21,6 @@ public interface IGamingView {
     void onRefreshShowCardCnt();
     void onPassShowCard(int PlayerId);
     void onHidePassShowCard(int PlayerId);
+    void onSetUpOnlinePlayingLayout(String UserNameLeft, String UserNameUp, String UserNameRight);
+    void onUpdateOnlinePlayingLayout(int idx, Card[] cards);
 }

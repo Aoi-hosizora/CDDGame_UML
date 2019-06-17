@@ -71,7 +71,7 @@ public class SocketHandlers {
         for (int i = 0; i < cards.length; i++) {
             playCardObjs[i] = PlayCardObj.toPlayCardObj(cards[i]);
         }
-//        mSocket.emit(EventConst.EmitEvent.PlayCard, playCardObjs);
+        mSocket.emit(EventConst.EmitEvent.PlayCard, playCardObjs);
     }
 
     ///////////////////////////////// listen /////////////////////////////////
