@@ -87,10 +87,13 @@ public class SocketHandlers {
 
             String cardsStr = "[";
 
-            for (int i = 0; i < playCardObjs.length; i ++)
-                cardsStr += playCardObjs[i].toString() + ", ";
+            if (playCardObjs.length != 0) {
+                for (int i = 0; i < playCardObjs.length; i ++)
+                    cardsStr += playCardObjs[i].toString() + ", ";
 
-            cardsStr = cardsStr.substring(0, cardsStr.length() - 2);
+                cardsStr = cardsStr.substring(0, cardsStr.length() - 2);
+            }
+
             cardsStr += "]";
 
 //            String cardsStr = new JSONArray(cardJsons).toString();

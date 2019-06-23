@@ -2,6 +2,7 @@ package com.oosad.cddgame.UI.GamingAct;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     CascadeLayout m_CardSetLayout;
 
     TextView m_SingleOrOnlineTextView;
+    TextView m_OnlineCountDownTextView;
 
     Button m_ExitGameButton;
     Button m_PushOrDistributeCardButton;
@@ -91,6 +93,10 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
         // 单机联机标志
         m_SingleOrOnlineTextView = findViewById(R.id.id_GamingAct_SingleOrOnlineTextView);
+
+        // 倒计时
+        m_OnlineCountDownTextView = findViewById(R.id.id_GamingAct_OnlineCountDown);
+        m_OnlineCountDownTextView.setVisibility(View.GONE);
 
         // Progress Diag
         m_prepareDialog = new ProgressDialog(this);
@@ -253,7 +259,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 .setPositiveButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        GameSystem.getInstance().initOnlineInfo();
+                        m_gamingPresenter.Handle_onBackToMainActivity();
                         onBackToMainActivity();
                     }
                 })
@@ -497,6 +503,42 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
         m_UserRightCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
         m_UserDownCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
+
+        m_OnlineCountDownTextView.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * OG 高亮当前的玩家
+     * @param idx
+     */
+    @Override
+    public void onHighLightCurrPlayer(int idx) {
+        m_UserNameLeftTextView.setTextColor(idx == Constant.Left_Player ? Color.RED : Color.WHITE);
+        m_UserNameRightTextView.setTextColor(idx == Constant.Right_Player ? Color.RED : Color.WHITE);
+        m_UserNameUpTextView.setTextColor(idx == Constant.Up_Player ? Color.RED : Color.WHITE);
+        m_UserNameDownTextView.setTextColor(idx == Constant.Down_Player ? Color.RED : Color.WHITE);
+    }
+
+    /**
+     * 设置倒计时时间
+     * @param num
+     */
+    @Override
+    public void onSetCountDownNumber(int num) {
+        m_OnlineCountDownTextView.setText(String.format(Locale.CHINA, "%d", num));
+    }
+
+    /**
+     * 时间超时，下个用户
+     */
+    @Override
+    public void onShowTimeoutToast() {
+        Toast.makeText(this, R.string.str_GamingAct_OnlineCountDownTimeOutToast, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onHideCountDownTextView() {
+        m_OnlineCountDownTextView.setVisibility(View.GONE);
     }
 
     /**

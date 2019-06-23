@@ -43,6 +43,16 @@ public class Constant {
     // region 与时延信息相关
 
     /**
+     * 一秒，倒计时用
+     */
+    public static final int TIME_ONESECOND = 1000;
+
+    /**
+     * 半分钟，倒计时用
+     */
+    public static final int TIME_HALFAMINUTE = 30 * TIME_ONESECOND;
+
+    /**
      * 机器人出牌时 清除出牌记录 与 发出新的出牌 之间的时延
      */
     public static final int TIME_WaitByClearRobotShowCardLayout = 200;
@@ -89,6 +99,8 @@ public class Constant {
     public static final int Up_Player = 2;
     public static final int Right_Player = 3;
     public static final int Down_Player = 0;
+
+    public static final int CountDownMaxTime = 30;
 
     // endregion Online 与布局相关
 

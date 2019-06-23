@@ -26,4 +26,8 @@ public interface IGamingView {
     void onUpdateProgressDialog(int cnt);
     void onShowProgressDialog();
     void onRemoveAllCards();
+    void onHighLightCurrPlayer(int idx);
+    void onSetCountDownNumber(int num);
+    void onShowTimeoutToast();
+    void onHideCountDownTextView();
 }

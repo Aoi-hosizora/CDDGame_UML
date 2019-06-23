@@ -21,4 +21,6 @@ public interface IGamingPresenter {
     void Handle_OthersShowCard(CascadeLayout cascadeLayout, Card[] cards);
     void Handle_SetupPrepareDialogCancel(ProgressDialog progressDialog);
 
+    void Handle_onBackToMainActivity();
+
 }

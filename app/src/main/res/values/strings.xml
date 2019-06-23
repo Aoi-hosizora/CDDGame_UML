@@ -45,6 +45,8 @@
     <string name="str_GamingAct_DefUserDownTextView">Me</string>
     <string name="str_GamingAct_PassTextView">pass</string>
 
+    <string name="str_GamingAct_OnlineCountDown">30</string>
+    <string name="str_GamingAct_OnlineCountDownTimeOutToast">您已超时，自动 pass</string>
     <string name="str_GamingAct_SingleTextView">单机</string>
     <string name="str_GamingAct_OnlineTextView">联机</string>
     <string name="str_GamingAct_PauseGameButton">暂停</string>
