@@ -1,5 +1,6 @@
 package com.oosad.cddgame.UI.ScoreAct;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class ScoreActivity extends AppCompatActivity implements IScoreView, View
     private void setupView() {
         m_SingleOrOnlineTextView = findViewById(R.id.id_ScoreAct_SingleOrOnlineTextView);
         m_BackButton = findViewById(R.id.id_ScoreAct_BackButton);
+        m_BackButton.setOnClickListener(this);
 
         m_DownCascadeLayout = findViewById(R.id.id_ScoreAct_DownCascadeLayout);
         m_UpCascadeLayout = findViewById(R.id.id_ScoreAct_UpCascadeLayout);
@@ -144,6 +146,18 @@ public class ScoreActivity extends AppCompatActivity implements IScoreView, View
                 m_DownUserNameTextView.setText(String.format(getString(R.string.str_ScoreAct_DownUserName), UserName, CardCnt));
                 break;
         }
+    }
+
+    /**
+     * 高亮 赢家
+     * @param idx
+     */
+    @Override
+    public void onSetupHighLight(int idx) {
+        m_DownUserNameTextView.setTextColor(idx == Constant.Down_Player ? Color.RED : Color.WHITE);
+        m_UpUserNameTextView.setTextColor(idx == Constant.Up_Player ? Color.RED : Color.WHITE);
+        m_LeftUserNameTextView.setTextColor(idx == Constant.Left_Player ? Color.RED : Color.WHITE);
+        m_RightUserNameTextView.setTextColor(idx == Constant.Right_Player ? Color.RED : Color.WHITE);
     }
 
     /**

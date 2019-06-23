@@ -92,6 +92,7 @@ public class ScorePresenterCompl implements IScorePresenter {
             m_scoreView.onSetupUserName(idx, playerObj.getUsername(), cards.length);
         }
         m_scoreView.onRefreshCardLayout();
+        m_scoreView.onSetupHighLight(onlineInfoMgr.getUserPosIdx(onlineInfoMgr.getWinnerPlayer().getUsername()));
     }
 
     /**

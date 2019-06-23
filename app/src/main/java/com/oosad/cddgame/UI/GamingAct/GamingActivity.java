@@ -370,12 +370,20 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         // 出牌后删除 Up 并更新 enable
         CardLayout.clearCardUpCnt();
 
-        onRefreshShowCardCnt();
         RefreshShowCardButton_Enabled();
-        
-        // 拥有的牌为空
-        if (m_CardSetLayout.getAllCards().length == 0 && m_gamingPresenter.Handle_GetIsSingle())
-            onShowWinAlert();
+
+        if (m_gamingPresenter.Handle_GetIsSingle()) {
+            onRefreshShowCardCnt();
+
+            // 拥有的牌为空
+            if (m_CardSetLayout.getAllCards().length == 0)
+                onShowWinAlert();
+        }
+        else {
+            m_UserDownCardCntTextView.setText(String.format(Locale.CHINA, "%d",
+                    Integer.parseInt(m_UserDownCardCntTextView.getText().toString()) - cardLayouts.length));
+        }
+
     }
 
     @Override
@@ -565,20 +573,26 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
             switch (idx) {
                 case Constant.Left_Player:
                     // Left
+                    ShowLogE("onUpdateOnlinePlayingLayout",
+                            m_UserLeftCardCntTextView.getText().toString() + ": " + Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()));
+
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetLeftLayout, cards);
-                    m_UserLeftCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()) - cards.length));
+                    m_UserLeftCardCntTextView.setText(String.format(Locale.CHINA, "%d",
+                            Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()) - cards.length));
 
                     break;
                 case Constant.Up_Player:
                     // Up
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetUpLayout, cards);
-                    m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserUpCardCntTextView.getText().toString()) - cards.length));
+                    m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d",
+                            Integer.parseInt(m_UserUpCardCntTextView.getText().toString()) - cards.length));
 
                     break;
                 case Constant.Right_Player:
                     // Right
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetRightLayout, cards);
-                    m_UserRightCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserRightCardCntTextView.getText().toString()) - cards.length));
+                    m_UserRightCardCntTextView.setText(String.format(Locale.CHINA, "%d",
+                            Integer.parseInt(m_UserRightCardCntTextView.getText().toString()) - cards.length));
                     break;
                 default:
                     // ME

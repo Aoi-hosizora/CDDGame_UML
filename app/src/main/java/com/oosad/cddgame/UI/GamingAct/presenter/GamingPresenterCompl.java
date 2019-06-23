@@ -458,6 +458,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
         if (prePlayer != -1) {
             PlayerObj prePlayerObj = playerRoomInfo.getPlayers()[prePlayer];
 
+            // TODO 待改
+
             if (onlineInfoMgr.getNowPlayRoomInfo().getPrePlayer() != playerRoomInfo.getPrePlayer()) {
                 // 有玩家出牌，上上个（未更新）玩家和上一个玩家不一样
 

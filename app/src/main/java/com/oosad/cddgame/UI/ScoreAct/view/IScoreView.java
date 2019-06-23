@@ -11,6 +11,7 @@ public interface IScoreView {
 
     void onAddCardLayout(int idx, View cardLayout);
     void onSetupUserName(int idx, String UserName, int CardCnt);
+    void onSetupHighLight(int idx);
 
     void onRefreshCardLayout();
 }
