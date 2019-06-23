@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:cascade="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_rank"
+    tools:context=".UI.ScoreAct.ScoreActivity">
+
+
+    <TextView
+        android:id="@+id/id_ScoreAct_SingleOrOnlineTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="216dp"
+        android:text="@string/str_ScoreAct_SingleTextView"
+        android:textColor="@color/White"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.147" />
+
+    <!--
+        <com.oosad.cddgame.UI.Widget.CardLayout
+            android:layout_width="@dimen/ScoreCard_Width"
+            android:layout_height="@dimen/ScoreCard_Height"
+            android:background="@drawable/card_1" />
+    -->
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
+        android:id="@+id/id_ScoreAct_DownCascadeLayout"
+        android:layout_width="@dimen/ScoreCardSet_CascadeLayout_Width"
+        android:layout_height="@dimen/ScoreCardSet_CascadeLayout_Height"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.252"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.368"
+
+        cascade:horizontal_spacing="@dimen/ScoreCard_Horizontal_Spacing"
+        cascade:vertical_spacing="@dimen/ScoreCard_Vertical_Spacing">
+
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
+
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
+        android:id="@+id/id_ScoreAct_UpCascadeLayout"
+        android:layout_width="@dimen/ScoreCardSet_CascadeLayout_Width"
+        android:layout_height="@dimen/ScoreCardSet_CascadeLayout_Height"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.79"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.368"
+        cascade:horizontal_spacing="@dimen/ScoreCard_Horizontal_Spacing"
+        cascade:vertical_spacing="@dimen/ScoreCard_Vertical_Spacing">
+
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
+
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
+        android:id="@+id/id_ScoreAct_LeftCascadeLayout"
+        android:layout_width="@dimen/ScoreCardSet_CascadeLayout_Width"
+        android:layout_height="@dimen/ScoreCardSet_CascadeLayout_Height"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.252"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.712"
+        cascade:horizontal_spacing="@dimen/ScoreCard_Horizontal_Spacing"
+        cascade:vertical_spacing="@dimen/ScoreCard_Vertical_Spacing">
+
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
+
+    <com.oosad.cddgame.UI.Widget.CascadeLayout
+        android:id="@+id/id_ScoreAct_RightCascadeLayout"
+        android:layout_width="@dimen/ScoreCardSet_CascadeLayout_Width"
+        android:layout_height="@dimen/ScoreCardSet_CascadeLayout_Height"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.789"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.712"
+        cascade:horizontal_spacing="@dimen/ScoreCard_Horizontal_Spacing"
+        cascade:vertical_spacing="@dimen/ScoreCard_Vertical_Spacing">
+
+        <!--<com.oosad.cddgame.UI.Widget.CardLayout-->
+            <!--android:layout_width="@dimen/ScoreCard_Width"-->
+            <!--android:layout_height="@dimen/ScoreCard_Height"-->
+            <!--android:background="@drawable/card_1" />-->
+
+    </com.oosad.cddgame.UI.Widget.CascadeLayout>
+
+    <!-- /////////////////////////////////////////////// -->
+
+    <TextView
+        android:id="@+id/id_ScoreAct_DownUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_ScoreAct_DownUserName"
+
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.27" />
+
+    <TextView
+        android:id="@+id/id_ScoreAct_UpUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_ScoreAct_UpUserName"
+
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.738"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.27" />
+
+    <TextView
+        android:id="@+id/id_ScoreAct_LeftUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_ScoreAct_LeftUserName"
+
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.307"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.567" />
+
+    <TextView
+        android:id="@+id/id_ScoreAct_RightUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_ScoreAct_RightUserName"
+
+        android:textColor="@color/White"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.738"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.567" />
+
+    <!-- /////////////////////////////////////////////// -->
+
+    <Button
+        android:id="@+id/id_ScoreAct_BackButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/str_ScoreAct_BackButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.911"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.97" />
+
+</android.support.constraint.ConstraintLayout>

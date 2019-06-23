@@ -25,6 +25,8 @@ import com.oosad.cddgame.Net.SocketHandlers;
 import com.oosad.cddgame.Net.SocketJson.PlayCardObj;
 import com.oosad.cddgame.Net.SocketJson.PlayerObj;
 import com.oosad.cddgame.Net.SocketJson.PlayerRoomInfoObj;
+import com.oosad.cddgame.UI.ScoreAct.ScoreActivity;
+import com.oosad.cddgame.UI.ScoreAct.presenter.ScorePresenterCompl;
 import com.oosad.cddgame.Util.CardUtil;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 import com.oosad.cddgame.UI.Widget.CascadeLayout;
@@ -388,29 +390,6 @@ public class GamingPresenterCompl implements IGamingPresenter,
     }
 
     /**
-     * 将 Json 内的数组对应到 List 内的顺序
-     * @param UserName
-     * @return
-     */
-    private int getUserPosIdx(String UserName) {
-        String ThisUserName = GameSystem.getInstance().getCurrUser().getName();
-        if (UserName.equals(GameSystem.getInstance().getCurrUser().getName()))
-            return Constant.Down_Player;
-
-        List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
-
-        int flag = 1;
-        for (int i = 0; i < OthersUserNameList.size() + 1; i++) {
-            if (OthersUserNameList.get(i).equals(ThisUserName))
-                flag = 0;
-
-            if (OthersUserNameList.get(i).equals(UserName))
-                return flag + i;
-        }
-        return -1;
-    }
-
-    /**
      * {
      *  "room_number":"46787",
      *  "players":[...]
@@ -481,13 +460,17 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
             if (onlineInfoMgr.getNowPlayRoomInfo().getPrePlayer() != playerRoomInfo.getPrePlayer()) {
                 // 有玩家出牌，上上个（未更新）玩家和上一个玩家不一样
+
                 PassCnt = 0;
                 if (!prePlayerObj.getUsername().equals(GameSystem.getInstance().getCurrUser().getName()))
                     // 不是当前玩家更新界面
-                    m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(prePlayerObj.getUsername()), precards);
-            } else {
+
+                    m_GamingView.onUpdateOnlinePlayingLayout(onlineInfoMgr.getUserPosIdx(prePlayerObj.getUsername()), precards);
+            }
+            else {
                 // Pass，注意 +1%4 (curr + ++passcnt) % sumcnt
-                int passplayid = (getUserPosIdx(prePlayerObj.getUsername()) + ++PassCnt) % Constant.PlayerCnt;
+
+                int passplayid = (onlineInfoMgr.getUserPosIdx(prePlayerObj.getUsername()) + ++PassCnt) % Constant.PlayerCnt;
                 m_GamingView.onPassShowCard(passplayid);
                 ShowLogE("onPlayingTochuHandle", "passplayid: " + passplayid);
             }
@@ -500,8 +483,7 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         // 高亮当前玩家
 
-        m_GamingView.onHighLightCurrPlayer(getUserPosIdx(onlineInfoMgr.getCurrPlayer().getUsername()));
-
+        m_GamingView.onHighLightCurrPlayer(onlineInfoMgr.getUserPosIdx(onlineInfoMgr.getCurrPlayer().getUsername()));
     }
 
     /**
@@ -592,7 +574,23 @@ public class GamingPresenterCompl implements IGamingPresenter,
         cardslist.add((Card[]) bundle.getSerializable("Card[]1"));
         cardslist.add((Card[]) bundle.getSerializable("Card[]2"));
         cardslist.add((Card[]) bundle.getSerializable("Card[]3"));
+
+        // 判断赢者
+        onlineInfoMgr.handleWinner(cardslist, playerRoomInfo);
+
+        // 设置最后的卡牌
+        onlineInfoMgr.setWinedCardsList(cardslist);
+
         m_GamingView.onShowWinAlert();
+    }
+
+    /**
+     * 返回赢者
+     * @return
+     */
+    @Override
+    public String Handle_WinnerName() {
+        return onlineInfoMgr.getWinnerPlayer().getUsername();
     }
 
     /**
@@ -602,5 +600,28 @@ public class GamingPresenterCompl implements IGamingPresenter,
     public void Handle_onBackToMainActivity() {
         GameSystem.getInstance().initOnlineInfo();
         CountDownTickTimer.cancel();
+    }
+
+    /**
+     * 设置 Bundle 并打开 ScoreAct
+     */
+    @Override
+    public void Handle_ShowScore() {
+
+        Intent intent = new Intent(m_GamingView.getThisPtr(), ScoreActivity.class);
+        Bundle bundle = new Bundle();
+
+        if (isSingle) {
+            bundle.putBoolean(ScorePresenterCompl.INT_ISSINGLE, true);
+            m_GamingView.getThisPtr().startActivity(intent);
+        }
+        else {
+            bundle.putBoolean(ScorePresenterCompl.INT_ISSINGLE, false);
+        }
+
+        intent.putExtra(ScorePresenterCompl.INT_BUNDLE, bundle);
+        m_GamingView.getThisPtr().startActivity(intent);
+
+        m_GamingView.onBackToMainActivity();
     }
 }

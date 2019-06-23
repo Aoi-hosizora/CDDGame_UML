@@ -19,16 +19,25 @@ public class CardUtil {
      * @param IsShowCardLayout
      *      true: 指定布局为 用于展示的 CardLayout
      *      false: 指定布局为 个人用有的 CardLayout
+     * @param isGaming 在哪个活动中
      * @return
      */
-    public static CardLayout getCardLayoutFromCard(Context context, Card card, boolean IsShowCardLayout) {
+    public static CardLayout getCardLayoutFromCard(Context context, Card card, boolean IsShowCardLayout, boolean isGaming) {
         CardLayout cl = new CardLayout(context);
         cl.setCard(card);
 
         int height, width;
         if (IsShowCardLayout) { // ShowCardLayout
-            height = (int) context.getResources().getDimension(R.dimen.ShowCard_Height);
-            width = (int) context.getResources().getDimension(R.dimen.ShowCard_Width);
+            if (isGaming) {
+                // Gaming Act
+                height = (int) context.getResources().getDimension(R.dimen.ShowCard_Height);
+                width = (int) context.getResources().getDimension(R.dimen.ShowCard_Width);
+            }
+            else {
+                // Score Act
+                height = (int) context.getResources().getDimension(R.dimen.ScoreCard_Height);
+                width = (int) context.getResources().getDimension(R.dimen.ScoreCard_Width);
+            }
         }
         else { // MainCardLayout
             height = (int) context.getResources().getDimension(R.dimen.Card_Height);
@@ -40,6 +49,20 @@ public class CardUtil {
         cl.setCanCardSelected(!IsShowCardLayout); // 拥有的牌 -> 可选
         return cl;
     }
+
+    /**
+     * 从 Card 获得 CardLayout (Gaming 内)
+     * @param context
+     * @param card
+     * @param IsShowCardLayout
+     *      true: 指定布局为 用于展示的 CardLayout
+     *      false: 指定布局为 个人用有的 CardLayout
+     * @return
+     */
+    public static CardLayout getCardLayoutFromCard(Context context, Card card, boolean IsShowCardLayout) {
+        return getCardLayoutFromCard(context, card, IsShowCardLayout, true);
+    }
+
 
     /**
      * 从 CardLayout[] 获得 Card[]

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Gaming Act -->
+
     <dimen name="Card_Height">100dp</dimen>
     <dimen name="Card_Width">70dp</dimen>
     <dimen name="Card_Horizontal_Spacing">20dp</dimen>
@@ -20,5 +23,19 @@
     <dimen name="ShowCardSet_CascadeLayout_Width">180dp</dimen>
 
     <dimen name="ShowCardSet_PassTextSize">30sp</dimen>
+
+
+    <!-- Score Act -->
+
+    <dimen name="ScoreCard_Height">65dp</dimen>
+    <dimen name="ScoreCard_Width">40dp</dimen>
+
+    <dimen name="ScoreCard_Horizontal_Spacing">15dp</dimen>
+    <dimen name="ScoreCard_Vertical_Spacing">0dp</dimen>
+
+    <dimen name="ScoreCard_Vertical_Padding">0dp</dimen>
+
+    <dimen name="ScoreCardSet_CascadeLayout_Height">80dp</dimen>
+    <dimen name="ScoreCardSet_CascadeLayout_Width">240dp</dimen>
 
 </resources>

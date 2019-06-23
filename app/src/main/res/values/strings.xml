@@ -62,5 +62,17 @@
     <string name="str_GamingAct_ShowNoSelectCardAlertMsg">没有选择想出的牌。</string>
     <string name="str_GamingAct_ShowCantShowCardForRuleAlertMsg">不符合规则的出牌。</string>
     <string name="str_GamingAct_ShowCantShowCardForRoundAlertMsg">还没轮到出牌。</string>
+    <string name="str_GamingAct_ShowWinAlertMsg">用户 %s 胜出。</string>
+    <string name="str_GamingAct_ShowWinAlertPosScore">查看排行榜</string>
+    <string name="str_GamingAct_ShowWinAlertNegCancel">返回</string>
+
+    <!-- Score Act -->
+    <string name="str_ScoreAct_DownUserName">%s (自己): %d</string>
+    <string name="str_ScoreAct_UpUserName">%s (上): %d</string>
+    <string name="str_ScoreAct_LeftUserName">%s (左): %d</string>
+    <string name="str_ScoreAct_RightUserName">%s (右): %d</string>
+    <string name="str_ScoreAct_BackButton">返回</string>
+    <string name="str_ScoreAct_SingleTextView">单机</string>
+    <string name="str_ScoreAct_OnlineTextView">联机</string>
 
 </resources>

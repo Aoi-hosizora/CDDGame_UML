@@ -22,5 +22,7 @@ public interface IGamingPresenter {
     void Handle_SetupPrepareDialogCancel(ProgressDialog progressDialog);
 
     void Handle_onBackToMainActivity();
+    void Handle_ShowScore();
+    String Handle_WinnerName();
 
 }

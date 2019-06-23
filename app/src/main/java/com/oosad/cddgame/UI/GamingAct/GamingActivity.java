@@ -374,7 +374,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         RefreshShowCardButton_Enabled();
         
         // 拥有的牌为空
-        if (m_CardSetLayout.getAllCards().length == 0)
+        if (m_CardSetLayout.getAllCards().length == 0 && m_gamingPresenter.Handle_GetIsSingle())
             onShowWinAlert();
     }
 
@@ -450,20 +450,25 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onShowWinAlert() {
-        onShowAlert("提醒", "有人赢了", "确定");
-    }
 
-    /**
-     * 显示提醒框 字面值
-     * @param title
-     * @param Message
-     * @param PositiveButtonText
-     */
-    private void onShowAlert(String title, String Message, String PositiveButtonText) {
         new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(Message)
-                .setPositiveButton(PositiveButtonText, null)
+                .setTitle(R.string.alert_title)
+                .setMessage(String.format(getString(R.string.str_GamingAct_ShowWinAlertMsg), m_gamingPresenter.Handle_WinnerName()))
+                .setPositiveButton(R.string.str_GamingAct_ShowWinAlertPosScore, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        m_gamingPresenter.Handle_ShowScore();
+                    }
+                })
+                .setNegativeButton(R.string.str_GamingAct_ShowWinAlertNegCancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        m_gamingPresenter.Handle_onBackToMainActivity();
+                        onBackToMainActivity();
+                    }
+                })
                 .show();
     }
 
@@ -498,6 +503,11 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_UserNameLeftTextView.setText(UserNameLeft);
         m_UserNameUpTextView.setText(UserNameUp);
         m_UserNameRightTextView.setText(UserNameRight);
+
+        m_UserUpCardCntTextView.setVisibility(View.VISIBLE);
+        m_UserDownCardCntTextView.setVisibility(View.VISIBLE);
+        m_UserLeftCardCntTextView.setVisibility(View.VISIBLE);
+        m_UserRightCardCntTextView.setVisibility(View.VISIBLE);
 
         m_UserLeftCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
         m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
