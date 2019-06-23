@@ -3,7 +3,9 @@ package com.oosad.cddgame.Net.SocketJson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PlayerObj {
+import java.io.Serializable;
+
+public class PlayerObj implements Serializable {
 
     private String username;
     /**

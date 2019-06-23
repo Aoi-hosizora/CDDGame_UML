@@ -47,6 +47,9 @@ public class CardUtil {
      * @return
      */
     public static Card[] getCardsFromCardLayouts(CardLayout[] cardLayouts) {
+        if (cardLayouts == null)
+            return new Card[] {};
+
         Card[] cards = new Card[cardLayouts.length];
         int idx = 0;
         for (CardLayout cl : cardLayouts) {
@@ -62,6 +65,9 @@ public class CardUtil {
      * @return
      */
     public static CardLayout[] getCardSetLayoutUp(CardLayout[] cardLayouts) {
+        if (cardLayouts == null)
+            return new CardLayout[]{};
+
         ArrayList<CardLayout> cards = new ArrayList<>();
         for (CardLayout v : cardLayouts) {
             if (v.getIsUp())

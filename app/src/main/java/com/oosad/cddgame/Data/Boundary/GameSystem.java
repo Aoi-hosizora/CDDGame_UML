@@ -52,6 +52,13 @@ public class GameSystem {
         Winner = null;
     }
 
+    /**
+     * 初始化房间信息，重连房间用
+     */
+    public void initOnlineInfo() {
+        onlineInfoMgr.initInstance();
+    }
+
     private CardMgr cardMgr;
     private GameRound gameRound;
     private PlayerMgr playerMgr;

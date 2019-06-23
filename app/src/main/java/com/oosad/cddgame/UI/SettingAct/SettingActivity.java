@@ -106,7 +106,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
             case R.id.id_SettingAct_ResetButton: // 重置设置
                 ResetButton_Click();
             break;
-            case R.id.id_SettingAct_ReLoginButton: // 重置设置
+            case R.id.id_SettingAct_ReLoginButton: // 重新登陆
                 ReLoginButton_Click();
             break;
         }

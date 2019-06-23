@@ -76,15 +76,32 @@ public class SocketHandlers {
      * @param cards
      */
     public static void EmitShowCard(Card[] cards) {
+        ShowLogE("", "cards: " + cards.length);
+
+        // 考虑了 cards == null
         PlayCardObj[] playCardObjs = PlayCardObj.toPlayCardObjArray(cards);
 
+        ShowLogE("", "playCardObjs: " + playCardObjs.length);
+
         try {
-            String cardsStr = new JSONArray(playCardObjs).toString();
+
+            String cardsStr = "[";
+
+            for (int i = 0; i < playCardObjs.length; i ++)
+                cardsStr += playCardObjs[i].toString() + ", ";
+
+            cardsStr = cardsStr.substring(0, cardsStr.length() - 2);
+            cardsStr += "]";
+
+//            String cardsStr = new JSONArray(cardJsons).toString();
+            // [null,null]
             // JSON.stringify([{"number":3,"type":"RED DIAMOND"}, ...])
+
+            ShowLogE("EmitShowCard", cardsStr);
 
             mSocket.emit(EventConst.EmitEvent.PlayCard, cardsStr);
         }
-        catch (JSONException ex) {
+        catch (/*JSONException*/ Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -172,10 +189,11 @@ public class SocketHandlers {
         @Override
         public void call(final Object... args) {
 
-            JSONObject jsonPlayerRoomInfo = (JSONObject) args[0];
-            JSONArray jsonPlayerCards = (JSONArray) args[1];
-
             try {
+
+                JSONObject jsonPlayerRoomInfo = new JSONObject((String) args[0]);
+                JSONArray jsonPlayerCards = new JSONArray((String) args[1]);
+
                 PlayerRoomInfoObj playerRoomInfo =
                         PlayerRoomInfoObj.toPlayerRoomInfoObj(jsonPlayerRoomInfo);
 

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Net.SocketHandlers;
@@ -214,7 +215,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
     @Override
     public void onShowProgressDialog() {
-        m_prepareDialog.show();
+//        m_prepareDialog.show();
     }
 
     /**
@@ -252,6 +253,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 .setPositiveButton(getString(R.string.str_GamingAct_ShowConfirmExitGameAlertPosButtonForExit), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        GameSystem.getInstance().initOnlineInfo();
                         onBackToMainActivity();
                     }
                 })
@@ -318,6 +320,14 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_ShowCardSetUpLayout.refreshLayout();
         m_ShowCardSetLeftLayout.refreshLayout();
         m_ShowCardSetRightLayout.refreshLayout();
+    }
+
+    /**
+     * 删除用户所有的牌的布局，OG用
+     */
+    @Override
+    public void onRemoveAllCards() {
+        m_CardSetLayout.removeAllViews();
     }
 
     /**
@@ -434,7 +444,7 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onShowWinAlert() {
-        onShowAlert("提醒", "赢了", "确定");
+        onShowAlert("提醒", "有人赢了", "确定");
     }
 
     /**
@@ -483,10 +493,10 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         m_UserNameUpTextView.setText(UserNameUp);
         m_UserNameRightTextView.setText(UserNameRight);
 
-        m_UserLeftCardCntTextView.setText(Constant.PlayerCardCnt);
-        m_UserNameUpTextView.setText(Constant.PlayerCardCnt);
-        m_UserNameRightTextView.setText(Constant.PlayerCardCnt);
-        m_UserNameDownTextView.setText(Constant.PlayerCardCnt);
+        m_UserLeftCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
+        m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
+        m_UserRightCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
+        m_UserDownCardCntTextView.setText(String.format(Locale.CHINA, "%d", Constant.PlayerCardCnt));
     }
 
     /**
@@ -504,19 +514,19 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
                 case Constant.Left_Player:
                     // Left
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetLeftLayout, cards);
-                    m_UserLeftCardCntTextView.setText(Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()) - cards.length);
+                    m_UserLeftCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserLeftCardCntTextView.getText().toString()) - cards.length));
 
                     break;
                 case Constant.Up_Player:
                     // Up
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetUpLayout, cards);
-                    m_UserUpCardCntTextView.setText(Integer.parseInt(m_UserUpCardCntTextView.getText().toString()) - cards.length);
+                    m_UserUpCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserUpCardCntTextView.getText().toString()) - cards.length));
 
                     break;
                 case Constant.Right_Player:
                     // Right
                     m_gamingPresenter.Handle_OthersShowCard(m_ShowCardSetRightLayout, cards);
-                    m_UserRightCardCntTextView.setText(Integer.parseInt(m_UserRightCardCntTextView.getText().toString()) - cards.length);
+                    m_UserRightCardCntTextView.setText(String.format(Locale.CHINA, "%d", Integer.parseInt(m_UserRightCardCntTextView.getText().toString()) - cards.length));
                     break;
                 default:
                     // ME

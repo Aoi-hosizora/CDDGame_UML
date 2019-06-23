@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Net.SocketJson;
 
+import android.support.annotation.Nullable;
+
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Entity.CardSuit;
 import com.oosad.cddgame.Net.JsonConst;
@@ -8,10 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class PlayCardObj {
+public class PlayCardObj implements Serializable {
     /**
      * 1 - 12
      */
@@ -21,6 +25,11 @@ public class PlayCardObj {
      * "BLACK SPADE" || "BLACK CLUB" || "RED HEART" || "RED DIAMOND"
      */
     private String type;
+
+    @Override
+    public String toString() {
+        return String.format(Locale.CHINA,"{\"number\":%d,\"type\":\"%s\"}", number, type);
+    }
 
     public int getNumber() {
         return number;
@@ -125,6 +134,8 @@ public class PlayCardObj {
      * @return
      */
     public static PlayCardObj[] toPlayCardObjArray(Card[] cards) {
+        if (cards == null)
+            return new PlayCardObj[]{};
         PlayCardObj[] playCardObjs = new PlayCardObj[cards.length];
         for (int i = 0; i < cards.length; i++)
             playCardObjs[i] = toPlayCardObj(cards[i]);
@@ -138,6 +149,8 @@ public class PlayCardObj {
      * @return
      */
     public static Card[] toCardArr(PlayCardObj[] playCardObjs) {
+        if (playCardObjs == null)
+            return new Card[]{};
         Card[] cards = new Card[playCardObjs.length];
         for (int i = 0; i < playCardObjs.length; i++) {
             cards[i] = PlayCardObj.toCard(playCardObjs[i]);

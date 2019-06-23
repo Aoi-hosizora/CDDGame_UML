@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -150,12 +151,19 @@ public class GamingPresenterCompl implements IGamingPresenter,
     }
 
     /**
+     * SO OG
      * 跳过出牌
      */
     @Override
     public void Handle_UserPassShowCard() {
-        GameSystem.getInstance().canShowCardWithCheckTurn(null, GameSystem.getInstance().getCurrUser());
-        m_GamingView.onPassShowCard(Constant.PLAYER_USER);
+        if (isSingle) {
+            GameSystem.getInstance().canShowCardWithCheckTurn(null, GameSystem.getInstance().getCurrUser());
+            m_GamingView.onPassShowCard(Constant.PLAYER_USER);
+        }
+        else {
+            // TODO
+            Handle_ShowCardOnline(new CardLayout[] {});
+        }
     }
 
     /**
@@ -249,6 +257,111 @@ public class GamingPresenterCompl implements IGamingPresenter,
         m_GamingView.onShowProgressDialog();
     }
 
+    private final int onWaitingFinish = 0;
+    private final int onPlayingTochu = 1;
+    private final int onEnded = 2;
+
+    private final Handler handler = new Handler(new Handler.Callback() {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case onWaitingFinish: {
+
+                    String currUserName = GameSystem.getInstance().getCurrUser().getName();
+                    PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) msg.obj;
+                    PlayerObj[] allplays = playerRoomInfo.getPlayers();
+
+                    List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
+
+                    for (PlayerObj playerObj : allplays) {
+                        String pname = playerObj.getUsername();
+                        if (!pname.equals(currUserName)) {
+                            OthersUserNameList.add(pname);
+
+                        }
+                    }
+
+                    // 设置界面，用户名和牌数
+                    m_GamingView.onSetUpOnlinePlayingLayout(
+                            OthersUserNameList.get(Constant.Left_Player - 1),
+                            OthersUserNameList.get(Constant.Up_Player - 1),
+                            OthersUserNameList.get(Constant.Right_Player - 1)
+                    );
+
+
+//                    ShowLogE("handleMessage",
+//                            OthersUserNameList.get(Constant.Left_Player - 1) +","+ OthersUserNameList.get(Constant.Up_Player - 1) +","+ OthersUserNameList.get(Constant.Right_Player - 1));
+
+                }
+                    break;
+                case onPlayingTochu: {
+                    ShowLogE("handleMessage", "onPlayingTochu");
+
+/*                  {
+                        "room_number":"29583",
+                        "players":[
+                            {"username":"user1","status":"Prepare"},
+                            {"username":"1234","status":"Prepare"},
+                            {"username":"testuser2","status":"Prepare"},
+                            {"username":"testuser","status":"Prepare"}
+                        ],
+                        "status":"PLAYING",
+                        "current":1,
+                        "precard":[
+                            {"number":1,"type":"RED HEART"}
+                        ],
+                        "prePlayer":0,
+                        "rest_second":30
+                    }
+*/
+                    Bundle bundle = msg.getData();
+                    PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) bundle.getSerializable("PlayerRoomInfoObj");
+                    Card[] cards = (Card[]) bundle.getSerializable("Card[]");
+                    Card[] precards = PlayCardObj.toCardArr(playerRoomInfo.getPrecard());
+
+                    // 发好牌，显示自己的牌
+
+                    m_GamingView.onRemoveAllCards();
+                    for (Card c : cards)
+                        m_GamingView.onAddCardLayout(CardUtil.getCardLayoutFromCard(m_GamingView.getThisPtr(), c, false));
+
+                    m_GamingView.onRefreshCardLayout();
+
+                    int prePlayer = playerRoomInfo.getPrePlayer();
+
+                    if (prePlayer != -1) {
+
+                        PlayerObj prePlayerObj = playerRoomInfo.getPlayers()[prePlayer];
+
+                        // 更新界面
+                        m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(prePlayerObj.getUsername()), precards);
+
+                    }
+
+                    // 更新数据
+                    onlineInfoMgr.setNowPlayRoomInfo(playerRoomInfo);
+                    onlineInfoMgr.setPreCards(PlayCardObj.toCardArr(playerRoomInfo.getPrecard()));
+                    onlineInfoMgr.setCurrPlayer(playerRoomInfo.getPlayers()[playerRoomInfo.getCurrent()]);
+                    break;
+                }
+                case onEnded: {
+                    Bundle bundle = msg.getData();
+                    PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) bundle.getSerializable("PlayerRoomInfoObj");
+                    List<Card[]> cardslist = new ArrayList<>();
+                    cardslist.add((Card[]) bundle.getSerializable("Card[]0"));
+                    cardslist.add((Card[]) bundle.getSerializable("Card[]1"));
+                    cardslist.add((Card[]) bundle.getSerializable("Card[]2"));
+                    cardslist.add((Card[]) bundle.getSerializable("Card[]3"));
+                    m_GamingView.onShowWinAlert();
+
+                    break;
+                }
+            }
+            return false;
+        }
+    });
+
     /**
      * {
      *  "room_number":"46787",
@@ -284,25 +397,11 @@ public class GamingPresenterCompl implements IGamingPresenter,
             if (onlineInfoMgr.getIsPlayingGame()) {
                 // 都进入准备
 
-                String currUserName = GameSystem.getInstance().getCurrUser().getName();
-                PlayerObj[] allplays = playerRoomInfo.getPlayers();
-
-                List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
-
-                for (PlayerObj playerObj : allplays) {
-                    String pname = playerObj.getUsername();
-                    if (!pname.equals(currUserName)) {
-                        OthersUserNameList.add(pname);
-                    }
-                }
-
-                // 设置界面，用户名和牌数
-                m_GamingView.onSetUpOnlinePlayingLayout(
-                        OthersUserNameList.get(Constant.Left_Player - 1),
-                        OthersUserNameList.get(Constant.Up_Player - 1),
-                        OthersUserNameList.get(Constant.Right_Player - 1)
-                );
-
+                // use handler
+                Message message = new Message();
+                message.what = onWaitingFinish;
+                message.obj = playerRoomInfo;
+                handler.sendMessage(message);
             }
         }
     }
@@ -353,16 +452,15 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         // 通知界面：将 prePlayer 的牌数减少 cards.len，并更新
 
-        int prePlayer = playerRoomInfo.getPrePlayer();
-        PlayerObj prePlayerObj = playerRoomInfo.getPlayers()[prePlayer];
+        Message message = new Message();
+        message.what = onPlayingTochu;
 
-        // 更新界面
-        m_GamingView.onUpdateOnlinePlayingLayout(getUserPosIdx(prePlayerObj.getUsername()), cards);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PlayerRoomInfoObj", playerRoomInfo);
+        bundle.putSerializable("Card[]", cards);
+        message.setData(bundle);
 
-        // 更新数据
-        onlineInfoMgr.setNowPlayRoomInfo(playerRoomInfo);
-        onlineInfoMgr.setPreCards(PlayCardObj.toCardArr(playerRoomInfo.getPrecard()));
-        onlineInfoMgr.setCurrPlayer(playerRoomInfo.getPlayers()[playerRoomInfo.getCurrent()]);
+        handler.sendMessage(message);
     }
 
 
@@ -389,8 +487,12 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         CardLayout[] cardSetLayout = CardUtil.getCardSetLayoutUp(cardLayouts);
 
+        ShowLogE("Handle_ShowCardOnline", "cardSetLayout: " + cardLayouts.length);
+
         // 想要出的 Card[]
         Card[] cards = CardUtil.getCardsFromCardLayouts(cardSetLayout);
+
+        ShowLogE("Handle_ShowCardOnline", "cards: " + cards.length);
 
         // TODO check rcvd
 
@@ -412,6 +514,22 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
     @Override
     public void onEnd(PlayerRoomInfoObj playerRoomInfo, List<Card[]> cards) {
+        // start timer
+        ShowLogE("onEnd", "" + playerRoomInfo.getCurrent());
 
+        // 通知界面：将 prePlayer 的牌数减少 cards.len，并更新
+
+        Message message = new Message();
+        message.what = onEnded;
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PlayerRoomInfoObj", playerRoomInfo);
+        bundle.putSerializable("Card[]0", cards.get(0));
+        bundle.putSerializable("Card[]1", cards.get(1));
+        bundle.putSerializable("Card[]2", cards.get(2));
+        bundle.putSerializable("Card[]3", cards.get(3));
+        message.setData(bundle);
+
+        handler.sendMessage(message);
     }
 }

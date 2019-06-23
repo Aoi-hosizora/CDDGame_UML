@@ -25,4 +25,5 @@ public interface IGamingView {
     void onUpdateOnlinePlayingLayout(int idx, Card[] cards);
     void onUpdateProgressDialog(int cnt);
     void onShowProgressDialog();
+    void onRemoveAllCards();
 }

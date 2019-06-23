@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PlayerRoomInfoObj {
+import java.io.Serializable;
+
+public class PlayerRoomInfoObj implements Serializable {
     /**
      * len 5
      */

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.UI.LoginAct.LoginActivity;
@@ -74,6 +75,7 @@ public class SettingPresenterCompl implements ISettingPresenter {
     public void Handle_ReLoginButton_Click() {
         Intent intent = new Intent(m_settingView.getThisPtr(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        GameSystem.getInstance().setCurrUserToken("");
         m_settingView.getThisPtr().startActivity(intent);
     }
 }
