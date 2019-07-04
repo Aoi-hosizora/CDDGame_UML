@@ -240,7 +240,7 @@ public class GameSystem {
      * @return
      */
     public int canShowCardWithCheckTurn(Card[] showcards, Player player) {
-        Log.e("", "canShowCardWithCheckTurn: " + ""+ showcards.length + player);
+        // Log.e("", "canShowCardWithCheckTurn: " + ""+ showcards.length + player);
 
         // 没有胜者
         if (Winner == null) {
