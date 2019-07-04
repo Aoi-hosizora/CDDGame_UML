@@ -459,9 +459,11 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
     @Override
     public void onShowWinAlert() {
 
+        String winner =  m_gamingPresenter.Handle_WinnerName();
+
         new AlertDialog.Builder(this)
                 .setTitle(R.string.alert_title)
-                .setMessage(String.format(getString(R.string.str_GamingAct_ShowWinAlertMsg), m_gamingPresenter.Handle_WinnerName()))
+                .setMessage(String.format(getString(R.string.str_GamingAct_ShowWinAlertMsg), winner))
                 .setPositiveButton(R.string.str_GamingAct_ShowWinAlertPosScore, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

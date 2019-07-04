@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Data.Boundary;
 
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Controller.OnlineInfoMgr;
 import com.oosad.cddgame.Data.Controller.PlayerMgr;
@@ -11,6 +13,9 @@ import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Controller.CardMgr;
 import com.oosad.cddgame.Data.Controller.GameRound;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GameSystem Boundary:
@@ -65,6 +70,57 @@ public class GameSystem {
     private OnlineInfoMgr onlineInfoMgr;
 
     private Player Winner = null;
+
+    /**
+     * 获得赢者
+     * @return
+     */
+    public Player getWinner() {
+        return Winner;
+    }
+
+    /**
+     * 获得赢者 idx
+     * @return
+     */
+    public int getWinnerIdx() {
+        if (Winner == null)
+            return -1;
+
+        if (!Winner.IsRobot())
+            return Constant.PLAYER_USER;
+        else {
+            return ((Robot)Winner).getId();
+        }
+    }
+
+    /**
+     * 委托获得 Robot Str
+     * @param idx
+     * @return
+     */
+    public int getRobotStr(int idx) {
+        return playerMgr.getRobotStr(idx);
+    }
+
+    /**
+     * 存在胜者
+     *      按照 CurrUser, R1, R2, R3顺序返回牌面
+     * 不存在胜者
+     *      返回空
+     * @return
+     */
+    public List<Card[]> getWinnerCards() {
+        if (Winner == null)
+            return null;
+
+        ArrayList<Card[]> ret = new ArrayList<>();
+        ret.add(cardMgr.getPlayerCards(getCurrUser()));
+        ret.add(cardMgr.getPlayerCards(playerMgr.getRobot(Constant.PLAYER_ROBOT_1)));
+        ret.add(cardMgr.getPlayerCards(playerMgr.getRobot(Constant.PLAYER_ROBOT_2)));
+        ret.add(cardMgr.getPlayerCards(playerMgr.getRobot(Constant.PLAYER_ROBOT_3)));
+        return ret;
+    }
 
     private boolean isSingle;
 
@@ -184,6 +240,8 @@ public class GameSystem {
      * @return
      */
     public int canShowCardWithCheckTurn(Card[] showcards, Player player) {
+        // Log.e("", "canShowCardWithCheckTurn: " + ""+ showcards.length + player);
+
         // 没有胜者
         if (Winner == null) {
             // 没有轮到

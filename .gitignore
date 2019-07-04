@@ -23,3 +23,5 @@ captures/
 .settings/
 
 /app/src/main/tmp
+
+debug.txt

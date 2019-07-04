@@ -1,6 +1,6 @@
 # CDDGame_UML
 
-+ SCUT 2018 OOSAD 课程大作业 及 软件开发综合实训
++ SCUT 2019 OOSAD 课程大作业 及 软件开发综合实训
 + CDDGame At Android MVP Pattern
 + 素材来自: [_dis_HLCDD](https://github.com/TianQiLi/_dis_HLCDD)
 
