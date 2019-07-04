@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Controller.OnlineInfoMgr;
 import com.oosad.cddgame.Data.Entity.Card;
 import com.oosad.cddgame.Data.Entity.Player.Player;
@@ -14,6 +15,7 @@ import com.oosad.cddgame.UI.ScoreAct.view.IScoreView;
 import com.oosad.cddgame.UI.Widget.CardLayout;
 import com.oosad.cddgame.Util.CardUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ScorePresenterCompl implements IScorePresenter {
@@ -42,6 +44,10 @@ public class ScorePresenterCompl implements IScorePresenter {
     @Override
     public void Handle_SetupBundle(Intent intent) {
         Bundle bundle = intent.getBundleExtra(INT_BUNDLE);
+//        if (bundle == null) {
+//            m_scoreView.onBackToMainActivity();
+//            return;
+//        }
         isSingle = bundle.getBoolean(INT_ISSINGLE, true);
 
         // 设置界面
@@ -49,33 +55,39 @@ public class ScorePresenterCompl implements IScorePresenter {
         if (isSingle)
             Handle_SetupCardsAndNameforSingle();
         else
-            Handle_SetupCardsAndName();
+            Handle_SetupCardsAndNameforOnline();
     }
 
     /**
-     * OG 设置用户卡牌排行榜和用户名
+     * SG 设置用户卡牌排行榜和用户名
      */
     private void Handle_SetupCardsAndNameforSingle() {
-        // GameSystem.getInstance().
 
-//        for (int i = 0; i < playerObjs.length; i ++) {
-//            Card[] cards = WinnerCards.get(i);
-//            PlayerObj playerObj = playerObjs[i];
-//            int idx = onlineInfoMgr.getUserPosIdx(playerObj.getUsername());
-//
-//            for (Card c : cards) {
-//                CardLayout cardLayout = CardUtil.getCardLayoutFromCard(m_scoreView.getThisPtr(), c, true);
-//                m_scoreView.onAddCardLayout(idx, cardLayout);
-//            }
-//            m_scoreView.onSetupUserName(idx, playerObj.getUsername(), cards.length);
-//        }
-//        m_scoreView.onRefreshCardLayout();
+        List<Card[]> WinnerCards = GameSystem.getInstance().getWinnerCards();
+        List<String> WinnerStr = new ArrayList<String>();
+        WinnerStr.add(GameSystem.getInstance().getCurrUser().getName());
+        WinnerStr.add(m_scoreView.getThisPtr().getString(GameSystem.getInstance().getRobotStr(Constant.PLAYER_ROBOT_1)));
+        WinnerStr.add(m_scoreView.getThisPtr().getString(GameSystem.getInstance().getRobotStr(Constant.PLAYER_ROBOT_2)));
+        WinnerStr.add(m_scoreView.getThisPtr().getString(GameSystem.getInstance().getRobotStr(Constant.PLAYER_ROBOT_3)));
+
+        for (int i = 0; i < Constant.PlayerCnt; i ++) {
+            Card[] cards = WinnerCards.get(i);
+
+            for (Card c : cards) {
+                CardLayout cardLayout = CardUtil.getCardLayoutFromCard(m_scoreView.getThisPtr(), c, true, false);
+                m_scoreView.onAddCardLayout(i, cardLayout);
+            }
+            m_scoreView.onSetupUserName(i, WinnerStr.get(i), cards.length);
+        }
+
+        m_scoreView.onRefreshCardLayout();
+        m_scoreView.onSetupHighLight(GameSystem.getInstance().getWinnerIdx());
     }
 
     /**
      * OG 设置用户卡牌排行榜和用户名
      */
-    private void Handle_SetupCardsAndName() {
+    private void Handle_SetupCardsAndNameforOnline() {
         OnlineInfoMgr onlineInfoMgr = GameSystem.getInstance().getOnlineInfoMgr();
         List<Card[]> WinnerCards = onlineInfoMgr.getWinedCardsList();
         PlayerObj[] playerObjs = onlineInfoMgr.getNowPlayRoomInfo().getPlayers();

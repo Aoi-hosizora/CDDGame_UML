@@ -4,6 +4,7 @@ import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Player.Player;
 import com.oosad.cddgame.Data.Entity.Player.Robot;
 import com.oosad.cddgame.Data.Entity.Player.User;
+import com.oosad.cddgame.R;
 
 /**
  * PlayerMgr Controller:
@@ -88,4 +89,20 @@ public class PlayerMgr {
         };
     }
 
+    /**
+     * 返回 Robot 对应的 String(ResId)
+     * @param idx
+     * @return
+     */
+    public int getRobotStr(int idx) {
+        switch (idx) {
+            case Constant.PLAYER_ROBOT_1:
+                return R.string.str_GamingAct_DefUserLeftTextView;
+            case Constant.PLAYER_ROBOT_2:
+                return R.string.str_GamingAct_DefUserUpTextView;
+            default: // Constant.PLAYER_ROBOT_3:
+                return R.string.str_GamingAct_DefUserRightTextView;
+
+        }
+    }
 }

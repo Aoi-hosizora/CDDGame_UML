@@ -139,8 +139,10 @@ public class GamingPresenterCompl implements IGamingPresenter,
             // 处理出牌规则判断 !!!!!!
             int ret = GameSystem.getInstance().canShowCardWithCheckTurn(cards, GameSystem.getInstance().getCurrUser());
 
-            if (ret == Constant.NO_ERR)  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
+            if (ret == Constant.NO_ERR) {  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
                 m_GamingView.onUserShowCardSet(cardSetLayout);
+               //  if (GameSystem.getInstance().get)
+            }
             else if (ret == Constant.ERR_NOT_RULE)
                 m_GamingView.onShowCantShowCardForRuleAlert();
             else if (ret == Constant.ERR_NOT_ROUND)
@@ -592,7 +594,18 @@ public class GamingPresenterCompl implements IGamingPresenter,
      */
     @Override
     public String Handle_WinnerName() {
-        return onlineInfoMgr.getWinnerPlayer().getUsername();
+        if (isSingle) {
+            Player winner =  GameSystem.getInstance().getWinner();
+            if (winner.IsRobot()) {
+                int idx = ((Robot) winner).getId();
+                return m_GamingView.getThisPtr().getString(GameSystem.getInstance().getRobotStr(idx));
+            }
+            else
+                return GameSystem.getInstance().getCurrUser().getName();
+        }
+        else
+            return onlineInfoMgr.getWinnerPlayer().getUsername();
+
     }
 
     /**
@@ -615,7 +628,6 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
         if (isSingle) {
             bundle.putBoolean(ScorePresenterCompl.INT_ISSINGLE, true);
-            m_GamingView.getThisPtr().startActivity(intent);
         }
         else {
             bundle.putBoolean(ScorePresenterCompl.INT_ISSINGLE, false);
