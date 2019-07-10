@@ -4,7 +4,6 @@ import com.oosad.cddgame.Data.Entity.Card;
 
 public class RuleUtil {
 
-
     /*判断卡组类型：单张，对子，三条，四张，
      *顺子(花色不同的5张连牌)，同花(花色相同的5张不连牌)，
      * 葫芦(3带2)，金刚(4带1)，同花顺(花色相同的5张连牌)
@@ -24,8 +23,8 @@ public class RuleUtil {
 
     //顺子
     public static boolean isShunZi(Card[] cards){
-        //顺子不能有2所以不存在最大数小于7的以及最小数大于J的
-        if(cards[0].getCardNum()>=11||cards[4].getCardNum()<7)
+        //顺子不能有2所以不存在最大数小于7的以及最小数大于10的
+        if(cards[0].getCardNum()>10||cards[4].getCardNum()<7)
             return false;
         if(cards[0].getCardNum()==1){
             //顺子中带A时牌型一定是A 10 J Q K，不能用普通判定
@@ -76,7 +75,7 @@ public class RuleUtil {
             if(cards[i].getCardNum()==cards[i-1].getCardNum())
                 count++;
             else if(count==4)
-                return true;    //找到相同的四张牌
+                return true;    //找到了相同的四张牌
             else count=1;
         }
         return (count==4);
@@ -116,7 +115,6 @@ public class RuleUtil {
     public static boolean judgement(Card[] upCards,Card[] curCards){
 
         if (curCards == null) return true;
-
         if (typeOfCards(curCards) == errorType) return false;
 
         if (upCards == null) return true;

@@ -31,6 +31,12 @@ public class Card implements Comparable<Card> {
         this.cardSuit = cardSuit;
     }
 
+    public int getCardLogicValue(){
+        if(cardNum==1||cardNum==2)
+            return cardNum+10;
+        else return cardNum-3;
+    }
+
     public int compareBasic(Card card){
         if (this.getCardNum() != card.getCardNum())
             return this.getCardNum() > card.getCardNum() ? 1 : -1;

@@ -1,6 +1,7 @@
 package com.oosad.cddgame.Data.Adapter;
 
 import com.oosad.cddgame.Data.Entity.Card;
+import com.oosad.cddgame.Util.RobotShowCardUtil;
 
 public class NormalRobotShowCardAdapter implements RobotShowCardAdapter {
 
@@ -8,7 +9,8 @@ public class NormalRobotShowCardAdapter implements RobotShowCardAdapter {
     public Card[] showCard(Card[] HasCards, Card[] PreCards) {
 
         // TODO
+        return RobotShowCardUtil.searchShowCard(PreCards,HasCards);
 
-        return new Card[] { HasCards[0] };
+//        return new Card[] { HasCards[0] };
     }
 }
