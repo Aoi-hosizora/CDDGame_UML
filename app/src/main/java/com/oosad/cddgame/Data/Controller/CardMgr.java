@@ -187,12 +187,12 @@ public class CardMgr {
      * @param lastShownCard
      */
     public void setLastShownCard(Card[] lastShownCard) {
-        if (lastShownCard != null)
-            HasJumpedCnt = 0;
 
-        if (lastShownCard == null)
+        if (lastShownCard == null || lastShownCard.length==0)
             HasJumpedCnt++;
 
+        if (lastShownCard != null && lastShownCard.length!=0)
+            HasJumpedCnt = 0;
         if (HasJumpedCnt == 3)
             LastShownCard = null;
         else
