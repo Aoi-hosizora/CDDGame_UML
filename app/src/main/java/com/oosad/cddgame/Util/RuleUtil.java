@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Util;
 
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Entity.Card;
 
 public class RuleUtil {
@@ -114,10 +116,20 @@ public class RuleUtil {
     //判断能否出牌,返回true代表能打上家的牌
     public static boolean judgement(Card[] upCards,Card[] curCards){
 
+
+        Log.e("", "judgement: " + (upCards == null) + ",,," + (upCards != null? upCards.length : "null") );
+
+        if (upCards == null || upCards.length==0) return true;
+
+
+        Log.e("", "judgement: " + curCards[0].getCardNum() );
+
         if (curCards == null || curCards.length==0) return true;
+
+
         if (typeOfCards(curCards) == errorType) return false;
 
-        if (upCards == null) return true;
+
 
         if(typeOfCards(upCards)==0||typeOfCards(curCards)==0)
             return false;

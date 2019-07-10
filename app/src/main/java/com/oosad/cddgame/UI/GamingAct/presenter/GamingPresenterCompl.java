@@ -35,6 +35,8 @@ import com.oosad.cddgame.UI.GamingAct.view.IGamingView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -347,16 +349,20 @@ public class GamingPresenterCompl implements IGamingPresenter,
             m_GamingView.onUpdateProgressDialog(cntForPrepare);
 
             onlineInfoMgr.setIsPlayingGame(playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Playing));
+            ShowLogE("onWaiting", "setIsPlayingGame 1111" + onlineInfoMgr.getIsPlayingGame() + playerRoomInfo.getStatus());
 
-            if (onlineInfoMgr.getIsPlayingGame()) {
-                // 都进入准备
-
-                // use handler
-                Message message = new Message();
-                message.what = onWaitingFinish;
-                message.obj = playerRoomInfo;
-                handler.sendMessage(message);
-            }
+//            if (onlineInfoMgr.getIsPlayingGame()) {
+//
+//                ShowLogE("onWaiting", "getIsPlayingGame 2222");
+//
+//                // 都进入准备
+//
+//                // use handler
+//                Message message = new Message();
+//                message.what = onWaitingFinish;
+//                message.obj = playerRoomInfo;
+//                handler.sendMessage(message);
+//            }
         }
     }
 
@@ -366,9 +372,12 @@ public class GamingPresenterCompl implements IGamingPresenter,
      * @param msg
      */
     private void onWaitingFinishHandle(Message msg) {
+
         String currUserName = GameSystem.getInstance().getCurrUser().getName();
         PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) msg.obj;
         PlayerObj[] allplays = playerRoomInfo.getPlayers();
+
+        ShowLogE("onWaitingFinishHandle", "getOthersUserNameList");
 
         List<String> OthersUserNameList = onlineInfoMgr.getOthersUserNameList();
 
@@ -376,9 +385,12 @@ public class GamingPresenterCompl implements IGamingPresenter,
             String pname = playerObj.getUsername();
             if (!pname.equals(currUserName)) {
                 OthersUserNameList.add(pname);
-
             }
         }
+
+        onlineInfoMgr.setOthersUserNameList(OthersUserNameList);
+
+        onlineInfoMgr.setPreCards(null);
 
         // 设置界面，用户名和牌数，倒计时
         m_GamingView.onSetUpOnlinePlayingLayout(
@@ -390,6 +402,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
         // CountDownTickTimer.start();
 
     }
+
+    boolean initPlay = true;
 
     /**
      * {
@@ -412,6 +426,24 @@ public class GamingPresenterCompl implements IGamingPresenter,
      */
     @Override
     public void onPlaying(PlayerRoomInfoObj playerRoomInfo, Card[] cards) {
+
+        if (initPlay) {
+
+            onlineInfoMgr.setIsPlayingGame(playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Playing));
+
+            initPlay = false;
+
+            ShowLogE("onWaiting", "getIsPlayingGame 2222");
+
+            // 都进入准备
+
+            // use handler
+            Message message = new Message();
+            message.what = onWaitingFinish;
+            message.obj = playerRoomInfo;
+            handler.sendMessage(message);
+        }
+
 
         // start timer
         CountDownTickTimer.cancel();
@@ -451,6 +483,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
         // 发好牌，显示自己的牌
 
         m_GamingView.onRemoveAllCards();
+
+        Arrays.sort(cards);
         for (Card c : cards)
             m_GamingView.onAddCardLayout(CardUtil.getCardLayoutFromCard(m_GamingView.getThisPtr(), c, false));
 
@@ -479,6 +513,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
                 ShowLogE("onPlayingTochuHandle", "passplayid: " + passplayid);
             }
         }
+
+        ShowLogE("onPlayingTochuHandle", ""+playerRoomInfo.getPrecard().length);
 
         // 更新数据
         onlineInfoMgr.setNowPlayRoomInfo(playerRoomInfo);

@@ -505,6 +505,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
      */
     @Override
     public void onSetUpOnlinePlayingLayout(String UserNameLeft, String UserNameUp, String UserNameRight) {
+
+        ShowLogE("onSetUpOnlinePlayingLayout", UserNameLeft);
         m_PrePareButton.setVisibility(View.GONE);
         m_PushOrDistributeCardButton.setVisibility(View.VISIBLE);
         m_PassShowCardButton.setVisibility(View.VISIBLE);

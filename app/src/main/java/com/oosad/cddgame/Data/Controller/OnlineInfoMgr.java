@@ -1,5 +1,7 @@
 package com.oosad.cddgame.Data.Controller;
 
+import android.util.Log;
+
 import com.oosad.cddgame.Data.Boundary.GameSystem;
 import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Entity.Card;
@@ -26,6 +28,7 @@ public class OnlineInfoMgr {
         Instnace.isPlayingGame = false;
         Instnace.OthersUserNameList = new ArrayList<>();
         Instnace.nowPlayRoomInfo = null;
+        preCards = new Card[]{};
     }
 
     //////////
@@ -34,7 +37,7 @@ public class OnlineInfoMgr {
     private List<String> OthersUserNameList = new ArrayList<>();
 
     private PlayerRoomInfoObj nowPlayRoomInfo;
-    private Card[] preCards;
+    private Card[] preCards = new Card[]{};
     private PlayerObj currPlayer;
 
     /**
@@ -130,7 +133,15 @@ public class OnlineInfoMgr {
 
         List<String> OthersUserNameList = getOthersUserNameList();
 
+
+        Log.e("", "getUserPosIdx: " + OthersUserNameList.size() + ", " + (ThisUserName == null));
+
+        if (OthersUserNameList == null || OthersUserNameList.size() == 0)
+            return -1;
+
         int flag = 1;
+
+
         for (int i = 0; i < OthersUserNameList.size() + 1; i++) {
             if (OthersUserNameList.get(i).equals(ThisUserName))
                 flag = 0;
