@@ -9,7 +9,7 @@
 + `minSdk` 23 (Android 6)
 + `targetSdk` 28 (Android 9)
 
-### Service
+### Server
 + Back-End(Express): [CDD-backend](https://github.com/651291702/CDD-backend)
 
 ### Main Problem

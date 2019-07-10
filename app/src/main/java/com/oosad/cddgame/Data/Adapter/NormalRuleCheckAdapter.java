@@ -7,8 +7,7 @@ import com.oosad.cddgame.Util.RuleUtil;
 
 public class NormalRuleCheckAdapter implements RuleCheckAdapter {
     /**
-     * SG/OG
-     * 调用规则模块 待改
+     * 调用规则模块
      * @param showcards 为 null 表示跳过
      * @return
      */
@@ -20,3 +19,4 @@ public class NormalRuleCheckAdapter implements RuleCheckAdapter {
         return RuleUtil.judgement(upcards, showcards);
     }
 }
+
