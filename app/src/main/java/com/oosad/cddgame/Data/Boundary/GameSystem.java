@@ -240,7 +240,8 @@ public class GameSystem {
      * @return
      */
     public int canShowCardWithCheckTurn(Card[] showcards, Player player) {
-        // Log.e("", "canShowCardWithCheckTurn: " + ""+ showcards.length + player);
+
+         Log.e("", "canShowCardWithCheckTurn: " + ""+ (showcards!=null ? (""+showcards.length + player) : ""));
 
         // 没有胜者
         if (Winner == null) {
@@ -260,6 +261,7 @@ public class GameSystem {
 
             // 符合规则并进行出牌处理，待处理
             cardMgr.removePlayerCardShown(showcards, player);
+            Log.e("ssssss", "canShowCardWithCheckTurn: ");
             cardMgr.setLastShownCard(showcards);
 
             gameRound.setNextPlayer();

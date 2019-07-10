@@ -149,7 +149,7 @@ public class PlayCardObj implements Serializable {
      * @return
      */
     public static Card[] toCardArr(PlayCardObj[] playCardObjs) {
-        if (playCardObjs == null)
+        if (playCardObjs == null || playCardObjs.length == 0)
             return new Card[]{};
         Card[] cards = new Card[playCardObjs.length];
         for (int i = 0; i < playCardObjs.length; i++) {
