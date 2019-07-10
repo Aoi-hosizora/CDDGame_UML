@@ -211,9 +211,8 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
         ShowLogE("onUpdateProgressDialog", "" + m_prepareDialog.isShowing() + msg);
         if (m_prepareDialog.isShowing()) {
 //            m_prepareDialog.dismiss();
-//            m_prepareDialog.cancel();
-//            m_prepareDialog.setMessage(msg);
-//            m_prepareDialog.show();
+            m_prepareDialog.setMessage(msg);
+            m_prepareDialog.show();
         }
         else
             m_prepareDialog.setMessage(msg);
@@ -221,7 +220,12 @@ public class GamingActivity extends AppCompatActivity implements IGamingView, Vi
 
     @Override
     public void onShowProgressDialog() {
-//        m_prepareDialog.show();
+        m_prepareDialog.show();
+    }
+
+    @Override
+    public void onShowCancelProgressDialog() {
+        m_prepareDialog.dismiss();
     }
 
     /**

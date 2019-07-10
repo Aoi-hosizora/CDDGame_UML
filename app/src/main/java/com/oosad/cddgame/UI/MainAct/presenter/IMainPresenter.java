@@ -6,4 +6,7 @@ public interface IMainPresenter {
     void Handle_SettingButton_Click();
 
     String Handle_GetUserName();
+
+    void Handle_StartPlayBGM();
+    void Handle_StopPlayBGM();
 }

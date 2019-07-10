@@ -1,13 +1,21 @@
 package com.oosad.cddgame.UI.MainAct.presenter;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
 import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Setting;
+import com.oosad.cddgame.Service.MusicService;
 import com.oosad.cddgame.UI.GamingAct.GamingActivity;
 import com.oosad.cddgame.UI.GamingAct.presenter.GamingPresenterCompl;
+import com.oosad.cddgame.UI.MainAct.MainActivity;
 import com.oosad.cddgame.UI.MainAct.view.IMainView;
 import com.oosad.cddgame.UI.SettingAct.SettingActivity;
 import com.oosad.cddgame.UI.SettingAct.presenter.SettingPresenterCompl;
@@ -79,5 +87,54 @@ public class MainPresenterCompl implements IMainPresenter {
     @Override
     public String Handle_GetUserName() {
         return GameSystem.getInstance().getCurrUser().getName();
+    }
+
+    ////////////////////////////////////////////
+    // BGM
+
+
+    private MusicService musicService;
+    private MusicConnector conn= new MusicConnector();
+
+    /**
+     * ????
+     */
+    private class MusicConnector implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            musicService = ((MusicService.MyMusicBinder) iBinder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            musicService = null;
+            ShowLogE("onServiceDisconnected", "binding Failed");
+        }
+    }
+
+    /**
+     * 处理BGM
+     */
+    @Override
+    public void Handle_StartPlayBGM() {
+
+        AudioManager audioManager = (AudioManager) m_mainView.getThisPtr().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                (int)(Setting.getInstance().getGameBGMVoloum() * Constant.VoloumRate_100),
+                AudioManager.FLAG_PLAY_SOUND
+        );
+
+        Intent intent = new Intent();
+        intent.setClass(m_mainView.getThisPtr(), MusicService.class);
+
+
+        m_mainView.getThisPtr().bindService(intent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void Handle_StopPlayBGM() {
+        m_mainView.getThisPtr().unbindService(conn);
     }
 }

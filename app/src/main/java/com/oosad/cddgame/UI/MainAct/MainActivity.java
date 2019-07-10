@@ -1,6 +1,11 @@
 package com.oosad.cddgame.UI.MainAct;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.stetho.Stetho;
+import com.oosad.cddgame.Service.MusicService;
 import com.oosad.cddgame.UI.MainAct.presenter.IMainPresenter;
 import com.oosad.cddgame.UI.MainAct.presenter.MainPresenterCompl;
 import com.oosad.cddgame.UI.MainAct.view.IMainView;
@@ -23,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
     Button m_SettingButton;
     TextView m_WelcomeUserTextView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,15 @@ public class MainActivity extends AppCompatActivity implements IMainView, View.O
         m_mainPresenter = new MainPresenterCompl(this);
 
         setupView();
+
+        m_mainPresenter.Handle_StartPlayBGM();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        m_mainPresenter.Handle_StopPlayBGM();
+
     }
 
     private void setupView() {

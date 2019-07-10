@@ -52,6 +52,12 @@ public class Constant {
      */
     public static final int TIME_HALFAMINUTE = 30 * TIME_ONESECOND;
 
+
+    /**
+     * 机器人出牌时 清除原先布局 和 Pass 之间的时延
+     */
+    public static final int TIME_WaitByClearRobotPassCardLayout = 100;
+
     /**
      * 机器人出牌时 清除出牌记录 与 发出新的出牌 之间的时延
      */
@@ -103,5 +109,14 @@ public class Constant {
     public static final int CountDownMaxTime = 30;
 
     // endregion Online 与布局相关
+
+    // region 与游戏音量有关
+
+    /**
+     * 系统音量与 100 progress 的转换
+     */
+    public static final double VoloumRate_100 = 15.0 / 100;
+
+    // endregion 与游戏音量有关
 
 }
