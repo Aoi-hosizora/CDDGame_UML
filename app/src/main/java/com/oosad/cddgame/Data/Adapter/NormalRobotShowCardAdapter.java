@@ -8,9 +8,6 @@ public class NormalRobotShowCardAdapter implements RobotShowCardAdapter {
     @Override
     public Card[] showCard(Card[] HasCards, Card[] PreCards) {
 
-        // TODO
         return RobotShowCardUtil.searchShowCard(PreCards,HasCards);
-
-//        return new Card[] { HasCards[0] };
     }
 }

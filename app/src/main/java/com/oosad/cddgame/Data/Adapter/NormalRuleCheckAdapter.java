@@ -17,7 +17,6 @@ public class NormalRuleCheckAdapter implements RuleCheckAdapter {
         boolean ret = RuleUtil.judgement(upcards, showcards);
         Log.e("TAG", "checkShowCardThroughRule: " + ret);
 
-        // TODO
-        return true;
+        return RuleUtil.judgement(upcards, showcards);
     }
 }

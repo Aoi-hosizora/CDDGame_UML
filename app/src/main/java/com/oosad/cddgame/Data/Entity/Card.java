@@ -37,21 +37,26 @@ public class Card implements Comparable<Card> {
         else return cardNum-3;
     }
 
-    public int compareBasic(Card card){
-        if (this.getCardNum() != card.getCardNum())
-            return this.getCardNum() > card.getCardNum() ? 1 : -1;
-        return this.getCardSuit().compareTo(card.getCardSuit());
-    }
-    @Override
-    public int compareTo(Card card) {
-        if(this.getCardNum()<3)
-            if(card.getCardNum()<3)
-                return this.compareBasic(card);
-            else return 1;
-        else if(card.getCardNum()<3)
-            return -1;
-        else return this.compareBasic(card);
-    }
+//    public int compareBasic(Card card){
+//        if (this.getCardNum() != card.getCardNum())
+//            return this.getCardNum() > card.getCardNum() ? 1 : -1;
+//        return this.getCardSuit().compareTo(card.getCardSuit());
+//    }
+//    @Override
+//    public int compareTo(Card card) {
+//        if(this.getCardNum()<3)
+//            if(card.getCardNum()<3)
+//                return this.compareBasic(card);
+//            else return 1;
+//        else if(card.getCardNum()<3)
+//            return -1;
+//        else return this.compareBasic(card);
+//    }
+      public int compareTo(Card card) {
+        if(this.getCardLogicValue()==card.getCardLogicValue())
+            return this.getCardSuit().ordinal()>card.getCardSuit().ordinal()?1:-1;
+        else return this.getCardLogicValue() > card.getCardLogicValue()?1:-1;
+      }
 
     @Override
     public boolean equals(Object obj) {
