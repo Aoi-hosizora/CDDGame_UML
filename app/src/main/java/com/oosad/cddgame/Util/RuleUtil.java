@@ -119,15 +119,17 @@ public class RuleUtil {
 
         Log.e("", "judgement: " + (upCards == null) + ",,," + (upCards != null? upCards.length : "null") );
 
-        if (upCards == null || upCards.length==0) return true;
-
-
-        Log.e("", "judgement: " + curCards[0].getCardNum() );
 
         if (curCards == null || curCards.length==0) return true;
 
 
         if (typeOfCards(curCards) == errorType) return false;
+
+
+        if (upCards == null || upCards.length==0) return true;
+
+
+        Log.e("", "judgement: " + curCards[0].getCardNum() );
 
 
 
