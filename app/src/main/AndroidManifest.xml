@@ -39,6 +39,12 @@
         <activity
             android:name=".UI.ScoreAct.ScoreActivity"
             android:screenOrientation="landscape" />
+
+        <service
+            android:name=".Service.MusicService"
+            android:exported="false" >
+        </service>
+
     </application>
 
 </manifest>

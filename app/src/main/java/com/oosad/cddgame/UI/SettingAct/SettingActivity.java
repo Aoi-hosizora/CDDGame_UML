@@ -1,5 +1,7 @@
 package com.oosad.cddgame.UI.SettingAct;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.R;
 import com.oosad.cddgame.UI.SettingAct.presenter.ISettingPresenter;
 import com.oosad.cddgame.UI.SettingAct.presenter.SettingPresenterCompl;
@@ -71,6 +74,7 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 m_GameBGMTextView.setText(String.format(getString(R.string.str_SettingAct_SeekBarChangeTextView), i));
+                m_settingPresenter.Handle_AdjustBGMVoloum(i);
             }
 
             @Override
@@ -92,6 +96,10 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) { }
         });
+
+        // TODO <<<<<<<<<<<<<<<<<<<<<<<<<
+
+        m_GameOtoSeekBar.setEnabled(false);
     }
 
     @Override
@@ -111,7 +119,6 @@ public class SettingActivity extends AppCompatActivity implements ISettingView, 
             break;
         }
     }
-
     /**
      * 单击返回主界面按钮
      */

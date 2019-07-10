@@ -115,6 +115,7 @@ public class GamingPresenterCompl implements IGamingPresenter,
             m_GamingView.onAddCardLayout(CardUtil.getCardLayoutFromCard(context, c, false));
 
         m_GamingView.onRefreshCardLayout();
+        m_GamingView.onHighLightCurrPlayer(Constant.Down_Player);
     }
 
     /**
@@ -143,6 +144,9 @@ public class GamingPresenterCompl implements IGamingPresenter,
 
             if (ret == Constant.NO_ERR) {  // 允许这样出牌，并且已经在 CardMgr 内更新了相关信息，直接显示出牌更新界面
                 m_GamingView.onUserShowCardSet(cardSetLayout);
+
+                // 出完牌，高亮左玩家
+                m_GamingView.onHighLightCurrPlayer(Constant.Left_Player);
                //  if (GameSystem.getInstance().get)
             }
             else if (ret == Constant.ERR_NOT_RULE)
@@ -167,6 +171,7 @@ public class GamingPresenterCompl implements IGamingPresenter,
         if (isSingle) {
             GameSystem.getInstance().canShowCardWithCheckTurn(null, GameSystem.getInstance().getCurrUser());
             m_GamingView.onPassShowCard(Constant.PLAYER_USER);
+            m_GamingView.onHighLightCurrPlayer(Constant.Left_Player);
         }
         else {
             // TODO
@@ -185,6 +190,7 @@ public class GamingPresenterCompl implements IGamingPresenter,
         Robot robot = GameSystem.getInstance().getRobot(RobotIdx);
 
         robot.setOnRobotShowCard(new Robot.OnRobotShowCardListener() {
+
             @Override
             public void onShowCard(final Card[] cards) {
 
@@ -200,17 +206,36 @@ public class GamingPresenterCompl implements IGamingPresenter,
                             m_GamingView.onHidePassShowCard(RobotIdx);
                             cascadeLayout.addView(cl);
                         }
+
                         m_GamingView.onRefreshShowCardCnt();
+
+
+                        // TODO
+                        // 高亮下一个玩家
+                        ShowLogE("", "Handle_SetupRobotShowCardLayout" + RobotIdx);
+                        m_GamingView.onHighLightCurrPlayer((RobotIdx + 1) % Constant.PlayerCnt);
+
                     }
 
                 }, Constant.TIME_WaitByClearRobotShowCardLayout);
-
-
             }
 
             @Override
             public void onPassCard() {
-                m_GamingView.onPassShowCard(RobotIdx);
+
+                m_GamingView.onHidePassShowCard(RobotIdx);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        m_GamingView.onPassShowCard(RobotIdx);
+
+                        // 高亮下一个玩家
+                        m_GamingView.onHighLightCurrPlayer((RobotIdx + 1) % Constant.PlayerCnt);
+                    }
+
+                }, Constant.TIME_WaitByClearRobotPassCardLayout);
             }
         });
     }
@@ -265,7 +290,10 @@ public class GamingPresenterCompl implements IGamingPresenter,
         m_GamingView.onShowProgressDialog();
     }
 
+
+    private final int onWaitingChangeProgress = -1;
     private final int onWaitingFinish = 0;
+
     private final int onPlayingTochu = 1;
     private final int onEnded = 2;
 
@@ -274,6 +302,9 @@ public class GamingPresenterCompl implements IGamingPresenter,
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
+                case onWaitingChangeProgress:
+                    onWaitingChangeProgressHandle(msg);
+                break;
                 case onWaitingFinish:
                     onWaitingFinishHandle(msg);
                 break;
@@ -339,31 +370,36 @@ public class GamingPresenterCompl implements IGamingPresenter,
     public void onWaiting(PlayerRoomInfoObj playerRoomInfo) {
         if (!onlineInfoMgr.getIsPlayingGame()) {
 
-            // 设置 等待对话框
-            int cntForPrepare = 0;
-            for (PlayerObj playerObj : playerRoomInfo.getPlayers()) {
-                if (playerObj.getStatus().equals(JsonConst.PlayerStatus.Prepare))
-                    cntForPrepare ++;
-            }
+            // use handler
+            Message message = new Message();
+            message.what = onWaitingChangeProgress;
+            message.obj = playerRoomInfo;
+            handler.sendMessage(message);
 
-            m_GamingView.onUpdateProgressDialog(cntForPrepare);
-
-            onlineInfoMgr.setIsPlayingGame(playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Playing));
-            ShowLogE("onWaiting", "setIsPlayingGame 1111" + onlineInfoMgr.getIsPlayingGame() + playerRoomInfo.getStatus());
-
-//            if (onlineInfoMgr.getIsPlayingGame()) {
-//
-//                ShowLogE("onWaiting", "getIsPlayingGame 2222");
-//
-//                // 都进入准备
-//
-//                // use handler
-//                Message message = new Message();
-//                message.what = onWaitingFinish;
-//                message.obj = playerRoomInfo;
-//                handler.sendMessage(message);
-//            }
         }
+    }
+
+    /**
+     * 游戏准备，Progress
+     *
+     * @param msg
+     */
+    private void onWaitingChangeProgressHandle(Message msg) {
+
+        PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) msg.obj;
+
+        // 设置 等待对话框
+        int cntForPrepare = 0;
+        for (PlayerObj playerObj : playerRoomInfo.getPlayers()) {
+            if (playerObj.getStatus().equals(JsonConst.PlayerStatus.Prepare))
+                cntForPrepare ++;
+        }
+
+        // TODO
+
+        m_GamingView.onUpdateProgressDialog(cntForPrepare);
+
+        onlineInfoMgr.setIsPlayingGame(playerRoomInfo.getStatus().equals(JsonConst.PlayerInRoomStatus.Playing));
     }
 
     /**
@@ -376,6 +412,8 @@ public class GamingPresenterCompl implements IGamingPresenter,
         String currUserName = GameSystem.getInstance().getCurrUser().getName();
         PlayerRoomInfoObj playerRoomInfo = (PlayerRoomInfoObj) msg.obj;
         PlayerObj[] allplays = playerRoomInfo.getPlayers();
+
+        m_GamingView.onShowCancelProgressDialog();
 
         ShowLogE("onWaitingFinishHandle", "getOthersUserNameList");
 

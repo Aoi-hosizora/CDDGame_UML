@@ -1,14 +1,19 @@
 package com.oosad.cddgame.UI.SettingAct.presenter;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.oosad.cddgame.Data.Boundary.GameSystem;
+import com.oosad.cddgame.Data.Constant;
 import com.oosad.cddgame.Data.Setting;
 import com.oosad.cddgame.Data.Entity.Player.User;
 import com.oosad.cddgame.UI.LoginAct.LoginActivity;
 import com.oosad.cddgame.UI.SettingAct.view.ISettingView;
+
+import java.util.Set;
 
 public class SettingPresenterCompl implements ISettingPresenter {
 
@@ -45,6 +50,7 @@ public class SettingPresenterCompl implements ISettingPresenter {
      */
     @Override
     public void Handle_BackButton_Click() {
+        m_settingView.onSetupUI(Setting.getInstance().getGameBGMVoloum(), Setting.getInstance().getGameOtoVoloum());
         m_settingView.onBackToMainActivity();
     }
 
@@ -77,5 +83,21 @@ public class SettingPresenterCompl implements ISettingPresenter {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         GameSystem.getInstance().setCurrUserToken("");
         m_settingView.getThisPtr().startActivity(intent);
+    }
+
+    /**
+     * 调整 BGM 音量
+     * @param progress
+     */
+    public void Handle_AdjustBGMVoloum(int progress) {
+        // https://blog.csdn.net/weixin_37577039/article/details/78775931
+
+        /*
+        UI: 15 -> Sys: 100
+        UI: 0 -> Sys: 0
+         */
+
+        AudioManager audioManager = (AudioManager) m_settingView.getThisPtr().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(progress * Constant.VoloumRate_100), AudioManager.FLAG_PLAY_SOUND);
     }
 }
